@@ -1,0 +1,17 @@
+services:
+
+  # ─────────────────────────────────────────────
+  # BukaKios WebView Simple
+  # ─────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wv-simple
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1001:80"
+    env_file:
+      - .env
+    volumes:
+      - ./.env:/var/www/html/.env:ro

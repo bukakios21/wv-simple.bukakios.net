@@ -1,0 +1,43 @@
+<?PHP
+$show_additional = false;
+$data_additional = $app->grab_data("$api_url/v1/get_additional_info.php?key=$api_key&id=$id");
+$data_additional = json_decode($data_additional,true);
+if(isset($data_additional['data'])){
+    $axme = $data_additional['data'];
+    $show_additional = true;
+    $ax_text_info_salin = $axme['ax_text_info_salin'];
+    $ax_text_salin = $axme['ax_text_salin'];
+    $ax_info = $axme['ax_info'];
+    $ax_sn = $axme['ax_sn'];
+    $ax_alert = $axme['ax_alert'];
+    $ax_additional = $axme['ax_additional'];
+}
+?>
+<?PHP if($show_additional){ ?>
+    <div class="alert alert-<?PHP echo $ax_alert; ?>" style="padding:20px;">
+        <center><h3><?PHP echo $ax_info; ?> :</h3>
+            <h3
+                    style=";margin-bottom:-20px;margin-top:10px;font-size:20px"
+                    id="sn_catatan"
+                    data-text="<?PHP echo $ax_text_info_salin; ?>"
+                    data-copy="<?PHP echo $ax_sn; ?>">
+                <?PHP echo $ax_sn; ?>
+            </h3>
+            <br>
+            <span style="text-decoration:underline;color:#00bfff;cursor:pointer"
+                  onclick="copyToClipboard('sn_catatan')">
+		<?PHP echo $ax_text_salin; ?>
+	</span></center>
+        <?PHP echo $ax_additional; ?>
+    </div> <?PHP } ?>
+
+<?PHP
+if($status>1){
+    //refund
+    $jumlah_refund = $app->idr($price_client);;
+    echo "<div class='alert alert-info'>
+	<b>Harap Baca!!!</b><br>
+	Di karenakan transaksi ini gagal, dana sebesar <b>$jumlah_refund</b> sudah kami kembalikan ke saldo akun kamu :) , jika ada yang ingin di tanyakan silahkan <a href='kontak.html'>kontak kami</a>
+	</div>";
+}
+?>

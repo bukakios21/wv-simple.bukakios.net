@@ -1,0 +1,26 @@
+# BukaKios WebView Simple — Docker Compose (Dev)
+# Mount source code langsung dari host → edit PHP tanpa rebuild
+#
+# Usage:
+#   Dev:  docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+#   Live: docker compose -f docker-compose.yml up -d --build
+#
+services:
+  app:
+    # Override: jangan build ulang, pakai image yang sudah di-build
+    build: ~
+    image: wv-simple:latest
+    container_name: wv-simple
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1001:80"
+    env_file:
+      - .env
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/http.d/default.conf:ro
+      - ./docker/php-fpm.conf:/usr/local/etc/php-fpm.d/custom.conf:ro
+      - ./config.php:/var/www/html/config.php:ro
+      - ./.env:/var/www/html/.env:ro
+      # Mount seluruh source code — edit PHP langsung tercermin tanpa rebuild
+      - .:/var/www/html:ro
+    user: "1000:1000"
