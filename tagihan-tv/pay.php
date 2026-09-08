@@ -18,21 +18,27 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     if ($_SESSION['csrf'] === $csrf) {
         if ($msg === "cek") {
             $id_pelanggan = $_REQUEST['id_pelanggan'];
-            $cek_tagihan_raw = $api_v2->inq_pasca($kode_produk, $id_pelanggan);
-            //var_dump($cek_tagihan_raw);
-            $cek_tagihan      = json_decode($cek_tagihan_raw, true);
+            $kode_produk="tv";
+            $cek_tagihan_http = $api_v2->inq_pasca($kode_produk, $id_pelanggan);
+
+            $cek_tagihan = json_decode($cek_tagihan_http, true);
             if (isset($cek_tagihan['status'])) {
                 $data_r = $cek_tagihan;
             } else {
                 $data_r = array('status' => 0, "error_msg" => "Gagal Cek Tagihan, server tidak merespon");
             }
         } else if ($msg === "bayar") {
-            if (isset($_REQUEST['inq_id'], $_REQUEST['trx_id'], $_REQUEST['biaya_toko'])) {
-                $inq_id      = $_REQUEST['inq_id'];
+            if (isset($_REQUEST['trx_id'], $_REQUEST['biaya_toko'])) {
                 $trx_id      = $_REQUEST['trx_id'];
                 $biaya_toko  = $_REQUEST['biaya_toko'];
-                $bayar_tagihan_raw = $api_v2->pay_pasca($trx_id, $inq_id, $biaya_toko);
-                $data_r = json_decode($bayar_tagihan_raw, true);
+                $tanggal     = $_REQUEST['tanggal'] ?? '';
+                $bayar_tagihan_raw = $api_v2->pay_pasca($trx_id, $biaya_toko, $tanggal);
+                $bayar_tagihan     = json_decode($bayar_tagihan_raw, true);
+                if (isset($bayar_tagihan['status'])) {
+                    $data_r = $bayar_tagihan;
+                } else {
+                    $data_r = array('status' => 0, "error_msg" => "Server tidak merespon dengan benar", "raw" => substr((string)$bayar_tagihan_raw, 0, 500));
+                }
             } else {
                 $data_r = array('status' => 0, "error_msg" => "Parameter tidak lengkap");
             }
@@ -57,8 +63,10 @@ if (isset($data_produk['status']) && $data_produk['status'] == 1) {
     $code             = $data_produk['code'];
     $product_logo     = $data_produk['product_logo'];
     $product_name     = $data_produk['product_name'];
-    $profit           = str_replace("-", "", $data_produk['harga_jual']);
-    $price_sell       = $data_produk['price_sell'];
+    $product_price       = $data_produk['price'] ?? 0;
+    $product_price_add   = $data_produk['price_add'] ?? 0;
+    // Diskon default (per bulan) untuk info card. Sama seperti rumus wv3 di renderDetail.
+    $profit = (float) $product_price + (float) $product_price_add;
 } else {
     $error_msg = "Gagal memuat data produk.";
     if (isset($data_produk['error_msg'])) {
@@ -79,7 +87,6 @@ $csrf_token = $app->csrf();
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= htmlspecialchars($product_name) ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -109,6 +116,64 @@ $csrf_token = $app->csrf();
     * { font-family: 'Inter', sans-serif; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
+
+    /* ===== Custom modal animations ===== */
+    #customModal:not(.hidden) > div {
+      animation: modalPopIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes modalPopIn {
+      0%   { opacity: 0; transform: scale(0.85) translateY(8px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes modalPopOut {
+      0%   { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.92) translateY(4px); }
+    }
+
+    .modal-icon-circle {
+      transform-origin: center;
+      animation: iconCircleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+    }
+    @keyframes iconCircleIn {
+      0%   { opacity: 0; transform: scale(0.4); }
+      60%  { opacity: 1; transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-check-path {
+      stroke-dasharray: 28;
+      stroke-dashoffset: 28;
+      animation: checkDraw 0.55s cubic-bezier(0.65, 0, 0.45, 1) 0.4s forwards;
+    }
+    @keyframes checkDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .modal-fail-path {
+      transform-origin: center;
+      animation: failShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.2s both;
+    }
+    @keyframes failShake {
+      0%   { opacity: 0; transform: scale(0.5); }
+      40%  { opacity: 1; transform: scale(1.1) rotate(-6deg); }
+      70%  { transform: scale(1) rotate(4deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+
+    .modal-title    { animation: fadeUp 0.35s ease-out 0.25s both; }
+    .modal-subtitle { animation: fadeUp 0.35s ease-out 0.35s both; }
+    .modal-body     { animation: fadeUp 0.4s ease-out 0.45s both; }
+    .modal-btn      { animation: fadeUp 0.35s ease-out 0.55s both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #customModal { animation: backdropIn 0.2s ease-out both; }
+    @keyframes backdropIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-950">
@@ -129,6 +194,16 @@ $csrf_token = $app->csrf();
     <div class="flex items-start gap-3 rounded-xl bg-red-600 px-4 py-3 shadow-lg text-white">
       <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
       <p id="toastErrorMsg" class="text-[13px] font-semibold leading-5"></p>
+    </div>
+  </div>
+
+  <!-- Custom modal (success / fail / info) -->
+  <div id="customModal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/50 backdrop-blur-[2px] px-4">
+    <div class="w-[92vw] max-w-[400px] rounded-3xl bg-white px-7 py-7 shadow-2xl ring-1 ring-slate-900/5">
+      <div id="customModalBody"></div>
+      <button id="customModalBtn" type="button" class="mt-6 w-full rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white text-[15px] font-bold py-3.5 px-5 transition">
+        Tutup
+      </button>
     </div>
   </div>
 
@@ -167,7 +242,10 @@ $csrf_token = $app->csrf();
         <div class="px-5 pt-5 pb-4" id="inputSection">
           <label class="text-[13px] font-semibold text-slate-700">Nomor Pelanggan</label>
           <input
-            type="number"
+            type="tel"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            autocomplete="off"
             id="nope"
             class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[15px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
             placeholder="Masukkan nomor pelanggan"
@@ -311,9 +389,59 @@ $csrf_token = $app->csrf();
   <script>
     // State
     var trx_id = "";
-    var inq_id = "";
 
-    // Format to Rp
+    // Product detail (dari API V2 detail_produk_by_code) untuk rumus diskon wv3
+    var productDetail = {
+      price: <?= (int) $product_price ?>,
+      price_add: <?= (int) $product_price_add ?>
+    };
+
+    // Parse string rupiah ke angka
+    function parseRupiah(rupiahString) {
+      try {
+        if (rupiahString == null || rupiahString === '') return 0;
+        var str = String(rupiahString);
+        var isNegative = str.indexOf('-') !== -1;
+        var numberOnly = str.replace(/[^\d]/g, '');
+        var result = numberOnly ? Number(numberOnly) : 0;
+        return isNegative ? -result : result;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    // Format angka ke rupiah (Intl, fallback manual)
+    function formatRupiah(angka) {
+      try {
+        if (typeof Intl !== 'undefined' && Intl.NumberFormat) {
+          return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+          }).format(angka);
+        }
+        var num = Number(angka);
+        if (isNaN(num)) return 'Rp 0';
+        var parts = Math.abs(num).toString().split('.');
+        var integerPart = parts[0];
+        var formatted = '';
+        for (var i = 0; i < integerPart.length; i++) {
+          if (i > 0 && (integerPart.length - i) % 3 === 0) formatted += '.';
+          formatted += integerPart[i];
+        }
+        return (num < 0 ? '-Rp ' : 'Rp ') + formatted;
+      } catch (e) {
+        return 'Rp 0';
+      }
+    }
+
+    // Parse nilai numerik polos (untuk field yang bukan rupiah)
+    function parseNum(v) {
+      var n = Number(String(v == null ? 0 : v).replace(/[^\d]/g, ''));
+      return isNaN(n) ? 0 : n;
+    }
+
+    // Format to Rp (legacy helper, masih dipakai beberapa call site)
     function formatRp(n) {
       var s = String(Math.abs(Number(n))),
           r = (s.length % 3),
@@ -348,14 +476,19 @@ $csrf_token = $app->csrf();
 
     // CEK button
     function doCek() {
-      var id_pelanggan = document.getElementById('nope').value.trim();
+      var id_pelanggan = document.getElementById('nope').value.replace(/[^0-9]/g, '');
       if (!id_pelanggan) {
         showToastError('Nomor pelanggan tidak boleh kosong');
+        document.getElementById('nope').focus();
         return;
       }
 
+      // Reset state: sembunyikan error dari percobaan sebelumnya
+      hideErrorState();
+
       var csrf = document.getElementById('csrf').value;
       showLoading('Memeriksa tagihan…');
+      document.getElementById('btnProcessing').classList.add('hidden');
       document.getElementById('btnCek').disabled = true;
       document.getElementById('nope').disabled = true;
 
@@ -376,7 +509,11 @@ $csrf_token = $app->csrf();
                 showErrorState(myJsn.error_msg || 'Gagal mengecek tagihan');
               }
             } catch(e) {
-              showErrorState('Respons server tidak valid');
+              console.error('[doCek] parse error:', e);
+              var rawResp = (xhr.responseText || '').substring(0, 500);
+              var debugInfo = '<div class="mt-2 text-left"><details class="text-left"><summary class="text-[11px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-1 max-h-32 overflow-auto rounded-lg bg-slate-100 p-2 text-[10px] text-slate-700 whitespace-pre-wrap break-all">' +
+                'Parse error: ' + (e.message || e) + '\n\nRaw response:\n' + rawResp + '</pre></details></div>';
+              showErrorState('Respons server tidak valid' + debugInfo);
             }
           } else {
             showErrorState('Koneksi gagal (HTTP ' + xhr.status + ')');
@@ -388,25 +525,36 @@ $csrf_token = $app->csrf();
 
     // Render tagihan detail
     function renderDetail(data) {
-      trx_id = data.trx_id || "";
-      inq_id = data.inq_id || "";
-      var d = data.custom_data || {};
-      var tagihan = Number(d.tagihan || 0);
-      var biaya_admin = Number(d.biaya_admin || 0);
-      var potongan = Number(d.potongan || 0);
-      var total_buyer = Number(d.total_bayar_buyer || 0);
-      var total_seller = Number(d.total_bayar_seller || 0);
-      var profit = total_buyer - total_seller;
+      // API bisa return nested (data.data) atau flat (langsung field)
+      var d = data.data || data.custom_data || data;
+      trx_id = d.trx_id || data.trx_id || "";
 
-      document.getElementById('nama_pel').textContent   = d.nama_pelanggan || '-';
-      document.getElementById('periode').textContent    = d.periode || '-';
-      document.getElementById('tagihan').textContent    = formatRp(tagihan);
-      document.getElementById('biaya_admin').textContent = formatRp(biaya_admin);
-      document.getElementById('potongan').textContent   = '- ' + formatRp(profit);
-      document.getElementById('tot_ta').textContent      = formatRp(total_buyer);
-      document.getElementById('tot_ta2').textContent     = formatRp(total_buyer);
-      document.getElementById('tot_ka2').textContent     = formatRp(total_seller);
-      document.getElementById('profit_display').textContent = formatRp(profit);
+      // Hitung diskon biaya admin (rumus wv3)
+      var price    = parseNum(productDetail.price);
+      var priceAdd = parseNum(productDetail.price_add);
+      var admin    = parseNum(d.admin);
+      var bulan    = parseNum(d.jml_bulan) || 1;
+      var diskonAngka = admin - ((price + priceAdd) * bulan);
+
+      // Tagihan, denda, total bayar dari API (fallback ke field lain untuk TV/PLN)
+      var tagihan     = parseNum(d.tagihan);
+      var denda       = parseNum(d.denda);
+      var totalBayarPelanggan = parseNum(d.total_bayar);
+
+      // Total Bayar Kamu (saldo seller) = tagihan + admin - diskon (rumus wv3)
+      var totalBayarKamuAngka = tagihan + admin - diskonAngka;
+      var profitAngka = totalBayarPelanggan - totalBayarKamuAngka;
+
+      // Tampilkan ke UI
+      document.getElementById('nama_pel').textContent   = d.customer_name || d.nama_pelanggan || '-';
+      document.getElementById('periode').textContent    = d.bln_th || d.periode || '-';
+      document.getElementById('tagihan').textContent    = formatRupiah(tagihan);
+      document.getElementById('biaya_admin').textContent = formatRupiah(admin);
+      document.getElementById('potongan').textContent   = '- ' + formatRupiah(diskonAngka);
+      document.getElementById('tot_ta').textContent     = formatRupiah(totalBayarPelanggan);
+      document.getElementById('tot_ta2').textContent    = formatRupiah(totalBayarPelanggan);
+      document.getElementById('tot_ka2').textContent    = formatRupiah(totalBayarKamuAngka);
+      document.getElementById('profit_display').textContent = formatRupiah(profitAngka);
     }
 
     // Switch to action buttons
@@ -425,23 +573,32 @@ $csrf_token = $app->csrf();
       document.getElementById('errorMsg').classList.remove('hidden');
     }
 
+    function hideErrorState() {
+      document.getElementById('errorMsg').classList.add('hidden');
+    }
+
     // Batal
     function doBatal() {
-      trx_id = ""; inq_id = "";
+      trx_id = "";
       document.getElementById('errorMsg').classList.add('hidden');
       document.getElementById('detailSection').classList.add('hidden');
       document.getElementById('btnActionGroup').classList.add('hidden');
+      document.getElementById('btnProcessing').classList.add('hidden');
+      document.getElementById('inputSection').classList.remove('hidden');
+      document.getElementById('infoCard').classList.remove('hidden');
       document.getElementById('btnCek').classList.remove('hidden');
       document.getElementById('btnCek').disabled = false;
       document.getElementById('nope').disabled = false;
       document.getElementById('nope').value = '';
       document.getElementById('biaya_profit').value = '0';
       document.getElementById('progressBar').style.width = '33%';
+      // Fokus kembali ke input agar UX lebih baik
+      document.getElementById('nope').focus();
     }
 
     // Bayar
     function doBayar() {
-      if (!inq_id) { showToastError('Silakan cek tagihan terlebih dahulu'); return; }
+      if (!trx_id) { showToastError('Silakan cek tagihan terlebih dahulu'); return; }
 
       var csrf      = document.getElementById('csrf').value;
       var id_pel    = document.getElementById('nope').value.trim();
@@ -453,7 +610,7 @@ $csrf_token = $app->csrf();
       var xhr = new XMLHttpRequest();
       xhr.open('GET', '?code=<?= urlencode($code) ?>&msg=bayar&biaya_toko=' + encodeURIComponent(biaya_toko)
         + '&id_pelanggan=' + encodeURIComponent(id_pel) + '&csrf=' + encodeURIComponent(csrf)
-        + '&trx_id=' + encodeURIComponent(trx_id) + '&inq_id=' + encodeURIComponent(inq_id), true);
+        + '&trx_id=' + encodeURIComponent(trx_id), true);
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
           document.getElementById('btnProcessing').classList.add('hidden');
@@ -461,31 +618,180 @@ $csrf_token = $app->csrf();
             try {
               var myJsn = JSON.parse(xhr.responseText);
               if (myJsn.status == 1) {
-                Swal.fire({
-                  title: 'Transaksi Berhasil',
-                  text: 'Transaksi sedang diproses. Halaman akan dialihkan…',
-                  icon: 'success',
-                  timer: 3000,
-                  showConfirmButton: false
+                var trxIdBayar = myJsn.data || myJsn.trx_id || trx_id;
+                var namaPelBayar = document.getElementById('nama_pel') ? document.getElementById('nama_pel').textContent : '-';
+                var saldoBerkurang = document.getElementById('tot_ka2') ? document.getElementById('tot_ka2').textContent : 'Rp 0';
+                var successHtml =
+                  '<div class="flex flex-col items-center text-center">' +
+                    '<div class="modal-icon-circle w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center mb-5 ring-8 ring-emerald-50/50">' +
+                      '<svg viewBox="0 0 24 24" class="w-11 h-11 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' +
+                        '<path class="modal-check-path" d="M4 12.5 L10 18.5 L20 6.5"/>' +
+                      '</svg>' +
+                    '</div>' +
+                    '<h2 class="modal-title text-[20px] font-extrabold text-slate-900 mb-1.5 leading-tight">Pembayaran Berhasil</h2>' +
+                    '<p class="modal-subtitle text-[13.5px] text-slate-500 leading-relaxed mb-5 px-2">Transaksi sedang diproses. Kamu bisa langsung cek tagihan lain.</p>' +
+                    '<div class="modal-body w-full rounded-2xl bg-slate-50 border border-slate-100 p-4 text-left divide-y divide-slate-200/70">' +
+                      '<div class="flex justify-between items-center py-2.5 text-[13px]"><span class="text-slate-500">ID Transaksi</span><span class="font-bold text-slate-900 font-mono">' + trxIdBayar + '</span></div>' +
+                      '<div class="flex justify-between items-center py-2.5 text-[13px]"><span class="text-slate-500">Nama Pelanggan</span><span class="font-semibold text-slate-800 text-right ml-2 truncate max-w-[60%]">' + namaPelBayar + '</span></div>' +
+                      '<div class="flex justify-between items-center py-2.5 text-[13px]"><span class="text-slate-500">Saldo Kamu Berkurang</span><span class="font-extrabold text-red-500 text-[15px]">' + saldoBerkurang + '</span></div>' +
+                    '</div>' +
+                  '</div>';
+                showModal({
+                  bodyHtml: successHtml,
+                  variant: 'success',
+                  btnText: 'Tutup',
+                  btnColor: 'emerald',
+                  onClose: function() {
+                    doBatal();
+                    document.getElementById('nope').focus();
+                  }
                 });
-                setTimeout(function() { window.location.href = '../_template/session_success.php'; }, 3000);
               } else {
-                showErrorAfterPay(myJsn.error_msg || 'Gagal memproses pembayaran');
+                showErrorAfterPay('Transaksi Gagal', myJsn.error_msg || 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.');
               }
             } catch(e) {
-              showErrorAfterPay('Respons server tidak valid');
+              console.error('[doBayar] parse error:', e);
+              var rawResp = (xhr.responseText || '').substring(0, 500);
+              var debugInfo = '<div class="mt-4 w-full text-left"><details class="text-left"><summary class="text-[12px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-2 max-h-40 overflow-auto rounded-lg bg-slate-100 p-3 text-[11px] text-slate-700 whitespace-pre-wrap break-all">' +
+                'Parse error: ' + (e.message || e) + '\n\nRaw response:\n' + rawResp + '</pre></details></div>';
+              showErrorAfterPay('Respons Tidak Valid', 'Server mengembalikan data yang tidak dapat diproses. Silakan coba lagi.' + debugInfo);
             }
           } else {
-            showErrorAfterPay('Koneksi gagal (HTTP ' + xhr.status + ')');
+            showErrorAfterPay('Koneksi Gagal', 'Tidak dapat terhubung ke server (HTTP ' + xhr.status + '). Periksa koneksi Anda dan coba lagi.');
           }
         }
       };
       xhr.send();
     }
 
-    function showErrorAfterPay(msg) {
-      Swal.fire({ title: 'Gagal', text: msg, icon: 'warning', confirmButtonText: 'OK' });
-      document.getElementById('btnActionGroup').classList.remove('hidden');
+    function showErrorAfterPay(title, message) {
+      showModal({
+        title: title,
+        message: message,
+        variant: 'fail',
+        btnText: 'Tutup',
+        onClose: function() {
+          var btn = document.getElementById('btnActionGroup');
+          if (btn) btn.classList.remove('hidden');
+        }
+      });
+    }
+
+    /**
+     * Custom modal.
+     */
+    function showModal(opts) {
+      var o = opts || {};
+      var variant = o.variant || 'info';
+      var bodyHtml = o.bodyHtml;
+      var titleText = o.title || '';
+      var messageText = o.message || '';
+      var btnText = o.btnText || 'Tutup';
+      var btnColor = o.btnColor || 'slate';
+      var onClose = typeof o.onClose === 'function' ? o.onClose : null;
+
+      var iconHtml = '';
+      var iconAnimClass = 'modal-icon-circle';
+      if (variant === 'success') {
+        iconHtml = '<svg viewBox="0 0 24 24" class="w-11 h-11 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' +
+                     '<path class="modal-check-path" d="M4 12.5 L10 18.5 L20 6.5"/>' +
+                   '</svg>';
+      } else if (variant === 'fail') {
+        iconHtml = '<svg viewBox="0 0 24 24" class="w-11 h-11 text-red-500" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' +
+                     '<path class="modal-fail-path" d="M6 6 L18 18 M18 6 L6 18"/>' +
+                   '</svg>';
+      } else {
+        iconHtml = '<svg viewBox="0 0 24 24" class="w-11 h-11 text-brand" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' +
+                     '<circle cx="12" cy="12" r="10"/>' +
+                     '<path d="M12 16v-4M12 8h.01"/>' +
+                   '</svg>';
+      }
+      var iconRing = variant === 'success' ? 'bg-emerald-50 ring-emerald-50/50'
+                    : variant === 'fail'    ? 'bg-red-50 ring-red-50/50'
+                                            : 'bg-brand/10 ring-brand/5';
+
+      var btnColorClass = btnColor === 'emerald'
+        ? 'bg-emerald-500 hover:bg-emerald-600 shadow-cta'
+        : 'bg-slate-900 hover:bg-slate-800';
+
+      var inner;
+      if (bodyHtml) {
+        if (bodyHtml.indexOf('modal-icon-circle') === -1 && bodyHtml.indexOf('modal-check-path') === -1) {
+          bodyHtml = bodyHtml.replace(
+            /(<div class="[^"]*w-20 h-20 rounded-full[^"]*")>/,
+            '$1 ' + iconAnimClass + '>'
+          );
+          if (variant === 'success') {
+            bodyHtml = bodyHtml.replace(
+              /<polyline points="20 6 9 17 4 12"\s*\/>/,
+              '<path class="modal-check-path" d="M4 12.5 L10 18.5 L20 6.5"/>'
+            );
+          } else if (variant === 'fail') {
+            bodyHtml = bodyHtml.replace(
+              /<circle cx="12" cy="12" r="10"\s*\/>/,
+              '<circle cx="12" cy="12" r="10"/><path class="modal-fail-path" d="M6 6 L18 18 M18 6 L6 18"/>'
+            ).replace(/<line x1="15" y1="9" x2="9" y2="15"\s*\/>/, '').replace(/<line x1="9" y1="9" x2="15" y2="15"\s*\/>/, '');
+          }
+        }
+        inner = bodyHtml;
+      } else {
+        inner =
+          '<div class="flex flex-col items-center text-center">' +
+            '<div class="w-20 h-20 rounded-full flex items-center justify-center mb-5 ring-8 ' + iconRing + ' ' + iconAnimClass + '">' + iconHtml + '</div>' +
+            '<h2 class="modal-title text-[20px] font-extrabold leading-tight text-slate-900 mb-2">' + titleText + '</h2>' +
+            '<p class="modal-subtitle text-[13.5px] text-slate-600 leading-relaxed max-w-[300px] mx-auto font-medium px-2">' + messageText + '</p>' +
+          '</div>';
+      }
+
+      var bodyEl = document.getElementById('customModalBody');
+      var btnEl = document.getElementById('customModalBtn');
+      var modalEl = document.getElementById('customModal');
+
+      bodyEl.innerHTML = inner;
+      btnEl.textContent = btnText;
+      btnEl.className = 'modal-btn mt-6 w-full rounded-xl text-white text-[15px] font-bold py-3.5 px-5 transition active:scale-[0.99] ' + btnColorClass;
+
+      // Replace button untuk bersih dari listener lama
+      var newBtn = btnEl.cloneNode(true);
+      btnEl.parentNode.replaceChild(newBtn, btnEl);
+      newBtn.textContent = btnText;
+      newBtn.className = btnEl.className;
+
+      var backdropHandler = function(e) {
+        if (e.target === modalEl) closeAndFire();
+      };
+      var escHandler = function(e) {
+        if (e.key === 'Escape' || e.keyCode === 27) closeAndFire();
+      };
+      function closeAndFire() {
+        hideModal();
+        modalEl.removeEventListener('click', backdropHandler);
+        document.removeEventListener('keydown', escHandler);
+        if (onClose) onClose();
+      }
+      newBtn.addEventListener('click', closeAndFire);
+      modalEl.addEventListener('click', backdropHandler);
+      document.addEventListener('keydown', escHandler);
+
+      modalEl.classList.remove('hidden');
+      modalEl.classList.add('flex');
+    }
+
+    function hideModal() {
+      var modalEl = document.getElementById('customModal');
+      if (!modalEl) return;
+      var innerCard = modalEl.querySelector(':scope > div');
+      if (innerCard) {
+        innerCard.style.animation = 'modalPopOut 0.2s cubic-bezier(0.4, 0, 1, 1) forwards';
+        setTimeout(function() {
+          modalEl.classList.add('hidden');
+          modalEl.classList.remove('flex');
+          if (innerCard) innerCard.style.animation = '';
+        }, 180);
+      } else {
+        modalEl.classList.add('hidden');
+        modalEl.classList.remove('flex');
+      }
     }
 
     // Back button

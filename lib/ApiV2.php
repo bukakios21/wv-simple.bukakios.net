@@ -225,9 +225,9 @@ class ApiV2
         return $this->curl_post_url($url, $body);
     }
 
-    function list_product_pasca($kategori_id)
+    function list_product_pasca($operator_id)
     {
-        $body = array('operator_id' => (int)$kategori_id);
+        $body = array('operator_id' => (int)$operator_id);
         $url  = $this->api_url_wv . "/pasca/product-list";
         return $this->curl_post_url($url, $body);
     }
@@ -242,12 +242,12 @@ class ApiV2
         return $this->curl_post_url($url, $body);
     }
 
-    function pay_pasca($trx_id, $inq_id, $biaya_toko)
+    function pay_pasca($trx_id, $biaya_toko, $tanggal = '')
     {
         $body = array(
             'trx_id'      => $trx_id,
-            'inq_id'      => $inq_id,
             'biaya_toko'  => $biaya_toko,
+            'tanggal'     => $tanggal,
         );
         $url = $this->api_url_wv . "/pasca/pay";
         return $this->curl_post_url($url, $body);

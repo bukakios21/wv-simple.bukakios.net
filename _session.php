@@ -4,20 +4,7 @@
 // gunakan langsung tanpa perlu parse User-Agent lagi.
 // Ini menangani AJAX request dari browser yang tidak kirim User-Agent BukaKios.
 // ============================================================
-if (!empty($_SESSION['user_jwt'])) {
-    $user_jwt = $_SESSION['user_jwt'];
-    $user_id  = abs((int)($_SESSION['user_id'] ?? 1));
-    $user_token     = $_SESSION['user_token'] ?? 'session_token';
-    $user_token_trx = $_SESSION['user_token_trx'] ?? 'session_token_trx';
-    $webview_valid  = true;
-    $new_detail     = !empty($_SESSION['new_detail']);
-    $bukakios_version     = $_SESSION['bukakios_version'] ?? '1.0';
-    $bukakios_version_int = (int)($_SESSION['bukakios_version_int'] ?? 10);
-// ============================================================
-// DEV BYPASS: tambahkan ?token_dev=<jwt_value> di URL untuk skip
-// validasi session (misal: lupa-pin/?token_dev=eyJhbGciOi...)
-// ============================================================
-} elseif (isset($_GET['token_dev'])) {
+if (isset($_GET['token_dev'])) {
     // Pastikan config.php sudah di-load (ROOT & $api_url tersedia)
     if (!defined('ROOT')) {
         require_once __DIR__ . '/config.php';
@@ -32,6 +19,19 @@ if (!empty($_SESSION['user_jwt'])) {
     $bukakios_version     = '1.0';
     $bukakios_version_int = 10;
     // Dev bypass aktif — skip semua validasi di bawah
+} else if (!empty($_SESSION['user_jwt'])) {
+    $user_jwt = $_SESSION['user_jwt'];
+    $user_id  = abs((int)($_SESSION['user_id'] ?? 1));
+    $user_token     = $_SESSION['user_token'] ?? 'session_token';
+    $user_token_trx = $_SESSION['user_token_trx'] ?? 'session_token_trx';
+    $webview_valid  = true;
+    $new_detail     = !empty($_SESSION['new_detail']);
+    $bukakios_version     = $_SESSION['bukakios_version'] ?? '1.0';
+    $bukakios_version_int = (int)($_SESSION['bukakios_version_int'] ?? 10);
+// ============================================================
+// DEV BYPASS: tambahkan ?token_dev=<jwt_value> di URL untuk skip
+// validasi session (misal: lupa-pin/?token_dev=eyJhbGciOi...)
+// ============================================================
 } else {
     // require 'config.php';
     //untuk memverifikasi token user di sini

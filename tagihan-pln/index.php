@@ -2,58 +2,80 @@
 @ob_start();
 error_reporting(E_ERROR | E_PARSE);
 require_once("../config.php");
+// session_destroy();
 require_once("../_session.php");
 require_once("../lib/ApiV2.php");
 $api_v2 = new ApiV2($user_jwt);
 
-$kode_produk = '000';
-if (isset($_GET['code'])) {
-    $kode_produk = $_GET['code'];
+if ($user_id==39958){
+   $app->simpan_file("abul.txt", $user_jwt);
+}
+
+$file_me = "index.php";
+$kode_produk = 'PLNPASCH'; //data static kode produk
+$data_produk_raw = $api_v2->detail_produk_by_code($kode_produk);
+$data_produk = json_decode($data_produk_raw, true);
+if (isset($data_produk['status']) and $data_produk['status'] == 1) {
+    $data_produk = $data_produk['data'];
+    $code = $data_produk['code'];
+    $product_logo = $data_produk['product_logo'];
+    $product_name = $data_produk['product_name'];
+    $product_price = $data_produk['price'] ?? 0;
+    $product_price_add = $data_produk['price_add'] ?? 0;
+} else {
+    $error_msg = "Server untuk mendapatkan data produk gagal di muat... silahkan coba lagi beberapa saat!!";
+    if (isset($data_produk['error_msg'])) {
+        $error_msg = $data_produk['error_msg'];
+    }
+    $html_title = "Gagal";
+    $lyt_button_link = "$c_url/tagihan-pln/$file_me";
+    $lyt_button_name = "COBA LAGI";
+    $lyt_image = "https://assets.bukakios.net/img/illustration/bc_trx_gagal.png";
+    $lyt_title = "Ada Kesalahan!";
+    $lyt_description = $error_msg;
+    require_once(ROOT . "/_template/general_message.php");
+    exit;
 }
 
 /************ ACTION HERE *****************/
 if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
-    $msg  = $_REQUEST['msg'];
+    //action here
+    $msg = $_REQUEST['msg'];
     $csrf = $_REQUEST['csrf'];
     if ($_SESSION['csrf'] === $csrf) {
         if ($msg === "cek") {
+            //cek tagihan...
             $id_pelanggan = $_REQUEST['id_pelanggan'];
             $cek_tagihan_http = $api_v2->inq_pasca($kode_produk, $id_pelanggan);
-
-            // Debug log inquiry PDAM
-            if (isset($app) && method_exists($app, 'simpan_file')) {
-                $app->simpan_file("inq_pdam_" . preg_replace('/[^A-Za-z0-9]/', '', $id_pelanggan) . ".json", (string)$cek_tagihan_http);
-            }
 
             $cek_tagihan = json_decode($cek_tagihan_http, true);
             if (isset($cek_tagihan['status'])) {
                 $data_r = $cek_tagihan;
             } else {
-                $data_r = ['status' => 0, "error_msg" => "Gagal Cek Tagihan, server tidak merespon", "raw" => substr((string)$cek_tagihan_http, 0, 500)];
+                $data_r = ['status' => 0, "error_msg" => "Gagal Cek Tagihan, server a1 tidak merespon, no status", "r" => $cek_tagihan];
             }
         } else if ($msg === "bayar") {
+            //bayar tagihan
             if (isset($_REQUEST['trx_id'], $_REQUEST['biaya_toko'])) {
-                $trx_id     = $_REQUEST['trx_id'];
+                $trx_id = $_REQUEST['trx_id'];
                 $biaya_toko = $_REQUEST['biaya_toko'];
-                $tanggal    = $_REQUEST['tanggal'] ?? '';
+                $tanggal = $_REQUEST['tanggal'] ?? '';
                 $bayar_tagihan_http = $api_v2->pay_pasca($trx_id, $biaya_toko, $tanggal);
-                $bayar_tagihan     = json_decode($bayar_tagihan_http, true);
-
-                // Debug log bayar PDAM
-                if (isset($app) && method_exists($app, 'simpan_file')) {
-                    $app->simpan_file("pay_pdam_" . preg_replace('/[^A-Za-z0-9]/', '', $trx_id) . ".json", (string)$bayar_tagihan_http);
-                }
-
+                $bayar_tagihan = json_decode($bayar_tagihan_http, true);
                 if (isset($bayar_tagihan['status'])) {
                     $data_r = $bayar_tagihan;
                 } else {
-                    $data_r = ['status' => 0, "error_msg" => "Server tidak merespon dengan benar", "raw" => substr((string)$bayar_tagihan_http, 0, 500)];
+                    $data_r = ['status' => 0, "error_msg" => "server a1 tidak merespon, status0", "raw" => substr((string)$bayar_tagihan_http, 0, 1000)];
+                }
+                // Debug log: tulis raw response supaya bisa dicek kalau ada keluhan
+                if (isset($app) && method_exists($app, 'simpan_file')) {
+                    $app->simpan_file("pay_pasca_" . $trx_id . ".json", (string)$bayar_tagihan_http);
                 }
             } else {
-                $data_r = ['status' => 0, "error_msg" => "Parameter tidak lengkap (trx_id / biaya_toko)"];
+                $data_r = ['status' => 0, "error_msg" => "trx_id tidak di temukan, refresh halaman ini"];
             }
         } else {
-            $data_r = ['status' => 0, "error_msg" => "Aksi tidak dikenali"];
+            $data_r = ['status' => 0, "error_msg" => "Tidak ada aksi untuk msg ini"];
         }
     } else {
         $data_r = ['status' => 0, "error_msg" => "Halaman Kadaluarsa, silahkan tutup halaman ini, kemudian buka kembali"];
@@ -64,39 +86,13 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     echo json_encode($data_r);
     exit;
 }
-/************ END ACTION *****************/
-
-/************ LOAD PRODUK DETAIL ************/
-$data_produk_raw = $api_v2->detail_produk_by_code($kode_produk);
-$data_produk     = json_decode($data_produk_raw, true);
-if (isset($data_produk['status']) && $data_produk['status'] == 1) {
-    $data_produk    = $data_produk['data'];
-    $code           = $data_produk['code'];
-    $product_logo   = $data_produk['product_logo'];
-    $product_name   = $data_produk['product_name'];
-    $product_price  = $data_produk['price'] ?? 0;
-    $product_price_add = $data_produk['price_add'] ?? 0;
-    // Diskon default (per bulan) untuk info card. Sama seperti rumus wv3 di renderDetail.
-    $profit = (float) $product_price + (float) $product_price_add;
-} else {
-    $error_msg = "Gagal memuat data produk.";
-    if (isset($data_produk['error_msg'])) {
-        $error_msg = $data_produk['error_msg'];
-    }
-    echo "<!doctype html><html lang='id'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1'/><title>Gagal</title></head><body style='font-family:sans-serif;padding:40px 20px;text-align:center;'>";
-    echo "<h2>⚠️</h2><p>" . htmlspecialchars($error_msg) . "</p>";
-    echo "<a href='index.php' style='color:#1a7fce'>← Kembali</a></body></html>";
-    exit;
-}
-
-$csrf_token = $app->csrf();
 ?>
 <!doctype html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><?= htmlspecialchars($product_name ?? 'Bayar Tagihan PDAM') ?></title>
+  <title><?= htmlspecialchars($product_name ?? 'Bayar Tagihan Listrik') ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -129,6 +125,7 @@ $csrf_token = $app->csrf();
     .hide-scrollbar::-webkit-scrollbar { display: none; }
 
     /* ===== Custom modal animations ===== */
+    /* Popup scale + fade in */
     #customModal:not(.hidden) > div {
       animation: modalPopIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     }
@@ -136,11 +133,13 @@ $csrf_token = $app->csrf();
       0%   { opacity: 0; transform: scale(0.85) translateY(8px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
+    /* Popup scale + fade out (close) */
     @keyframes modalPopOut {
       0%   { opacity: 1; transform: scale(1) translateY(0); }
       100% { opacity: 0; transform: scale(0.92) translateY(4px); }
     }
 
+    /* Icon circle: scale + fade in (delay 0.1s biar popup muncul dulu) */
     .modal-icon-circle {
       transform-origin: center;
       animation: iconCircleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
@@ -151,6 +150,7 @@ $csrf_token = $app->csrf();
       100% { opacity: 1; transform: scale(1); }
     }
 
+    /* Success check: stroke-dashoffset draw animation */
     .modal-check-path {
       stroke-dasharray: 28;
       stroke-dashoffset: 28;
@@ -160,6 +160,13 @@ $csrf_token = $app->csrf();
       to { stroke-dashoffset: 0; }
     }
 
+    /* Success check circle: scale pop in */
+    .modal-check-circle-bg {
+      transform-origin: center;
+      animation: iconCircleIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+    }
+
+    /* Fail icon: shake (subtle attention grab) */
     .modal-fail-path {
       transform-origin: center;
       animation: failShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.2s both;
@@ -171,6 +178,7 @@ $csrf_token = $app->csrf();
       100% { transform: scale(1) rotate(0); }
     }
 
+    /* Title + subtitle: fade up stagger */
     .modal-title    { animation: fadeUp 0.35s ease-out 0.25s both; }
     .modal-subtitle { animation: fadeUp 0.35s ease-out 0.35s both; }
     .modal-body     { animation: fadeUp 0.4s ease-out 0.45s both; }
@@ -180,6 +188,7 @@ $csrf_token = $app->csrf();
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* Backdrop fade in */
     #customModal { animation: backdropIn 0.2s ease-out both; }
     @keyframes backdropIn {
       from { opacity: 0; }
@@ -236,10 +245,10 @@ $csrf_token = $app->csrf();
     <section class="px-6 pt-5 pb-4 bg-white">
       <div class="flex items-center gap-3">
         <div class="h-12 w-12 rounded-2xl shadow-card bg-brand/8 flex items-center justify-center overflow-hidden shrink-0">
-          <img src="<?= htmlspecialchars($product_logo ?? '') ?>" class="h-full w-full object-contain" alt="PDAM" onerror="this.style.display='none';this.parentElement.innerHTML='<svg class=\'h-6 w-6 text-brand\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.8\'><path d=\'M12 2.5c-3.5 5-6 9-6 12.5a6 6 0 0012 0c0-3.5-2.5-7.5-6-12.5z\'/><path d=\'M9 14a3 3 0 003 3\'/></svg>'"/>
+          <img src="<?= htmlspecialchars($product_logo ?? '') ?>" class="h-full w-full object-contain" alt="PLN" onerror="this.style.display='none';this.parentElement.innerHTML='<svg class=\'h-6 w-6 text-brand\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.8\'><rect x=\'2\' y=\'7\' width=\'20\' height=\'15\' rx=\'2\'/><polyline points=\'17 2 12 7 7 2\'/></svg>'"/>
         </div>
         <div>
-          <h1 class="text-[17px] font-bold text-slate-900 leading-tight"><?= htmlspecialchars($product_name) ?></h1>
+          <h1 class="text-[17px] font-bold text-slate-900 leading-tight">Bayar Tagihan Listrik PLN</h1>
           <p class="text-[12px] text-mutedText mt-0.5"><?= htmlspecialchars($code) ?></p>
         </div>
       </div>
@@ -249,7 +258,7 @@ $csrf_token = $app->csrf();
     <section class="px-4 pb-4">
       <div class="rounded-[16px] border border-slate-200 bg-white shadow-soft overflow-hidden">
         <div class="px-5 pt-5 pb-4" id="inputSection">
-          <label class="text-[13px] font-semibold text-slate-700">Nomor Pelanggan / ID Tagihan</label>
+          <label class="text-[13px] font-semibold text-slate-700">Nomor Pelanggan</label>
           <div class="mt-2 flex gap-2">
             <input
               type="tel"
@@ -264,8 +273,8 @@ $csrf_token = $app->csrf();
               <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
             </button>
           </div>
-          <input type="hidden" id="csrf" value="<?= $csrf_token ?>" />
-          <p class="text-[12px] text-mutedText mt-2">Masukkan nomor pelanggan PDAM <?= htmlspecialchars($product_name) ?></p>
+          <input type="hidden" id="csrf" value="<?= $app->csrf(); ?>" />
+          <p class="text-[12px] text-mutedText mt-2">Masukkan nomor pelanggan PLN (11–12 digit)</p>
         </div>
 
         <!-- Info card -->
@@ -276,12 +285,17 @@ $csrf_token = $app->csrf();
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-[12px] text-emerald-700 leading-snug">
-                Bayar tagihan <?= htmlspecialchars($product_name) ?> di bukakios, kamu otomatis mendapatkan keuntungan dari biaya admin.
+                Bayar tagihan PLN di bukakios, kamu otomatis mendapatkan keuntungan dari biaya admin.
               </p>
             </div>
-            <a href="index.php" class="shrink-0 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-red-500 hover:bg-red-50 transition">
-              Ganti
-            </a>
+          </div>
+          <div class="mt-3 rounded-xl bg-amber-50 border border-amber-100 px-4 py-3 flex items-start gap-3">
+            <div class="shrink-0 mt-0.5">
+              <svg class="h-4 w-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <p class="text-[12px] text-amber-700 leading-snug">
+              Tagihan PLN pascabayar jatuh tempo tanggal 20 setiap bulannya. Pastikan bayar sebelum tanggal tersebut agar tidak terkena denda.
+            </p>
           </div>
         </div>
       </div>
@@ -315,8 +329,8 @@ $csrf_token = $app->csrf();
             <span class="text-[13px] font-semibold text-slate-800" id="nama">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[13px] text-slate-600">Alamat</span>
-            <span class="text-[13px] font-semibold text-slate-800 text-right ml-2 truncate max-w-[60%]" id="alamat">-</span>
+            <span class="text-[13px] text-slate-600">Tarif / Daya</span>
+            <span class="text-[13px] font-semibold text-slate-800" id="tarif_daya">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
             <span class="text-[13px] text-slate-600">Lembar Tagihan</span>
@@ -326,13 +340,9 @@ $csrf_token = $app->csrf();
             <span class="text-[13px] text-slate-600">Periode</span>
             <span class="text-[13px] font-semibold text-slate-800" id="periode">-</span>
           </div>
-          <div class="flex items-center justify-between px-5 py-3" id="row_meter_awal">
-            <span class="text-[13px] text-slate-600">Meter Awal</span>
-            <span class="text-[13px] font-semibold text-slate-800" id="meter_awal">-</span>
-          </div>
-          <div class="flex items-center justify-between px-5 py-3" id="row_meter_akhir">
-            <span class="text-[13px] text-slate-600">Meter Akhir</span>
-            <span class="text-[13px] font-semibold text-slate-800" id="meter_akhir">-</span>
+          <div class="flex items-center justify-between px-5 py-3">
+            <span class="text-[13px] text-slate-600">Jumlah Meter</span>
+            <span class="text-[13px] font-semibold text-slate-800" id="jml_meter">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
             <span class="text-[13px] text-slate-600">Tagihan</span>
@@ -345,6 +355,10 @@ $csrf_token = $app->csrf();
           <div class="flex items-center justify-between px-5 py-3">
             <span class="text-[13px] text-slate-600">Diskon Biaya Admin</span>
             <span class="text-[13px] font-semibold text-emerald-600" id="potongan">-</span>
+          </div>
+          <div class="flex items-center justify-between px-5 py-3">
+            <span class="text-[13px] text-slate-600">Denda</span>
+            <span class="text-[13px] font-semibold text-slate-800" id="denda">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3 bg-slate-50">
             <span class="text-[14px] font-bold text-slate-800">Total Bayar</span>
@@ -420,7 +434,7 @@ $csrf_token = $app->csrf();
     // State
     var trx_id = "";
 
-    // Product detail (dari API V2 detail_produk_by_code) untuk rumus diskon wv3
+    // Product detail (dari API V2 detail_produk_by_code)
     var productDetail = {
       price: <?= (int) $product_price ?>,
       price_add: <?= (int) $product_price_add ?>
@@ -471,7 +485,7 @@ $csrf_token = $app->csrf();
       return isNaN(n) ? 0 : n;
     }
 
-    // Format to Rp (legacy helper)
+    // Format to Rp
     function formatRp(n) {
       var s = String(Math.abs(Number(n))),
           r = (s.length % 3),
@@ -504,8 +518,8 @@ $csrf_token = $app->csrf();
 
     function showInfo() {
       showModal({
-        title: 'Cek Nomor Pelanggan PDAM',
-        message: 'Nomor pelanggan PDAM tertera pada kartu pelanggan, struk, atau invoice bulanan dari PDAM setempat. Biasanya berupa angka 4–10 digit. Jika kesulitan, hubungi kantor PDAM terdekat.',
+        title: 'Cek Nomor Listrik Anda',
+        message: 'ID pelanggan PLN terdiri dari 11–12 digit angka pada meteran listrik. Jika sulit, lihat struk tagihan atau struk pembelian token listrik sebelumnya.',
         variant: 'info',
         btnText: 'Ok'
       });
@@ -513,6 +527,14 @@ $csrf_token = $app->csrf();
 
     /**
      * Custom modal.
+     * @param {object} opts
+     *  - title      : string
+     *  - message    : string (untuk fail/info). Diabaikan kalau bodyHtml diset.
+     *  - bodyHtml   : string HTML (untuk success yang lebih kompleks). Override message.
+     *  - variant    : 'success' | 'fail' | 'info' (default 'info')
+     *  - btnText    : string (default 'Tutup')
+     *  - btnColor   : 'emerald' | 'slate' (default 'slate')
+     *  - onClose    : function (dipanggil saat modal ditutup)
      */
     function showModal(opts) {
       var o = opts || {};
@@ -524,17 +546,21 @@ $csrf_token = $app->csrf();
       var btnColor = o.btnColor || 'slate';
       var onClose = typeof o.onClose === 'function' ? o.onClose : null;
 
+      // Tiap variant punya animasi icon berbeda
       var iconHtml = '';
       var iconAnimClass = 'modal-icon-circle';
       if (variant === 'success') {
+        // Checkmark dengan draw animation (stroke-dashoffset)
         iconHtml = '<svg viewBox="0 0 24 24" class="w-11 h-11 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' +
                      '<path class="modal-check-path" d="M4 12.5 L10 18.5 L20 6.5"/>' +
                    '</svg>';
       } else if (variant === 'fail') {
+        // X icon dengan shake
         iconHtml = '<svg viewBox="0 0 24 24" class="w-11 h-11 text-red-500" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' +
                      '<path class="modal-fail-path" d="M6 6 L18 18 M18 6 L6 18"/>' +
                    '</svg>';
       } else {
+        // Info icon
         iconHtml = '<svg viewBox="0 0 24 24" class="w-11 h-11 text-brand" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' +
                      '<circle cx="12" cy="12" r="10"/>' +
                      '<path d="M12 16v-4M12 8h.01"/>' +
@@ -550,11 +576,16 @@ $csrf_token = $app->csrf();
 
       var inner;
       if (bodyHtml) {
+        // bodyHtml diasumsikan sudah include animasi class di dalamnya (lihat doBayar).
+        // Kalau belum, kita tambahkan default class wrapper biar animasi tetap jalan.
+        // Cek apakah bodyHtml sudah punya class animasi di icon circle.
         if (bodyHtml.indexOf('modal-icon-circle') === -1 && bodyHtml.indexOf('modal-check-path') === -1) {
+          // Patch icon: cari div w-20 h-20 rounded-full pertama, tambah class modal-icon-circle
           bodyHtml = bodyHtml.replace(
             /(<div class="[^"]*w-20 h-20 rounded-full[^"]*")>/,
             '$1 ' + iconAnimClass + '>'
           );
+          // Patch check path
           if (variant === 'success') {
             bodyHtml = bodyHtml.replace(
               /<polyline points="20 6 9 17 4 12"\s*\/>/,
@@ -584,13 +615,15 @@ $csrf_token = $app->csrf();
       }
 
       var bodyEl = document.getElementById('customModalBody');
-      var btnEl  = document.getElementById('customModalBtn');
+      var btnEl = document.getElementById('customModalBtn');
       var modalEl = document.getElementById('customModal');
 
       bodyEl.innerHTML = inner;
       btnEl.textContent = btnText;
+      // Reset & set button color class + animasi
       btnEl.className = 'modal-btn mt-6 w-full rounded-xl text-white text-[15px] font-bold py-3.5 px-5 transition active:scale-[0.99] ' + btnColorClass;
 
+      // Hapus listener lama, pasang yang baru (button + backdrop + escape)
       var newBtn = btnEl.cloneNode(true);
       btnEl.parentNode.replaceChild(newBtn, btnEl);
       newBtn.textContent = btnText;
@@ -603,18 +636,25 @@ $csrf_token = $app->csrf();
       };
       newBtn.addEventListener('click', closeAndFire);
 
+      // Click backdrop (selain inner card) untuk tutup
       var backdropHandler = function(e) {
         if (e.target === modalEl) closeAndFire();
       };
       modalEl.addEventListener('click', backdropHandler);
 
+      // Escape key untuk tutup
       var escHandler = function(e) {
         if (e.key === 'Escape' || e.keyCode === 27) closeAndFire();
       };
       document.addEventListener('keydown', escHandler);
 
+      // Cleanup handlers (disimpan di window agar bisa dihapus dari pemanggil luar kalau perlu)
+      window.__customModalCleanup = function() {
+        cleanupBackdrop();
+        cleanupEscape();
+      };
       function cleanupBackdrop() { modalEl.removeEventListener('click', backdropHandler); }
-      function cleanupEscape()   { document.removeEventListener('keydown', escHandler); }
+      function cleanupEscape() { document.removeEventListener('keydown', escHandler); }
 
       modalEl.classList.remove('hidden');
       modalEl.classList.add('flex');
@@ -623,6 +663,7 @@ $csrf_token = $app->csrf();
     function hideModal() {
       var modalEl = document.getElementById('customModal');
       if (!modalEl) return;
+      // Close animation: scale down + fade out, lalu hide setelah selesai
       var innerCard = modalEl.querySelector(':scope > div');
       if (innerCard) {
         innerCard.style.animation = 'modalPopOut 0.2s cubic-bezier(0.4, 0, 1, 1) forwards';
@@ -659,6 +700,7 @@ $csrf_token = $app->csrf();
         return;
       }
 
+      // Reset state: sembunyikan error dari percobaan sebelumnya
       hideErrorState();
 
       var csrf = document.getElementById('csrf').value;
@@ -668,7 +710,7 @@ $csrf_token = $app->csrf();
       document.getElementById('nope').disabled = true;
 
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '?code=<?= urlencode($code) ?>&msg=cek&id_pelanggan=' + encodeURIComponent(id_pelanggan) + '&csrf=' + encodeURIComponent(csrf), true);
+      xhr.open('GET', '<?= $file_me ?>?msg=cek&id_pelanggan=' + encodeURIComponent(id_pelanggan) + '&csrf=' + encodeURIComponent(csrf), true);
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
           hideLoading();
@@ -676,8 +718,7 @@ $csrf_token = $app->csrf();
           document.getElementById('nope').disabled = false;
           if (xhr.status === 200) {
             try {
-              var rawText = (xhr.responseText || '').replace(/^\uFEFF/, '').trim();
-              var myJsn = JSON.parse(rawText);
+              var myJsn = JSON.parse(xhr.responseText);
               if (myJsn.status == 1) {
                 renderDetail(myJsn);
                 switchToAction();
@@ -685,11 +726,7 @@ $csrf_token = $app->csrf();
                 showErrorState(myJsn.error_msg || 'Gagal mengecek tagihan');
               }
             } catch(e) {
-              console.error('[doCek] parse error:', e);
-              var rawResp = (xhr.responseText || '').substring(0, 500);
-              var debugInfo = '<div class="mt-2 text-left"><details class="text-left"><summary class="text-[11px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-1 max-h-32 overflow-auto rounded-lg bg-slate-100 p-2 text-[10px] text-slate-700 whitespace-pre-wrap break-all">' +
-                'Parse error: ' + (e.message || e) + '\n\nRaw response:\n' + rawResp + '</pre></details></div>';
-              showErrorState('Respons server tidak valid' + debugInfo);
+              showErrorState('Respons server tidak valid');
             }
           } else {
             showErrorState('Koneksi gagal (HTTP ' + xhr.status + ')');
@@ -707,49 +744,34 @@ $csrf_token = $app->csrf();
       // Hitung diskon biaya admin (rumus wv3)
       var price     = parseNum(productDetail.price);
       var priceAdd  = parseNum(productDetail.price_add);
-      var admin     = parseNum(d.admin != null ? d.admin : d.biaya_admin);
+      var admin     = parseNum(d.admin);
       var bulan     = parseNum(d.jml_bulan) || 1;
       var diskonAngka = admin - ((price + priceAdd) * bulan);
 
       // Tagihan, denda, dan total bayar dari API
       var tagihan     = parseNum(d.tagihan);
-      var totalBayarPelanggan = parseNum(d.total_bayar != null ? d.total_bayar : d.total_bayar_buyer);
+      var denda       = parseNum(d.denda);
+      var totalBayarPelanggan = parseNum(d.total_bayar);
 
       // Total Bayar Kamu (saldo seller) = tagihan + admin - diskon (rumus wv3)
       var totalBayarKamuAngka = tagihan + admin - diskonAngka;
       var profitAngka = totalBayarPelanggan - totalBayarKamuAngka;
 
-      // Field khusus PDAM (fallback ke '-' jika kosong)
-      var namaPelanggan = d.customer_name || d.nama_pelanggan || '-';
-      var alamat        = d.alamat || d.alamat_pelanggan || '-';
-      var meterAwal     = d.meter_awal != null && d.meter_awal !== '' ? d.meter_awal : '-';
-      var meterAkhir    = d.meter_akhir != null && d.meter_akhir !== '' ? d.meter_akhir : '-';
-
       // Tampilkan ke UI
       document.getElementById('tot_ta').textContent         = formatRupiah(totalBayarPelanggan);
-      document.getElementById('nama').textContent           = namaPelanggan;
-      document.getElementById('alamat').textContent         = alamat;
-      document.getElementById('lembar_tagihan').textContent   = (d.jml_bulan != null && d.jml_bulan !== '' ? d.jml_bulan + ' Bulan' : '1 Bulan');
+      document.getElementById('nama').textContent           = d.customer_name || d.nama_pelanggan || '-';
+      document.getElementById('tarif_daya').textContent     = d.tarif_daya || '-';
+      document.getElementById('lembar_tagihan').textContent = (d.jml_bulan != null ? d.jml_bulan + ' Bulan' : '-');
       document.getElementById('periode').textContent        = d.bln_th || d.periode || '-';
-      document.getElementById('meter_awal').textContent     = meterAwal;
-      document.getElementById('meter_akhir').textContent    = meterAkhir;
+      document.getElementById('jml_meter').textContent      = d.jml_meter != null ? d.jml_meter : '-';
       document.getElementById('tagihan').textContent        = formatRupiah(tagihan);
       document.getElementById('biaya').textContent          = formatRupiah(admin);
       document.getElementById('potongan').textContent       = '- ' + formatRupiah(diskonAngka);
+      document.getElementById('denda').textContent          = formatRupiah(denda);
       document.getElementById('tot_ka').textContent         = formatRupiah(totalBayarKamuAngka);
       document.getElementById('tot_ka2').textContent        = formatRupiah(totalBayarKamuAngka);
       document.getElementById('tot_ta2').textContent        = formatRupiah(totalBayarPelanggan);
       document.getElementById('profit').textContent         = formatRupiah(profitAngka);
-
-      // Sembunyikan baris meter_awal / meter_akhir kalau kosong (PDAM tidak selalu kirim)
-      if (meterAwal === '-') {
-        var rowMA = document.getElementById('row_meter_awal');
-        if (rowMA) rowMA.style.display = 'none';
-      }
-      if (meterAkhir === '-') {
-        var rowMK = document.getElementById('row_meter_akhir');
-        if (rowMK) rowMK.style.display = 'none';
-      }
     }
 
     function switchToAction() {
@@ -762,11 +784,8 @@ $csrf_token = $app->csrf();
     }
 
     function showErrorState(msg) {
-      var errorEl = document.getElementById('errorMsg');
-      var errorText = document.getElementById('errorText');
-      // Bersihkan text lama lalu append msg + (opsional) debug HTML
-      errorText.innerHTML = msg;
-      errorEl.classList.remove('hidden');
+      document.getElementById('errorText').textContent = msg;
+      document.getElementById('errorMsg').classList.remove('hidden');
     }
 
     function hideErrorState() {
@@ -784,14 +803,11 @@ $csrf_token = $app->csrf();
       document.getElementById('btnCek').classList.remove('hidden');
       document.getElementById('btnCek').disabled = false;
       document.getElementById('nope').disabled = false;
+      // Kosongkan nomor pelanggan agar tidak terbawa ke transaksi berikutnya
       document.getElementById('nope').value = '';
       document.getElementById('biaya_profit').value = '0';
       document.getElementById('progressBar').style.width = '33%';
-      // Reset baris kondisional PDAM (meter_awal / meter_akhir)
-      ['row_meter_awal', 'row_meter_akhir'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.style.display = '';
-      });
+      // Fokus kembali ke input agar UX lebih baik
       document.getElementById('nope').focus();
     }
 
@@ -799,28 +815,31 @@ $csrf_token = $app->csrf();
     function doBayar() {
       if (!trx_id) { showToastError('Silakan cek tagihan terlebih dahulu'); return; }
 
-      var csrf       = document.getElementById('csrf').value;
-      var id_pel     = document.getElementById('nope').value.trim();
+      var csrf      = document.getElementById('csrf').value;
+      var id_pel    = document.getElementById('nope').value.trim();
       var biaya_toko = document.getElementById('biaya_profit').value || '0';
 
       document.getElementById('btnActionGroup').classList.add('hidden');
       document.getElementById('btnProcessing').classList.remove('hidden');
 
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '?code=<?= urlencode($code) ?>&msg=bayar&biaya_toko=' + encodeURIComponent(biaya_toko) + '&id_pelanggan=' + encodeURIComponent(id_pel) + '&csrf=' + encodeURIComponent(csrf) + '&trx_id=' + encodeURIComponent(trx_id), true);
+      xhr.open('GET', '<?= $file_me ?>?msg=bayar&biaya_toko=' + encodeURIComponent(biaya_toko) + '&id_pelanggan=' + encodeURIComponent(id_pel) + '&csrf=' + encodeURIComponent(csrf) + '&trx_id=' + encodeURIComponent(trx_id), true);
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             try {
+              // Strip BOM dan whitespace sebelum parse agar lebih toleran
               var rawText = (xhr.responseText || '').replace(/^\uFEFF/, '').trim();
               var myJsn = JSON.parse(rawText);
               if (myJsn.status == 1) {
+                // Dialog sukses yang bagus
                 var namaPelanggan = document.getElementById('nama').textContent || '-';
                 var saldoBerkurang = document.getElementById('tot_ka2').textContent || 'Rp 0';
                 var trxId         = myJsn.data || myJsn.trx_id || trx_id;
 
                 var successHtml =
                   '<div class="flex flex-col items-center text-center">' +
+                    // Animated check circle (scale pop + stroke draw)
                     '<div class="modal-icon-circle w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center mb-5 ring-8 ring-emerald-50/50">' +
                       '<svg viewBox="0 0 24 24" class="w-11 h-11 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' +
                         '<path class="modal-check-path" d="M4 12.5 L10 18.5 L20 6.5"/>' +
@@ -828,6 +847,7 @@ $csrf_token = $app->csrf();
                     '</div>' +
                     '<h2 class="modal-title text-[20px] font-extrabold text-slate-900 mb-1.5 leading-tight">Pembayaran Berhasil</h2>' +
                     '<p class="modal-subtitle text-[13.5px] text-slate-500 leading-relaxed mb-5 px-2">Transaksi sedang diproses. Silahkan periksa riwayat transaksi kamu.</p>' +
+                    // Detail card - fade up
                     '<div class="modal-body w-full rounded-2xl bg-slate-50 border border-slate-100 p-4 text-left divide-y divide-slate-200/70">' +
                       '<div class="flex justify-between items-center py-2.5 text-[13px]"><span class="text-slate-500">ID Transaksi</span><span class="font-bold text-slate-900 font-mono">' + trxId + '</span></div>' +
                       '<div class="flex justify-between items-center py-2.5 text-[13px]"><span class="text-slate-500">Nama Pelanggan</span><span class="font-semibold text-slate-800 text-right ml-2 truncate max-w-[60%]">' + namaPelanggan + '</span></div>' +
