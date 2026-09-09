@@ -1,75 +1,13 @@
 <?php
-//echo "d";exit;
 require_once "../config.php";
 require_once "../_session.php";
+require_once "../lib/ApiV2.php";
 $openurl = "open://";
 $open_url = "open://";
-// if ($user_id != 40408) {
-//    if ($new_detail){
-// $id = abs((int)$_GET['id']);
-//    header("Location: https://wv3.bukakios.id/transaksi/$id");
-//    exit();
-//  }
-// }
+$app_id="net.bukakiosapps";
 
-function getTransaksi($id_trx, $token_jwt)
-{
-    $url = "https://api-v2.bukakios.net/wv-x7Up2p/transaksi/" . $id_trx;
+$api_v2 = new ApiV2($user_jwt);
 
-    $curl = curl_init();
-
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_HTTPHEADER => [
-            "Authorization: $token_jwt",
-            "Api-key: PLowElenThErTeRAphaRDwINEAntrIDe",
-        ],
-    ]);
-
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
-
-    curl_close($curl);
-
-    if ($err) {
-        return "cURL Error: " . $err;
-    } else {
-        return $response;
-    }
-}
-
-if ($user_id == 40408) {
-    // $id = abs((int)$_GET['id']);
-    // $response = getTransaksi($id, $user_jwt);
-    // $transaksi = json_decode($response, true);
-    // var_dump($transaksi["data"]);
-    // exit;
-}
-// $user_id = "14353";
-// $id = "11283";
-//$user_id = "46873";
-//$id = "589869";
-//if (isset($_GET['id'])) {
-//  $id = abs((int)$_GET['id']);
-// header("Location: https://wv3.bukakios.id/transaksi/$id");
-// exit();
-//}
-//if ($user_id == 28834 || $user_id == 278542 || $user_id == 40056) {
-//  $id = abs((int)$_GET['id']);
-// header("Location: https://wv3.bukakios.id/transaksi/$id");
-//exit();
-//}
-if ($user_id != 39958) {
-    // echo "maintenance";
-    // exit;
-}
 
 if (isset($_REQUEST["msg"])) {
     require_once "_act.php";
@@ -125,34 +63,17 @@ function datee($date)
 }
 
 if (isset($_GET["id"])) {
-    $id =  $_GET["id"];
+    $id = abs((int) $_GET["id"]);
     if ($user_id == 39958) {
      //   $id = 0;
     }
-    /*
-    $detail_transaksi = $db->fetch("select
-	t.uid,t.pembelianoperator_id,t.pembeliankategori_id,t.trx_id,t.product_name,product_code,t.nomor_tujuan,t.id_pel,t.price_client,t.selling_price_client,
-	t.sn,t.note,t.saldo_before_trx,t.saldo_after_trx,t.created_at,t.updated_at,t.status,
-	o.product_name as op_name, o.product_logo
-	from transaksi t inner join p_operator o
-	on t.pembelianoperator_id=o.id
-	where t.uid='$user_id' and t.id='$id'
-	");
-    if ($user_id != $detail_transaksi['uid']) {
-        exit;
-    }*/
 
     $data_post = [
         "key" => $api_key,
         "uid" => $user_id,
         "order_id" => $id,
     ];
-
-    // $url = "$api_url/detail_transaksi_full.php";
-    // $data_respon = $app->curl_post("$api_url/detail_transaksi_full.php", $data_post);
-    // $data_respon = callApi($url, $data_post);
-    // $transaksi = json_decode($data_respon, true);
-    $response = getTransaksi($id, $user_jwt);
+    $response = $api_v2->transaksi_detail($id);
     $transaksi = json_decode($response, true);
 
     if ($transaksi["status"] != 1) {
@@ -182,35 +103,6 @@ if (isset($_GET["id"])) {
     $pembelianoperator_id = $detail_transaksi["pembelianoperator_id"];
     $pembelian_kategori_id = $detail_transaksi["pembeliankategori_id"];
     $product_logo = $detail_transaksi["product_logo"];
-
-    if (isset($transaksi["h2h_id"])) {
-        $h2h_id = $transaksi["h2h_id"];
-        if ($h2h_id == 2566) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "https://svd.bukakios.net/voucher/detail/$sn");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $headers = ["Api-Key: A599084647F381FFFD16C6E5948341E65FC0D7AB"];
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            $call_api_svd = curl_exec($ch);
-            curl_close($ch);
-
-            $call_api_svd_res = json_decode($call_api_svd, true);
-            if (isset($call_api_svd_res["status"])) {
-                if ($call_api_svd_res["status"] == 0) {
-                    $svd_error = true;
-                    $svd_error_msg = $call_api_svd_res["error_msg"];
-                } else {
-                    $svd_data = $call_api_svd_res["data"];
-                    $svd_error = false;
-                    $svd_error_msg = "";
-                }
-            } else {
-                $svd_error = true;
-                $svd_error_msg = "Gagal menghubungi api SVD";
-            }
-        }
-    }
 
     //tambah data utang param
     $harga_hutang = str_replace(".", "", $selling_price_client);
@@ -301,7 +193,7 @@ if (isset($_GET["id"])) {
                 $open_url .
                 "https://play.google.com/store/apps/details?id=$app_id";
             $fakta_teks = "Tahukah kamu bahwa pembelian kamu di proses sangat cepat loh oleh bukakios, hanya dalam <b>$lama_proses detik</b>, pembelian kamu telah berhasil di proses :)
-			<p><a target='_blank' href='$link_open_rate' class='btn btn-warning btn-block btn-sm'><i class='font-icon font-icon-star'></i> Beri Rating</a>
+			<p class='mb-0 mt-2.5'><a target='_blank' href='$link_open_rate' class='flex w-full items-center justify-center gap-1.5 rounded-xl bg-amber-400 py-2 text-[13px] font-bold text-slate-900 transition hover:bg-amber-300 active:scale-[0.99]'><svg viewBox='0 0 24 24' class='h-4 w-4' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Beri Rating</a>
 			";
         } elseif ($lama_proses > 80 and $lama_proses < 420) {
             //8 menit
@@ -325,434 +217,353 @@ if (isset($_GET["id"])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#1a7fce',
+                        brandDark: '#1265a6',
+                    },
+                    boxShadow: {
+                        card: '0 5px 14px rgba(16, 24, 40, 0.07)',
+                        soft: '0 4px 12px rgba(15, 23, 42, 0.06)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://assets.bukakios.net/css/box.css" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
     <title>title::Detail Transaksi #<?= $trx_id ?></title>
     <style>
-        .notie-container {
-            box-shadow: none;
-        }
-
-        .title {
-            background-color: #f8f8fe;
-            padding: 10px;
-            color: #66728a;
-            font-weight: bold;
-            font-size: 20px;
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .cell-breakWord {
-            /* word-wrap: break-word;
-            max-width: 1px; */
-            word-wrap: break-word;
-            max-width: 1px;
-            -webkit-hyphens: auto;
-            /* iOS 4.2+ */
-            -moz-hyphens: auto;
-            /* Firefox 5+ */
-            -ms-hyphens: auto;
-            /* IE 10+ */
-            hyphens: auto;
-        }
-
-        .card {
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-            /* border: 1px; */
-        }
-
-        .box-circle {
-            width: auto;
-            height: 100px;
-            /* border: 0px solid #2196F3; */
-            border: 0px;
-            background-color: #2196F3;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            border-bottom-left-radius: 150%;
-            border-bottom-right-radius: 150%;
-        }
-
-        .product-logo {
-            margin-top: -20px;
-            text-align: center;
-        }
-
-        .bayar-id {
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-        }
-
-        .circle-logo {
+        /* Custom toast ala Tailwind, fixed top-center dengan animasi slide */
+        .bk-toast-wrap {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
             display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .bk-toast {
+            pointer-events: auto;
+            min-width: 240px;
+            max-width: 360px;
+            padding: 10px 14px 10px 12px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+            opacity: 0;
+            transform: translateY(-12px);
+            transition: opacity 180ms ease-out, transform 180ms ease-out;
+        }
+        .bk-toast.is-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .bk-toast--success {
+            border-color: #a7f3d0;
+            background: #ecfdf5;
+            color: #047857;
+        }
+        .bk-toast--success .bk-toast-icon {
+            color: #059669;
+        }
+        .bk-toast-icon {
+            display: inline-flex;
+            width: 22px;
+            height: 22px;
+            align-items: center;
             justify-content: center;
-            position: absolute;
-            top: 10%;
-            left: 41%;
-            background-color: #fff;
-            width: 18%;
-            height: 10%;
-            border-radius: 50%;
-            border: 1px solid #fff;
+            border-radius: 9999px;
+            background: #ffffff;
+        }
+        .bk-toast-text {
+            flex: 1 1 auto;
+            line-height: 1.35;
         }
 
-        .product-img {
-            position: relative;
-            width: 15%;
-            border-radius: 50%;
-            border: 3px solid #2196F3;
-            background-color: #fff;
+        a.disabled {
+            pointer-events: none;
+            cursor: default;
+            opacity: 0.5;
         }
 
-        .det-buy-text {
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .col-text {
-            font-size: 14px;
-            width: 90px;
-        }
-
-        .body {
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 80%;
-            background-color: #fff;
-            border-radius: 0px 0px 0px 0px;
-            margin-bottom: 10px;
-            padding-top: 4px;
-        }
-
-        .footer {
-            /* position: fixed; */
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: #fff;
-            color: white;
-            text-align: center;
-            padding-top: 2px;
-            padding-bottom: 10px;
+        a,
+        a:hover {
+            text-decoration: none;
         }
 
         body {
             font-family: Nunito;
         }
 
-        hr {
-            border: 2px dashed #9C9C9C;
-        }
-
         .loader {
             border: 16px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 16px solid #3498db;
+            border-top: 16px solid #1a7fce;
             width: 50px;
             height: 50px;
-            -webkit-animation: spin 5s linear infinite;
-            /* Safari */
+            -webkit-animation: spin 2s linear infinite;
             animation: spin 2s linear infinite;
         }
 
-        /* Safari */
         @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        /* #3498db */
     </style>
 </head>
 
-<body>
-    <div class="py-3" style='background-color:<?php echo $primary; ?>;height:90px'>
-        <!-- <div class="mx-auto py-3 px-3 text-center">
-             <img src="<?= $st_image ?>" height="60px"><br />
-            <span class="mt-3 font-weight-bold text-white"><?= $st_label ?></span>
-        </div> -->
-        <!--<div class="text-center mb-1">
-         <img class="mb-1" src=<?= $st_image ?>><br/>
-         <img class="mb-1" width="120px" src=<?= $st_image ?>><br />
+<body class="font-sans text-slate-950 antialiased">
 
-    </div> -->
-    </div>
-    <div class="body">
-        <div style="margin-top:-50px;margin-right:2px;margin-left:2px">
-            <div class="container">
-                <div class="card" style="border-radius:10px">
-                    <!-- <div class="box-circle">
-                        <div class="text-center mt-3" style="color:#fff">
-                            <strong style="font-size:10px"><?= $product_name ?></strong><br />
-                            <span style="font-size:8px"><?= $nomor_tujuan ?></span>
-                        </div>
-                        <div class="circle-logo"></div>
-                    </div> -->
-                    <!-- <div class="container"> -->
-                    <div class="product-logo">
-                        <img src="<?= $product_logo ?>" class="product-img">
-                    </div>
-                    <div class="py-1 px-4">
-                        <div class="row">
-                            <div class="col-12 text-center">
-                                <strong style="font-size:15px"><?= $product_name ?></strong>
-                            </div>
-                            <div class="col-12 text-center">
-                                <span style="font-size:14px;font-weight:bold"><?= $nomor_tujuan ?></span>
-                            </div>
-                        </div>
-                        <hr />
-                    </div>
-
-                    <div class="pb-1 px-4">
-                        <span class="font-weight-bold">ID Transaksi</span>
-
-                        <div id="copy_idd" data-text="ID Transaksi Berhasil Disalin" data-copy="<?= $trx_id ?>"></div>
-                        <span id="copy_id" class="font-weight-bold">#<?= $trx_id ?>
-                            <a class="btn btn-sm btn-outline-primary" style="color:<?= $primary ?>;padding:2px;font-size:10px;margin-bottom:5px" onclick="copyToClipboard('copy_idd')">Copy</a>
-                            <a href=''>
-                                <img src='https://assets.bukakios.net/img2/uploads/2019/12/569-refresh.png' style='height:20px;width:20px;margin-left:2px;margin-top:-2px' />
-                            </a>
-                        </span>
-                        <br />
-                        <span class="my-2" style='color:grey;font-size:19px'>Status Transaksi</span>
-                        <br />
-                        <?php echo $statusnya; ?><br />
-                        <span class="text-wrap font-weight-light" style="font-size:13px">Pada <?php echo $app->time_ago($created_at); ?></span>
-                        <hr>
-
-                        <div class="title">
-                            <span><i class="fa fa-info-circle mr-1"></i> Detail Pembelian</span>
-                        </div>
-
-                        <table style="margin-top:10px">
-                            <tr>
-                                <td class="col-text">Produk</td>
-                                <td class="det-buy-text">: <?= $product_name ?></td>
-                            </tr>
-                            <tr>
-                                <td class="col-text">No Tujuan</td>
-                                <td class="det-buy-text">: <?= $nomor_tujuan ?></td>
-                            </tr>
-                            <tr>
-                                <td class="col-text" style="vertical-align: text-top;">Tanggal</td>
-                                <td class="cell-breakWord det-buy-text">: <?= datee($created_at) ?></td>
-                            </tr>
-                            <?php if ($pembelian_kategori_id == 7) { ?>
-                                <tr>
-                                    <td class="col-text" style="vertical-align: text-top;">SN / Catatan</td>
-                                    <td class="cell-breakWord det-buy-text">: <?= $status_ppob ?></td>
-                                </tr>
-                            <?php } else { ?>
-                                <tr>
-                                    <td class="col-text" style="vertical-align: text-top;">SN / Catatan</td>
-                                    <td class="cell-breakWord det-buy-text">: <?= $sn ?></td>
-                                </tr>
-                            <?php } ?>
-                        </table>
-
-                        <hr>
-                        <div class="title">
-                            <span><i class="fa fa-money mr-1"></i> Detail Pembayaran</span>
-                        </div>
-                        <table style="margin-bottom: 10px;margin-top: 10px">
-                            <tr>
-                                <td class="col-text" style="width:150px">Saldo Awal</td>
-                                <td class=" det-buy-text" style="font-weight:bold;text-align: right"><?= $app->idr($saldo_before_trx) ?></td>
-                            </tr>
-                            <tr>
-                                <td class="col-text" style="width:150px">Harga Produk</td>
-                                <td class=" det-buy-text " style="font-weight:bold;text-align: right"><?= $app->idr($price_client) ?></td>
-                            </tr>
-                            <!--<tr>
-                            <td style="vertical-align: text-top; margin-bottom:-10px"></td>
-                            <td class="cell-breakWord">
-                                <hr />
-                            </td>
-                        </tr>-->
-                            <tr>
-                                <td class="col-text" style="width:150px">Sisa Saldo</td>
-                                <td class=" det-buy-text text-primary" style="font-weight:bold;text-align: right"><?= $app->idr($saldo_after_trx) ?></td>
-                            </tr>
-
-                        </table>
-
-                        <div class="alert alert-primary">
-                            <h5>Detail Keuntungan</h5>
-                            <table>
-                                <tr>
-                                    <td class="col-text" style="width:150px">Harga Jual Kamu</td>
-                                    <td class="det-buy-text" style="font-weight:bold;"><?= $app->idr($selling_price_client) ?> <a data-toggle="modal" data-target="#exampleModal"><i class="fa fa-pencil ml-1 text-primary"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-text" style="width:150px">Harga Modal/Produk</td>
-                                    <td class="det-buy-text text-danger" style="font-weight:bold;"><?= $app->idr($price_client) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-text text-success" style="width:150px">Profit Kamu</td>
-                                    <td class=" det-buy-text text-success" style="font-weight:bold;"><?= $app->idr($selling_price_client - $price_client) ?></td>
-                                </tr>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
+        <div class="flex items-center gap-3 px-4 py-3">
+            <button id="backBtn" aria-label="Kembali" class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-700 transition hover:bg-slate-200 active:scale-95">
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </button>
+            <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
+                <div class="h-full w-full rounded-full bg-brand"></div>
             </div>
-
-            <div class="mt-3">
-                <?php if (isset($h2h_id)) { ?>
-                    <div class='container'>
-                        <?php if (isset($svd_error)) {
-                            if ($svd_error) { ?>
-                                <div class="alert alert-warning"><?php echo $svd_error_msg; ?></div>
-                            <?php } else { ?>
-                                <div class="alert alert-succcess">
-                                    <h5>Voucher Kamu</h5>
-                                    <img width="80%" src="<?php echo $svd_data[
-                                        "voucher_image"
-                                    ]; ?> " alt="">
-                                </div>
-                        <?php }
-                        } ?>
-                    </div>
-                <?php } ?>
-                <div class='container'>
-                    <?php if ($status > 0) {
-                        require_once "additional_info_trx.php";
-                    } ?>
-                </div>
-                <div class='container'>
-                    <?php if (isset($fakta_tipe)) {
-                        echo "
-						<div class='alert bayar-id alert-fill alert-$fakta_tipe'>
-						$fakta_teks
-						</div>
-						";
-                    } ?>
-                </div>
-
-                <div class="col-12 mb-2 text-center">
-                    <a href="https://wv.bukakios.net/beli_lagi/index.php?nomor_tujuan=<?= $nomor_tujuan ?>&kode_produk=<?= $product_code ?>" class="btn btn-success btn-block <?= $user_id != "40408" ? "disabled" : "" ?>" style="color:#fff"><i class="fa fa-shopping-cart"></i> Beli Lagi</a>
-                </div>
-
-                <?php if ($status == 1) { ?>
-                    <div class="col-12 mb-2 text-center">
-                        <a href='<?php echo "print://https://member.bukakios.net/print-json/$signature/$id.json"; ?>' style='' class='btn btn-success btn-block'>Cetak Struk</a>
-                        <a href='<?php echo $open_url .
-                            "https://member.bukakios.net/pdf-mini/download/$signature/$id.pdf"; ?>' style='background-color:<?= $primary ?>' class='btn btn-primary btn-block'>Download Struk</a>
-                        <div class='alert alert-primary bayar-id' style='margin-top:10px'>
-                            Apakah transaksi ini di hutangi oleh pelanggan, biar gak lupa yukk di catet di aplikasi aja. <a href='<?php echo "catathutang://$msg"; ?>' class='btn btn-danger btn-block'>Catat Hutang</a>
-                        </div>
-                    </div>
-                <?php } ?>
-                <div class="col-12 mb-2 text-center">
-                    <div class='alert alert-primary bayar-id' style='margin-top:10px'>
-                        Butuh Bantuan? silahkan hubungi customer care kami di sini.
-                        <a style='margin-left:10px;margin-right:10px;background-color:green' href='<?php echo $openurl .
-                            $wa_komplain_link; ?>' class='btn btn-primary btn-block'><i class="fa fa-phone"></i> Via WhatsApp</a>
-                        <a style='margin-left:10px;margin-right:10px;background-color:<?= $primary ?>' href='../kontak/' class='btn btn-primary btn-block'><i class="fa fa-envelope"></i> Via Kontak Lainnya</a>
-                    </div>
-                </div>
-            </div>
-
+            <div class="shrink-0 text-[15px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
         </div>
-    </div>
+    </header>
 
-    <!-- Modal -->
+    <main class="mx-auto max-w-lg px-4 py-5">
+        <!-- Produk -->
+        <div class="mb-4 flex flex-col items-center text-center">
+            <div class="inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
+                <?php if (!empty($product_logo)) { ?>
+                    <img src="<?= $product_logo ?>" alt="<?= $product_name ?>" class="h-10 w-10 object-contain">
+                <?php } else { ?>
+                    <svg viewBox="0 0 24 24" class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg>
+                <?php } ?>
+            </div>
+            <h1 class="m-0 mt-2.5 text-[15px] font-bold leading-tight text-slate-900"><?= $product_name ?></h1>
+            <p class="m-0 mt-0.5 text-[14px] font-semibold text-slate-600"><?= $nomor_tujuan ?></p>
+        </div>
+
+        <div class="space-y-3.5">
+            <!-- Status -->
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div class="flex items-center justify-between gap-3">
+                    <?php if ($status == 1) { ?>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[12px] font-bold text-emerald-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Berhasil</span>
+                    <?php } elseif ($status == 0) { ?>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[12px] font-bold text-amber-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Sedang Di Proses</span>
+                    <?php } else { ?>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[12px] font-bold text-rose-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Refund</span>
+                    <?php } ?>
+                    <span class="text-[12px] font-medium text-slate-400">Pada <?= $app->time_ago($created_at) ?></span>
+                </div>
+            </div>
+
+            <!-- Detail Pembelian -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[13px]">
+                <div class="mb-3 flex items-center gap-3">
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></div>
+                    <div><h3 class="m-0 text-[14px] font-bold leading-tight text-slate-900">Detail Pembelian</h3><p class="m-0 mt-0.5 text-[12px] font-medium text-slate-500">Informasi transaksi kamu</p></div>
+                </div>
+                <div class="flex items-center justify-between gap-2 border-b border-slate-100 py-2">
+                    <span class="text-slate-500">ID Transaksi</span>
+                    <span class="flex items-center gap-1.5">
+                        <span id="copy_id" data-text="ID Transaksi Berhasil Disalin" data-copy="<?= $trx_id ?>" class="font-mono font-semibold text-slate-900">#<?= $trx_id ?></span>
+                        <button onclick="copyToClipboard('copy_id')" type="button" aria-label="Salin ID Transaksi" class="inline-flex items-center justify-center rounded-md bg-slate-50 px-1.5 py-0.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 active:scale-95 transition">
+                            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                        <a href="" aria-label="Refresh status" class="inline-flex items-center justify-center rounded-md px-1 py-0.5 text-slate-400 hover:text-brand active:scale-95 transition">
+                            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        </a>
+                    </span>
+                </div>
+                <div class="flex justify-between gap-3 border-b border-slate-100 py-2"><span class="shrink-0 text-slate-500">Produk</span><span class="text-right font-medium text-slate-900"><?= $product_name ?></span></div>
+                <div class="flex justify-between gap-3 border-b border-slate-100 py-2"><span class="shrink-0 text-slate-500">No Tujuan</span><span class="break-words text-right font-medium text-slate-900"><?= $nomor_tujuan ?></span></div>
+                <div class="flex justify-between gap-3 border-b border-slate-100 py-2"><span class="shrink-0 text-slate-500">Tanggal</span><span class="text-right font-medium text-slate-900"><?= datee($created_at) ?></span></div>
+                <div class="flex justify-between gap-3 py-2">
+                    <span class="shrink-0 text-slate-500">SN / Catatan</span>
+                    <span class="break-words text-right font-medium text-slate-900"><?php if ($pembelian_kategori_id == 7) { echo $status_ppob; } else { echo $sn; } ?></span>
+                </div>
+            </div>
+
+            <!-- Detail Pembayaran -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[13px]">
+                <div class="mb-3 flex items-center gap-3">
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.2" fill="currentColor"/></svg></div>
+                    <div><h3 class="m-0 text-[14px] font-bold leading-tight text-slate-900">Detail Pembayaran</h3><p class="m-0 mt-0.5 text-[12px] font-medium text-slate-500">Ringkasan saldo &amp; harga</p></div>
+                </div>
+                <div class="flex justify-between border-b border-slate-100 py-1.5"><span class="text-slate-500">Saldo Awal</span><span class="font-medium text-slate-900"><?= $app->idr($saldo_before_trx) ?></span></div>
+                <div class="flex justify-between border-b border-slate-100 py-1.5"><span class="text-slate-500">Harga Produk</span><span class="font-medium text-slate-900"><?= $app->idr($price_client) ?></span></div>
+                <div class="flex justify-between py-1.5"><span class="text-slate-500">Sisa Saldo</span><span class="font-semibold text-brand"><?= $app->idr($saldo_after_trx) ?></span></div>
+
+                <div class="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3">
+                    <div class="flex justify-between py-0.5">
+                        <span class="text-emerald-700/80">Harga Jual Kamu</span>
+                        <span class="flex items-center gap-1.5 font-bold text-emerald-700"><?= $app->idr($selling_price_client) ?>
+                            <button type="button" data-toggle="modal" data-target="#exampleModal" aria-label="Ubah harga jual" class="inline-flex items-center justify-center rounded-md px-1 py-0.5 text-emerald-600 hover:text-emerald-800 active:scale-95 transition">
+                                <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="flex justify-between py-0.5"><span class="text-emerald-700/80">Harga Modal/Produk</span><span class="font-bold text-rose-600"><?= $app->idr($price_client) ?></span></div>
+                    <div class="mt-1 flex justify-between border-t border-emerald-200 pt-1.5"><span class="font-semibold text-emerald-800">Profit Kamu</span><span class="font-bold text-emerald-700"><?= $app->idr($selling_price_client - $price_client) ?></span></div>
+                </div>
+            </div>
+
+            <div>
+                <?php if ($status > 0) {
+                    require_once "additional_info_trx.php";
+                } ?>
+            </div>
+
+            <?php if (isset($fakta_tipe)) { ?>
+                <div class="flex items-start gap-2.5 rounded-2xl border px-4 py-3 text-[13px] <?= $fakta_tipe == 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : ($fakta_tipe == 'warning' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-rose-200 bg-rose-50 text-rose-700') ?>">
+                    <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    <div class="min-w-0 leading-relaxed"><?= $fakta_teks ?></div>
+                </div>
+            <?php } ?>
+
+            <!-- Aksi -->
+            <div class="space-y-2.5">
+                <?php if ($status == 1) { ?>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <a href='<?php echo "print://https://member.bukakios.net/print-json/$signature/$id.json"; ?>' class="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2.5 text-[13px] font-semibold text-slate-700 transition hover:bg-slate-50">
+                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            Cetak Struk
+                        </a>
+                        <a href='<?php echo $open_url . "https://member.bukakios.net/pdf-mini/download/$signature/$id.pdf"; ?>' class="flex items-center justify-center gap-1.5 rounded-xl bg-brand/10 py-2.5 text-[13px] font-bold text-brand transition hover:bg-brand/20">
+                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Download Struk
+                        </a>
+                    </div>
+                    <a href='<?php echo "catathutang://$msg"; ?>' class="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[13px] font-bold text-rose-700 transition active:scale-[0.99]">
+                        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        Catat Hutang
+                    </a>
+                <?php } ?>
+
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 text-center">
+                    <p class="m-0 text-[12px] font-medium text-slate-500">Butuh bantuan? hubungi customer care kami</p>
+                    <div class="mt-2.5 grid grid-cols-2 gap-2.5">
+                        <a href='<?php echo $openurl . $wa_komplain_link; ?>' class="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 py-2 text-[13px] font-bold text-white transition hover:bg-emerald-600">
+                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            Via WhatsApp
+                        </a>
+                        <a href="../kontak/" class="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 py-2 text-[13px] font-semibold text-slate-700 transition hover:bg-slate-50">
+                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            Kontak Lainnya
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Ubah Harga Jual -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ubah Harga Jual Kamu</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-content rounded-2xl border-0 shadow-card">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title m-0 text-[15px] font-bold text-slate-900" id="exampleModalLabel">Ubah Harga Jual Kamu</h5>
+                    <button type="button" class="close m-0 p-0 text-slate-400" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body pt-2">
                     <div class="loader mx-auto mt-4" id="load" style="display:none"></div>
                     <div class="text-center mt-1">
-                        <span class="text-muted" style="font-weight:bold;display:none" id="wait">Please Wait...</span>
-                        <div class="text-muted" style="font-weight:bold;display:none" id="msg"></div>
+                        <span class="text-[12px] font-semibold text-slate-400" style="display:none" id="wait">Please Wait...</span>
+                        <div class="text-[12px] font-semibold text-slate-600" style="display:none" id="msg"></div>
                     </div>
-                    <div class="row">
-                        <div class="col-12 mb-2">
-                            <input type="number" id="fee" class="form-control" value="<?php echo $selling_price_client; ?>">
-                            <div id="msg-invalid" style="display:none" class="invalid-feedback">
-
-                            </div>
-                            <input type="hidden" id="csrf" class="form-control" value="<?= $app->csrf() ?>">
-                        </div>
-                        <div class="col-6 text-center ">
-                            <button type="button" class="btn btn-danger btn-block" id="cancel" data-dismiss="modal">Tidak</button>
-                        </div>
-                        <div class="col-6 text-center">
-                            <button type="button" onclick="change()" id="change" class="btn btn-success btn-block">Ubah</button>
-                        </div>
-
-                        <div class="col-12 text-center">
-                            <a href="" id="refresh" class="btn btn-primary " style="width:150px;display:none">
-                                <img src='https://assets.bukakios.net/img2/uploads/2021/02/233-569-refresh.png' style='height:20px;width:20px;margin-left:2px;margin-top:-2px' />
-                            </a>
-                        </div>
+                    <div class="mt-2">
+                        <input type="number" id="fee" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-[14px] font-semibold text-slate-900 outline-none focus:border-brand" value="<?php echo $selling_price_client; ?>">
+                        <div id="msg-invalid" style="display:none" class="mt-1.5 text-[12px] font-medium text-rose-600"></div>
+                        <input type="hidden" id="csrf" value="<?= $app->csrf() ?>">
+                    </div>
+                    <div class="mt-3 grid grid-cols-2 gap-2.5">
+                        <button type="button" class="rounded-xl border border-slate-200 py-2 text-[13px] font-semibold text-slate-700 transition hover:bg-slate-50" id="cancel" data-dismiss="modal">Tidak</button>
+                        <button type="button" onclick="change()" id="change" class="rounded-xl bg-brand py-2 text-[13px] font-bold text-white transition hover:bg-brandDark">Ubah</button>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <a href="" id="refresh" class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2 text-[13px] font-semibold text-slate-700" style="display:none">
+                            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                            Refresh
+                        </a>
                     </div>
                 </div>
-                <!-- <div class="modal-footer">
-
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div> -->
             </div>
         </div>
     </div>
 
-    <div class="footer">
-        <!-- <div class="mx-3 my-3">
-        <a href="livechat://open.it">Need help?</a>
-    </div> -->
-    </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
     <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/sweetalert.min.js"></script>
-    <script src="https://unpkg.com/notie"></script>
-    <!-- <script src="https://member.bukakios.net/js/lib/notie/notie.js"></script> -->
-    <!-- <script src="https://member.bukakios.net/js/me/copy.js"></script> -->
-    <script>
-        $(document).ready(function() {
-            $('#myModal').on('shown.bs.modal', function() {
-                $('#myInput').trigger('focus')
-            })
-        })
+    <!-- <script src="../assets/js/sweetalert.min.js"></script> -->
+    <!-- <script src="https://unpkg.com/notie"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 
+    <script>
+        // Android-aware back button (pola reset-pin)
+        (function() {
+            function goBack(e) {
+                e.preventDefault();
+                if (window.android && typeof window.android.back === 'function') {
+                    try { window.android.back(); return; } catch (_) {}
+                }
+                if (history.length > 1) { history.back(); }
+                else { window.location.href = '<?= $c_url ?? "/" ?>'; }
+            }
+            var btn = document.getElementById('backBtn');
+            if (btn) btn.addEventListener('click', goBack);
+        })();
+    </script>
+    <script>
         var copyToasterTimeout = 0;
         var popupText = "";
+
+        // Toast helper custom — Tailwind-style, fixed top-center, auto-hide 2.5s.
+        function showToast(msg, kind) {
+            if (!msg) return;
+            var wrap = document.getElementById('bk-toast-wrap');
+            if (!wrap) {
+                wrap = document.createElement('div');
+                wrap.id = 'bk-toast-wrap';
+                wrap.className = 'bk-toast-wrap';
+                document.body.appendChild(wrap);
+            }
+            var t = document.createElement('div');
+            t.className = 'bk-toast bk-toast--' + (kind || 'success');
+            t.innerHTML = '<span class="bk-toast-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M20 6L9 17l-5-5"/></svg></span><span class="bk-toast-text">' + msg + '</span>';
+            wrap.appendChild(t);
+            // trigger anim
+            requestAnimationFrame(function () { t.classList.add('is-show'); });
+            setTimeout(function () {
+                t.classList.remove('is-show');
+                setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 250);
+            }, 2500);
+        }
 
         function copyToClipboard(elementId) {
             var aux = document.createElement("input");
@@ -779,17 +590,9 @@ if (isset($_GET["id"])) {
             aux.blur();
             document.body.removeChild(aux);
             var text = document.getElementById(elementId);
-            popupText = text.getAttribute('data-text');
-            console.log(popupText);
-            //$('.popup-action__text').text(popupText);
-            /// $('.popup-action').addClass('active');
-            //$('.popup-action__text').text(popupText);
+            popupText = text.getAttribute('data-text') || 'Berhasil disalin';
             window.clearTimeout(copyToasterTimeout);
-            notie.alert({
-                type: 'success',
-                text: popupText,
-                time: 2
-            }) // Hides after 2 seconds
+            showToast(popupText, 'success');
         }
 
         function change() {
@@ -801,13 +604,12 @@ if (isset($_GET["id"])) {
             if (harga < modal) {
                 $('#msg-invalid').show();
                 document.getElementById("msg-invalid").textContent = "Harga Jual Tidak Boleh Dibawah Harga Modal";
-                feee.classList.add("is-invalid");
+                feee.classList.add("border-rose-400");
             } else if (profit > 50000) {
                 $('#msg-invalid').show();
                 document.getElementById("msg-invalid").textContent = "Keuntungan Tidak Boleh Diatas 50.000";
-                feee.classList.add("is-invalid");
+                feee.classList.add("border-rose-400");
             } else if (harga > modal && profit < 50000) {
-                // console.log(harga);
                 $('#fee').hide();
                 $('#msg-invalid').hide();
                 $('#cancel').hide();
@@ -823,14 +625,11 @@ if (isset($_GET["id"])) {
                         $('#msg').show();
                         var myJsn = JSON.parse(output);
                         var d = myJsn.msg;
-                        console.log(d);
                         if (myJsn.status == 1) {
                             var dataJsn = myJsn.msg;
-                            console.log(dataJsn);
                             document.getElementById("msg").textContent = myJsn.msg;
 
                         } else {
-                            // console.log(myJsn.error_msg)
                             document.getElementById("msg").textContent = myJsn.error_msg;
                         }
                     }

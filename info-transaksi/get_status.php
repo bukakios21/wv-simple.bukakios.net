@@ -2,8 +2,11 @@
 //echo "d";exit;
 require_once("../config.php");
 require_once("../_session.php");
+require_once("../lib/ApiV2.php");
 $openurl = "open://";
 $open_url = "open://";
+
+$api_v2 = new ApiV2($user_jwt);
 // if ($user_id != 40408) {
 //    if ($new_detail){
 // $id = abs((int)$_GET['id']);
@@ -12,43 +15,9 @@ $open_url = "open://";
 //  }
 // }
 
-function getTransaksi($id_trx, $token_jwt) {
-
-    $url = "https://api-v2.bukakios.net/wv-x7Up2p/transaksi/" . $id_trx;
-
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            "Authorization: $token_jwt",
-            "Api-key: PLowElenThErTeRAphaRDwINEAntrIDe"
-        ),
-    ));
-
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
-
-
-    curl_close($curl);
-
-    if ($err) {
-        return "cURL Error: " . $err;
-    } else {
-        return $response;
-    }
-}
-
 if (isset($_GET['id'])) {
     $id = abs((int)$_GET['id']);
-    $json_data = getTransaksi($id, $user_jwt);
+    $json_data = $api_v2->transaksi_detail($id);
     $transaksi = json_decode($json_data, true);
     if ($transaksi['status'] != 1) {
         echo "no data trx";

@@ -1,35 +1,11 @@
 <?PHP
 $show_additional = false;
 
-if (!function_exists('getAdditionalTrx')) {
-    function getAdditionalTrx($id_trx, $token_jwt)
-    {
-        $url = "https://api-v2.bukakios.net/wv-x7Up2p/transaksi/additional-info/" . $id_trx;
-
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => [
-                "Authorization: $token_jwt",
-                "Api-key: PLowElenThErTeRAphaRDwINEAntrIDe",
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return $response;
-    }
+if (!isset($api_v2)) {
+    require_once "../lib/ApiV2.php";
+    $api_v2 = new ApiV2($user_jwt);
 }
-
-$data_additional = getAdditionalTrx($id, $user_jwt);
+$data_additional = $api_v2->transaksi_additional_info($id);
 $data_additional = json_decode($data_additional, true);
 if (
     isset($data_additional['status']) &&
@@ -63,11 +39,10 @@ if (
                     data-copy="<?PHP echo htmlspecialchars($ax_sn, ENT_QUOTES, 'UTF-8'); ?>">
                 <?PHP echo nl2br(htmlspecialchars($ax_sn, ENT_QUOTES, 'UTF-8')); ?>
             </h3>
-            <br>
-            <span style="text-decoration:underline;color:#00bfff;cursor:pointer"
-                  onclick="copyToClipboard('sn_catatan')">
+            <button type="button" onclick="copyToClipboard('sn_catatan')" class="mt-8 inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand px-5 py-2 text-[13px] font-bold text-white shadow-md transition hover:bg-brandDark active:scale-95">
+                <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 <?PHP echo htmlspecialchars($ax_text_salin, ENT_QUOTES, 'UTF-8'); ?>
-            </span></div>
+            </button></div>
         <?PHP echo $ax_additional; ?>
     </div> <?PHP } ?>
 

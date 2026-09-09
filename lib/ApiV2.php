@@ -292,6 +292,20 @@ class ApiV2
         return $this->curl_get_url($url);
     }
 
+    // transaksi_detail: GET /transaksi/:trx_id (WV route, JWT + Api-Key).
+    // Detail transaksi PPOB untuk halaman info-transaksi. Id ada di URL path.
+    function transaksi_detail($id){
+        $url =  $this->api_url_wv."/transaksi/".$id;
+        return $this->curl_get_url($url);
+    }
+
+    // transaksi_additional_info: GET /transaksi/additional-info/:id.
+    // Info tambahan struk (mis. token PLN) yang tampil saat status transaksi > 0.
+    function transaksi_additional_info($id){
+        $url =  $this->api_url_wv."/transaksi/additional-info/".$id;
+        return $this->curl_get_url($url);
+    }
+
     function getLevelUser(){
         $url =  $this->api_url_wv."/user/get-level";
         return $this->grab_data_url($url);

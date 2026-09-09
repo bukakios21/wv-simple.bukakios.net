@@ -1,3 +1,0 @@
-<div class='alert alert-warning bayar-id mt-3 text-justify' style='margin-top:-10px'>
-	Harap Baca!!, Mohon transfer sesuai dengan nominal di atas, yakni <b><?PHP echo $total_transfer_rp; ?></b>, tidak kurang dan tidak lebih, jika kamu transfer tidak sesuai dengan nominal tersebut akan memperlambat proses verifikasi pembayaran kamu :), bahkan uang yang kamu transfer bisa hangus karna ini sudah tersistem. jadi di mohon kerjasamanya untuk mengirimkan sesuai nominal yang tertera.
-</div>
