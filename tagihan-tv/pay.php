@@ -18,7 +18,6 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     if ($_SESSION['csrf'] === $csrf) {
         if ($msg === "cek") {
             $id_pelanggan = $_REQUEST['id_pelanggan'];
-            $kode_produk="tv";
             $cek_tagihan_http = $api_v2->inq_pasca($kode_produk, $id_pelanggan);
 
             $cek_tagihan = json_decode($cek_tagihan_http, true);

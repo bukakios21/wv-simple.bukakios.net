@@ -1,116 +1,39 @@
 <?php
 require_once("../config.php");
-
-if (isset($_POST['ewallet_number'])) {
-    //khusus ovo push linkqu
-    $number = $_POST['ewallet_number'];
-    $topup_id = $_POST['topup_id'];
-    $data_post = array(
-        "key" => $api_key,
-        "id" => $topup_id,
-        "pg" => "linkqu",
-        "ewallet_number" => $number
-    );
-    $data_info_api = $app->curl_post("$api_url/get_topup_detail.php", $data_post);
-    $data_info = json_decode($data_info_api, true);
-    if (isset($data_info['status'])) {
-        if ($data_info['status'] == 1) {
-            $out = array(
-                "status" => 1,
-                "msg" => "Silahkan cek notifikasi OVO kamu. Topup akan di proses otomatis jika kamu telah melakukan pembayaran melalui aplikasi OVO. Silahkan reload halaman ini dan tunggu untuk notifikasi topupnya. Terima kasih "
-            );
-        } else {
-            $out = array(
-                "status" => 0,
-                "error_msg" => $data_info['error_msg']
-            );
-        }
-    } else {
-        $out = array(
-            "status" => 0,
-            "error_msg" => "Server Api Respon Tidak Valid!!, silahkan kontak tim kami! $data_info_api"
-        );
-        // $pg_error = true;
-        // // $error_msg = $data_info;
-        // $error_msg = "Server Api Respon Tidak Valid!!, silahkan kontak tim kami!";
-    }
-
-    echo json_encode($out);
-    exit;
-}
-
-
-require_once("../config_db.php");
 require_once("../_session.php");
+require_once('../lib/ApiV2.php');
+
 $openurl = "open://";
 $open_url = "open://";
-// $user_id = 39958;
 
-function callTopupApi($topup_id, $param_jwt) {
-    if (empty($param_jwt)) {
-        return "Error: JWT Token tidak boleh kosong!";
-    }
+$api_v2 = new ApiV2($user_jwt);
 
-    $url = 'https://api-v2.bukakios.net/wv-x7Up2p/third-party/topup';
-
-    $payload = json_encode([
-        'topup_id' => $topup_id
-    ]);
-
-    $headers = [
-        'Authorization: ' . $param_jwt, // Tambahkan "Bearer " jika perlu
-        'Content-Type: application/json'
-    ];
-
-    $curl = curl_init();
-
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => $payload,
-        CURLOPT_HTTPHEADER => $headers
-    ]);
-
-    $response = curl_exec($curl);
-    $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    $error = curl_error($curl);
-
-    curl_close($curl);
-
-    if ($error) {
-        return "cURL Error: " . $error;
-    }
-return $response;
-    return [
-        'status_code' => $http_code,
-        'response' => json_decode($response, true)
-    ];
-}
-
-if ($user_id == 1225305 or $user_id == 39958) {
-   $id = abs((int)$_GET['id']);
-   //header("Location: https://wv3.bukakios.id/topup/$id");
-   //exit();
-}
 
 if (isset($_GET['id'])) {
     $topup_id = abs((int) $_GET['id']);
 
-    $detail_topup = $db->fetch("select
-	t.nomor_rekening,t.uid,t.topup_metode,t.topup_metode_kategori,t.nominal_topup,t.kode_unik,t.fee,t.total_transfer,t.nomor_rekening as rekening_pg,t.created_at,t.expired_at,t.status,m.nama_kategori,m.nama_metode,m.gambar_metode,m.nomor_rekening,m.nama_rekening,m.id
-	from topup t inner join topup_metode m
-	on t.topup_metode=m.id
-	where t.uid='$user_id' and t.id='$topup_id'
-	");
-    if (!isset($detail_topup['uid'])) {
+    // ambil detail topup dari API V2 (ganti DB lokal)
+    $resApi = $api_v2->topup_detail($topup_id);
+    //var_dump($resApi);
+    $detail_topup = json_decode($resApi, true);
+
+    if (!isset($detail_topup['status']) || $detail_topup['status'] != 1 || empty($detail_topup['data']['uid'])) {
         echo "Data Topup tidak di temukan #$topup_id";
+        if (isset($app) && method_exists($app, 'simpan_file')) {
+            //$app->simpan_file("topup_detail_error.txt", $resApi ?? '');
+        }
         exit;
     }
+
+
+    // flatten response: dari {data: {...}} jadi variabel yang sama seperti legacy
+    // agar 80+ file di detail_topup/*.php tetap kompatibel tanpa diubah.
+    $detail_topup = $detail_topup['data'];
+
     $total_transfer_rp = $app->idr($detail_topup['total_transfer']);
     $topup_metode_kategori = $detail_topup['topup_metode_kategori'];
     $nama_kategori = $detail_topup['nama_kategori'];
-    $metode_id = $detail_topup['id'];
+    $metode_id = $detail_topup['metode_id'];
     $uid = $detail_topup['uid'];
     $nama_metode = $detail_topup['nama_metode'];
     $topup_metode = $detail_topup['topup_metode'];
@@ -118,18 +41,68 @@ if (isset($_GET['id'])) {
     $kode_unik = $detail_topup['kode_unik'];
     $fee = $detail_topup['fee'];
     $total_transfer = $detail_topup['total_transfer'];
-    $nomor_rekening = $detail_topup['nomor_rekening'];
+    // Backend: data.nomor_rekening = t.nomor_rekening (rekening_pg), data.nomor_rekening_bk = m.nomor_rekening
+    // Legacy PHP behavior: $nomor_rekening akhir yang dipakai = m.nomor_rekening (= nomor_rekening_bk)
+    $nomor_rekening_topup = $detail_topup['nomor_rekening'];
+    $nomor_rekening = $detail_topup['nomor_rekening_bk'];
     $created_at = $detail_topup['created_at'];
     $expired_at = $detail_topup['expired_at'];
     $status = $detail_topup['status'];
     $gambar_metode = $detail_topup['gambar_metode'];
-    $nomor_rekening = $detail_topup['nomor_rekening'];
     $nama_rekening = $detail_topup['nama_rekening'];
     $terima_bersih = $total_transfer + $fee;
     if ($topup_metode_kategori != 1) {
         $terima_bersih = $total_transfer - $fee;
     }
     $hash_topup = md5("$topup_id:$uid:$topup_metode:$created_at");
+
+        // Payment info: kalau status masih pending, ambil instruksi bayar dari BE.
+        // - kategori BANK (topup_metode_kategori == 1): return rekening manual,
+        //   sehingga FE tidak perlu render DB nomor_rekening manual lagi (konsisten).
+        // - selainnya (qris/va/ewallet): return QR / VA / link dari Tokopay.
+        // Response shape: { topup_id, tipe, nilai, cara_bayar, expired_at }
+        $payment_info = null;
+        $payment_error = null;
+        if ((int)$status === 0) {
+            $resPay = $api_v2->topup_payment($topup_id);
+            //var_dump($resPay); //ini jangan dihapusm
+            $resPayJson = json_decode($resPay, true);
+            if (is_array($resPayJson) && isset($resPayJson['status']) && (int)$resPayJson['status'] === 1
+                && isset($resPayJson['data']['tipe'])) {
+                $payment_info = $resPayJson['data'];
+            } else {
+                $payment_error = is_array($resPayJson) && isset($resPayJson['error_msg'])
+                    ? $resPayJson['error_msg']
+                    : 'Gagal memuat info pembayaran';
+            }
+        }
+    // Format created_at (ISO/RFC3339 atau "YYYY-MM-DD HH:MM:SS") jadi "09 Sep 2026, 14:00 WIB"
+    function _formatTopupDate($s) {
+        if (!$s) return '-';
+        $ts = strtotime($s);
+        if (!$ts) return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+        return date('d M Y, H:i', $ts) . ' WIB';
+    }
+    // _renderCaraBayar: sanitize & render instruksi bayar dari Tokopay.
+    // Tokopay kirim HTML berisi <p>...</p> per step (mis. "<p>1. Datang ke...</p><p>2. ...").
+    // Approach:
+    //   1. Decode HTML entities supaya tag jadi tag beneran (kalau JSON-encoded string)
+    //   2. Whitelist tag yang aman: <p>, <strong>, <b>, <br>
+    //   3. Return HTML bersih; tiap <p> jadi paragraf terpisah (margin-bottom via Tailwind [&>p])
+    function _renderCaraBayar($s) {
+        if (!$s) return '';
+        // Decode entities supaya tag tidak double-escape (JSON balikin "<p>...</p>" mentah)
+        $s = html_entity_decode($s, ENT_QUOTES, 'UTF-8');
+        // Whitelist tag aman: <p>, <strong>, <b>, <br>, <em>, <i>
+        $allowed = '<p><strong><b><br><em><i>';
+        $s = strip_tags($s, $allowed);
+        return $s;
+    }
+    $created_at_fmt = _formatTopupDate($created_at);
+    // Tampilkan baris Kode Unik hanya untuk kategori Transfer Bank (kategori = 1)
+    // atau kategori yang mengandung kata 'bank' (mis. 'Virtual Account Bank').
+    $show_kode_unik = ((string)$topup_metode_kategori === '1')
+        || (stripos((string)$nama_kategori, 'bank') !== false);
     $teks_komplain = "";
     if ($status == 0) {
         $st_image = "https://assets.bukakios.net/img2/uploads/2019/12/827-sand-clock.png";
@@ -174,15 +147,29 @@ if (isset($_GET['id'])) {
         //batalkan topup
         $act = $_REQUEST['act'];
         if ($act == 'cancel') {
-            if (isset($_GET['id'])) {
-                //do
-                $id = abs((int) $_GET['id']);
+            if (isset($_GET['id']) || isset($_POST['id'])) {
+                $id = abs((int) ($_GET['id'] ?? $_POST['id']));
 
                 require_once('../lib/ApiV2.php');
                 $api_v2 = new ApiV2($user_jwt);
                 $resApi = $api_v2->topup_cancel($id);
-                $app->simpan_file("resapi.txt", $resApi);
+                //$app->simpan_file("resapi.txt", $resApi);
 
+                // Kalau request via AJAX (XMLHttpRequest / fetch), balikin JSON.
+                // Kalau browser navigation biasa (legacy), redirect seperti biasa.
+                $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+                    && strcasecmp($_SERVER['HTTP_X_REQUESTED_WITH'], 'XMLHttpRequest') === 0;
+                if ($isAjax) {
+                    header('Content-Type: application/json; charset=utf-8');
+                    $resp = json_decode($resApi, true);
+                    if (is_array($resp) && isset($resp['status']) && (int)$resp['status'] === 1) {
+                        echo json_encode(['status' => 1, 'msg' => 'Topup berhasil dibatalkan']);
+                    } else {
+                        $msg = (is_array($resp) && isset($resp['error_msg'])) ? $resp['error_msg'] : 'Gagal membatalkan topup';
+                        echo json_encode(['status' => 0, 'msg' => $msg]);
+                    }
+                    exit;
+                }
 
                 header("location:$c_url/info-topup/?id=$topup_id&s=1");
                 exit;
@@ -194,19 +181,9 @@ if (isset($_GET['id'])) {
 }
 if ($topup_metode_kategori == 7) {
     //khusus transfer pulsa;
-    header("Location:$c_url/info-topup/index2.php?id=$topup_id");
+    //header("Location:$c_url/info-topup/index2.php?id=$topup_id");
 }
 
-//khusus transfer bank, cek kode unik duplikat atau enggak... klu duplikat batalkan
-if ($topup_metode_kategori == 1) {
-    $data_http = $app->grab_data("$api_url/v1/cek_kode_unik_duplikat.php?total=$total_transfer");
-    $cek_duplikat = json_decode($data_http, true);
-    if ($cek_duplikat['status'] == 1) {
-        //jika status 1, artinya duplikat, dan api sudah membatalkan semua topup dengan nominal unik ini
-        header("location:$c_url/info-topup/?id=$topup_id");
-        exit;
-    }
-}
 ?>
 <!doctype html>
 <html lang="en">
@@ -214,16 +191,90 @@ if ($topup_metode_kategori == 1) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#1a7fce',
+                        brandDark: '#1265a6',
+                    },
+                    boxShadow: {
+                        card: '0 5px 14px rgba(16, 24, 40, 0.07)',
+                        soft: '0 4px 12px rgba(15, 23, 42, 0.06)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!---link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"--->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito" />
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
     <title>title:detail topup pending</title>
     <style>
-        .notie-container {
-            box-shadow: none;
+        /* Custom toast ala Tailwind, fixed top-center dengan animasi slide */
+        .bk-toast-wrap {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .bk-toast {
+            pointer-events: auto;
+            min-width: 240px;
+            max-width: 360px;
+            padding: 10px 14px 10px 12px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+            opacity: 0;
+            transform: translateY(-12px);
+            transition: opacity 180ms ease-out, transform 180ms ease-out;
+        }
+        .bk-toast.is-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .bk-toast--success {
+            border-color: #a7f3d0;
+            background: #ecfdf5;
+            color: #047857;
+        }
+        .bk-toast--success .bk-toast-icon {
+            color: #059669;
+        }
+        .bk-toast-icon {
+            display: inline-flex;
+            width: 22px;
+            height: 22px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            background: #ffffff;
+        }
+        .bk-toast-text {
+            flex: 1 1 auto;
+            line-height: 1.35;
         }
 
         .body {
@@ -576,258 +627,191 @@ if ($topup_metode_kategori == 1) {
 
 </head>
 
-<body>
-    <div class="py-3" style="background-color:<?= $primary ?>;height:200px">
-        <div class="text-center mb-2">
-            <!-- <img class="mb-1" src=<?= $st_image ?>><br/> -->
-            <img class="mb-1" width="120px" src=<?= $st_image ?>><br />
+<body class="font-sans text-slate-950 antialiased">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
+        <div class="flex items-center gap-3 px-4 py-3">
+            <button id="backBtn" aria-label="Kembali" class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-700 transition hover:bg-slate-200 active:scale-95">
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </button>
+            <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
+                <div class="h-full w-full rounded-full bg-brand"></div>
+            </div>
+            <div class="shrink-0 text-[15px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
         </div>
-    </div>
-    <div style="margin-top:-50px;margin-right:2px;margin-left:2px">
-        <div class="cir"></div>
-        <div class="circle"></div>
-        <div class="container ">
-            <div class="card py-3 px-4 " style="border-radius:10px">
-                <span class="font-weight-bold">ID Topup</span>
+    </header>
 
-                <div id="copy_idd" data-text="ID Topup Berhasil Disalin" data-copy="<?= $topup_id ?>"></div>
-
-                <!-- <span id="copy_id" data-text="User Id Berhasil Disalin" data-copy="<?= $topup_id ?>" class="font-weight-bold" style="text-decoration:underline;color:#00bfff;cursor:pointer" onclick="copyToClipboard('copy_idd')">#<?= $topup_id ?>  -->
-                <span id="copy_id" class="font-weight-bold">#<?= $topup_id ?>
-                    <!-- <img src="https://image.flaticon.com/icons/svg/926/926768.svg" style="position:absolute;top:40px;height:10px"> -->
-                    <!-- <a href='' class="ml-3"><img src='https://assets.bukakios.net/img2/uploads/2019/12/569-refresh.png' style='height:20px;width:20px;margin-left:2px;margin-top:-2px'/></a> -->
-                    <!-- <a href=''><img src='https://assets.bukakios.net/img2/uploads/2019/12/569-refresh.png' style='height:20px;width:20px;margin-left:2px;margin-top:-2px'/></a> -->
-                    <a class="btn btn-sm btn-outline-primary" style="color:<?= $primary ?>;padding:2px;font-size:10px;margin-bottom:5px" onclick="copyToClipboard('copy_idd')">Copy</a>
-                </span>
-                <!-- <span style="text-decoration:underline;color:#00bfff;cursor:pointer" onclick="copyToClipboard('copy_id')">Copy Id</span> -->
-
-                <span class="font-weight-bold">Hingga Tanggal</span>
-                <span class="font-weight-light"><?= $expired_at ?></span>
-                <hr>
-                <div class="countdown">
-                    <div class="bloc-time hours" data-init-value="24">
-                        <span class="count-title font-weight-bold">Jam</span>
-
-                        <div class="figure hours hours-1">
-                            <span class="top">0</span>
-                            <span class="top-back">
-                                <span>0</span>
-                            </span>
-                            <span class="bottom">0</span>
-                            <span class="bottom-back">
-                                <span>0</span>
-                            </span>
-                        </div>
-
-                        <div class="figure hours hours-2">
-                            <span class="top">0</span>
-                            <span class="top-back">
-                                <span>0</span>
-                            </span>
-                            <span class="bottom">0</span>
-                            <span class="bottom-back">
-                                <span>0</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="bloc-time min" data-init-value="0">
-                        <span class="count-title font-weight-bold">Menit</span>
-
-                        <div class="figure min min-1">
-                            <span class="top">0</span>
-                            <span class="top-back">
-                                <span>0</span>
-                            </span>
-                            <span class="bottom">0</span>
-                            <span class="bottom-back">
-                                <span>0</span>
-                            </span>
-                        </div>
-
-                        <div class="figure min min-2">
-                            <span class="top">0</span>
-                            <span class="top-back">
-                                <span>0</span>
-                            </span>
-                            <span class="bottom">0</span>
-                            <span class="bottom-back">
-                                <span>0</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="bloc-time sec" data-init-value="0">
-                        <span class="count-title font-weight-bold">Detik</span>
-
-                        <div class="figure sec sec-1">
-                            <span class="top">0</span>
-                            <span class="top-back">
-                                <span>0</span>
-                            </span>
-                            <span class="bottom">0</span>
-                            <span class="bottom-back">
-                                <span>0</span>
-                            </span>
-                        </div>
-
-                        <div class="figure sec sec-2">
-                            <span class="top">0</span>
-                            <span class="top-back">
-                                <span>0</span>
-                            </span>
-                            <span class="bottom">0</span>
-                            <span class="bottom-back">
-                                <span>0</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <!-- <span class="badge badge-danger mx-auto text-center mt-1" style="display:none" id="expire">Topup EXPIRED</span> -->
-                <div class="mt-2 text-center">
-                    <?= $statusnya ?> <a href=''><img src='https://assets.bukakios.net/img2/uploads/2019/12/569-refresh.png' style='height:20px;width:20px;margin-left:2px;margin-top:-2px' /></a>
-                </div>
-
-                <hr>
-                <div class="text-center mx-5" style="padding:0px !important">
-                    <?php
-                    if ($topup_metode == 30) {
-                    ?>
-                        <table width="150%" style="text-align: left; padding:0px; margin-left:-45px">
-                            <tr>
-                                <td><span class="font-weight-bold text-left">Nominal Saldo Masuk</span></td>
-                                <td><span class="font-weight-light"><?= $app->idr($nominal_topup); ?></span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-bold">Kode Unik</span></td>
-                                <td><span class="font-weight-light"><?= $app->idr($kode_unik); ?></span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-bold">Potongan Rate</span></td>
-                                <td><span class="font-weight-light"><?= $app->idr($fee); ?></span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-bold">Total</span></td>
-                                <td><span class="font-weight-light"><?= $app->idr($total_transfer) ?></span></td>
-                            </tr>
-                        </table>
-                    <?php
-                    } else {
-                    ?>
-                        <table width="100%" style="text-align: left">
-                            <?php
-                            if ($metode_id == 40) {
-                                $disc = $nominal_topup * 0.01;
-                            ?>
-                                <tr>
-                                    <td><span class="font-weight-bold text-left">Total Tagihan</span></td>
-                                    <td><span class="font-weight-light"><?= $app->idr($nominal_topup); ?></span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-weight-bold">Diskon</span></td>
-                                    <td><span class="font-weight-light">0</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-weight-bold">Biaya admin</span></td>
-                                    <td><span class="font-weight-light"><?= $app->idr($fee); ?></span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-weight-bold">Total</span></td>
-                                    <!-- <td><span class="font-weight-light"><?php // $app->idr($nominal_topup - $disc)
-                                                                                ?></span></td> -->
-                                    <td><span class="font-weight-light"><?= $app->idr($nominal_topup + $fee) ?></span></td>
-                                </tr>
-                            <?php
-                            } else { ?>
-                                <tr>
-                                    <td><span class="font-weight-bold text-left">Total Tagihan</span></td>
-                                    <td><span class="font-weight-light"><?= $app->idr($nominal_topup); ?></span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-weight-bold">Kode Unik</span></td>
-                                    <td><span class="font-weight-light"><?= $app->idr($kode_unik); ?></span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-weight-bold">Biaya admin</span></td>
-                                    <td><span class="font-weight-light"><?= $app->idr($fee); ?></span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-weight-bold">Total</span></td>
-                                    <td><span class="font-weight-light"><?= $app->idr($total_transfer) ?></span></td>
-                                </tr>
-                            <?php
-                            }
-                            ?>
-                        </table>
-                    <?php
-                    }
-                    ?>
-                    <?php
-                    if ($metode_id == 40) {
-                        $disc = $nominal_topup * 0.01;
-                    ?>
-                        <div class="mt-2">
-                            <div class="box-money">
-                                <h3 id='nominal_transfer' data-text="Jumlah Transfer Berhasil Di Salin" data-copy="<?= $app->idr($nominal_topup + $fee); ?>"><?= $app->idr($nominal_topup + $fee); ?></h3>
-                            </div>
-                        </div>
-                    <?php
-                    } else {
-
-                        if ($metode_id > 0 && $metode_id <5){
-                            ?>
-                            <div class="alert alert-danger">Peringatan !!<br/>Transfer via mesin EDC (BRILINK, ETC) WAJIB MENGGUNKAN METODE VIRTUAL ACCOUNT (VA) ketika topup. Topup metode bank transfer Namun Transfer Via mesin EDC maka Topup TIDAK AKAN DIPROSES</div>
-                            <?php
-                        }
-
-                        ?>
-                        <div class="mt-2">
-                            <div class="box-money">
-                                <h3 id='nominal_transfer' data-text="Jumlah Transfer Berhasil Di Salin" data-copy="<?= $total_transfer; ?>"><?= $total_transfer_rp; ?></h3>
-                            </div>
-                            <br />
-                            <span style="text-decoration:underline;color:#00bfff;cursor:pointer" onclick="copyToClipboard('nominal_transfer')">Salin Jumlah</span>
-                        </div>
-                    <?php
-                    }
-                    ?>
-                </div>
-                <hr />
-
-                <?php
-                if ($metode_id == 29) {
-                    require_once("detail_topup/$metode_id.php");
-                }
-                ?>
-
-                <?PHP if ($status == 0 and $metode_id != 29) { ?>
-                    <?PHP require_once("detail_topup/$metode_id.php"); ?>
+    <main class="mx-auto max-w-lg px-4 py-5">
+        <div class="mb-4 flex justify-center">
+            <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl <?= $status == 1 ? 'bg-emerald-100 text-emerald-600' : ($status == 2 ? 'bg-rose-100 text-rose-600' : 'bg-amber-100 text-amber-600') ?>">
+                <?php if ($status == 1) { ?>
+                    <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>
+                <?php } elseif ($status == 2) { ?>
+                    <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
                 <?php } else { ?>
+                    <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <?php } ?>
             </div>
-        <?php
-                } ?>
+        </div>
 
-
-            <!-- kontak here -->
-            <div class="col-12 mb-2 text-center">
-                <div class='alert alert-primary bayar-id' style='margin-top:10px'>
-                    Butuh Bantuan? silahkan hubungi customer care kami di sini.
-                    <a style='margin-left:10px;margin-right:10px;background-color:green' href='<?PHP echo $openurl.$wa_komplain_link; ?>' class='btn btn-primary btn-block'><i class="fa fa-phone"></i> Via WhatsApp</a>
-                    <a style='margin-left:10px;margin-right:10px;background-color:<?= $primary; ?>' href='../kontak/' class='btn btn-primary btn-block'><i class="fa fa-envelope"></i> Via Kontak Lainnya</a>
+        <div class="space-y-3.5">
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div class="flex items-center justify-between gap-3">
+                    <?php if ($status == 1) { ?>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[12px] font-bold text-emerald-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Topup Berhasil</span>
+                    <?php } elseif ($status == 2) { ?>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[12px] font-bold text-rose-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Topup Dibatalkan</span>
+                    <?php } else { ?>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[12px] font-bold text-amber-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Menunggu Pembayaran</span>
+                        <span id="countdown" class="font-mono text-[13px] font-bold tabular-nums text-amber-600">--:--:--</span>
+                    <?php } ?>
                 </div>
             </div>
 
-        <?php if ($status == 0) { ?>
-            <div class="mt-3 py-3 px-4 text-center" style="border: 3px dashed #9C9C9C">
-                <a class="btn btn-danger btn-md btn-block" href="<?PHP echo "$c_url/info-topup/?id=$topup_id&act=cancel"; ?>">Batal Topup</a>
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[13px]">
+                <div class="mb-3 flex items-center gap-3">
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.2" fill="currentColor"/></svg></div>
+                    <div><h3 class="m-0 text-[14px] font-bold leading-tight text-slate-900">Rincian Nominal</h3><p class="m-0 mt-0.5 text-[12px] font-medium text-slate-500">Pastikan bayar sesuai total transfer</p></div>
+                </div>
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-100 mb-1">
+                    <span class="text-slate-500">Topup ID</span>
+                    <span class="flex items-center gap-1.5">
+                        <span id="copy_topup_id" data-text="Topup ID Berhasil Disalin" data-copy="<?= $topup_id ?>" class="font-mono font-medium text-slate-900">#<?= $topup_id ?></span>
+                        <button onclick="copyToClipboard('copy_topup_id')" type="button" aria-label="Salin Topup ID" class="inline-flex items-center justify-center rounded-md bg-slate-50 px-1.5 py-0.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 active:scale-95 transition">
+                            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </span>
+                </div>
+                <?php if ($topup_metode == 30) { ?>
+                    <div class="flex justify-between py-1"><span class="text-slate-500">Nominal Saldo Masuk</span><span class="font-medium text-slate-900"><?= $app->idr($nominal_topup) ?></span></div>
+                    <?php if ($show_kode_unik) { ?><div class="flex justify-between py-1"><span class="text-slate-500">Kode Unik</span><span class="font-medium text-slate-900"><?= $app->idr($kode_unik) ?></span></div><?php } ?>
+                    <div class="flex justify-between py-1"><span class="text-slate-500">Potongan Rate</span><span class="font-medium text-slate-900"><?= $app->idr($fee) ?></span></div>
+                <?php } elseif ($metode_id == 40) { $disc = $nominal_topup * 0.01; ?>
+                    <div class="flex justify-between py-1"><span class="text-slate-500">Total Tagihan</span><span class="font-medium text-slate-900"><?= $app->idr($nominal_topup) ?></span></div>
+                    <div class="flex justify-between py-1"><span class="text-slate-500">Diskon</span><span class="font-medium text-emerald-600">−<?= $app->idr($disc) ?></span></div>
+                    <div class="flex justify-between py-1"><span class="text-slate-500">Biaya Admin</span><span class="font-medium text-slate-900"><?= $app->idr($fee) ?></span></div>
+                <?php } else { ?>
+                    <div class="flex justify-between py-1"><span class="text-slate-500">Total Tagihan</span><span class="font-medium text-slate-900"><?= $app->idr($nominal_topup) ?></span></div>
+                    <?php if ($show_kode_unik) { ?><div class="flex justify-between py-1"><span class="text-slate-500">Kode Unik</span><span class="font-medium text-slate-900"><?= $app->idr($kode_unik) ?></span></div><?php } ?>
+                    <div class="flex justify-between py-1"><span class="text-slate-500">Biaya Admin</span><span class="font-medium text-slate-900"><?= $app->idr($fee) ?></span></div>
+                <?php } ?>
+                <div class="mt-2 flex items-center justify-between border-t border-slate-200 pt-2.5">
+                    <span class="font-semibold text-slate-700">Total Transfer</span>
+                    <button id="nominal_transfer" onclick="copyToClipboard('nominal_transfer')" data-text="Jumlah Transfer Berhasil Di Salin" data-copy="<?= ($metode_id == 40) ? $app->idr($nominal_topup + $fee) : $total_transfer ?>" type="button" class="text-right text-[15px] font-bold text-brand active:scale-95"><?php if ($metode_id == 40) { echo $app->idr($nominal_topup + $fee); } else { echo $total_transfer_rp; } ?></button>
+                </div>
             </div>
-        <?php } else { ?>
-            <!-- <div class="mt-3 py-3 px-4 text-center" style="border: 3px dashed #9C9C9C">
-                <a style='margin-left:10px;margin-right:10px;background-color:<?= $primary; ?>' href='intercom://open.it' class='btn btn-primary btn-block'>Kontak CS</a>
-            </div> -->
-        <?php } ?>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                <div class="mb-3 flex items-center gap-3">
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
+                        <?php if (!empty($gambar_metode)) { ?><img src="<?= $gambar_metode ?>" alt="<?= $nama_metode ?>" class="h-7 w-7 object-contain"><?php } else { ?><svg viewBox="0 0 24 24" class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg><?php } ?>
+                    </div>
+                    <div class="min-w-0 flex-1"><h3 class="m-0 truncate text-[14px] font-bold leading-tight text-slate-900"><?= $nama_metode ?></h3><p class="m-0 mt-0.5 truncate text-[11px] capitalize text-slate-400"><?= $nama_kategori ?></p></div>
+                </div>
+                <?php if (!empty($payment_error)) { ?>
+                    <div class="flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3">
+                        <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0 text-rose-500" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                        <div class="min-w-0">
+                            <p class="m-0 text-[12px] font-bold text-rose-700">Gagal memuat info pembayaran</p>
+                            <p class="m-0 mt-0.5 break-words text-[12px] text-rose-600"><?= htmlspecialchars($payment_error) ?></p>
+                        </div>
+                    </div>
+                <?php } elseif ($payment_info !== null && in_array($payment_info['tipe'], ['qr','link','va','bank','image_src'], true)) { ?>
+                    <?php if ($payment_info['tipe'] === 'bank') { ?>
+                        <div class="rounded-xl border border-slate-200 bg-white p-3">
+                            <p class="mb-1.5 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-400">Nomor Rekening / Tujuan</p>
+                            <div class="flex items-center justify-center rounded-lg bg-slate-50 px-3 py-2">
+                                <span id="copy_rekening" data-text="Nomor Rekening Berhasil Disalin" data-copy="<?= htmlspecialchars($payment_info['nilai']['nomor'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="leading-none font-mono text-[18px] font-bold tracking-wide text-slate-900"><?= htmlspecialchars($payment_info['nilai']['nomor'] ?? '') ?></span>
+                            </div>
+                            <button onclick="copyToClipboard('copy_rekening')" type="button" class="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand py-1.5 text-[12px] font-bold text-white transition active:scale-[0.99]">
+                                <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                Salin Nomor Rekening
+                            </button>
+                            <?php if (!empty($payment_info['nilai']['nama'])) { ?><p class="mt-1.5 text-center text-[12px] text-slate-500">a/n <span class="font-semibold text-slate-700"><?= htmlspecialchars($payment_info['nilai']['nama']) ?></span></p><?php } ?>
+                        </div>
+                    <?php } elseif ($payment_info['tipe'] === 'image_src') { ?>
+                        <!-- image_src: Tokopay sudah generate gambar QR PNG, FE tinggal <img> -->
+                        <div class="rounded-xl bg-slate-50 px-3 py-4 text-center">
+                            <p class="mb-2 text-[11px] text-slate-400">QRIS</p>
+                            <div class="mx-auto inline-block rounded-lg bg-white p-2">
+                                <img src="<?= htmlspecialchars($payment_info['nilai'] ?? '', ENT_QUOTES, 'UTF-8') ?>" alt="QRIS Bukakios" class="h-44 w-44 object-contain" loading="lazy">
+                            </div>
+                            <?php if (!empty($payment_info['cara_bayar'])) { ?>
+                                <div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div>
+                            <?php } ?>
+                        </div>
+                    <?php } elseif ($payment_info['tipe'] === 'qr') { ?>
+                        <div class="rounded-xl bg-slate-50 px-3 py-4 text-center">
+                            <p class="mb-2 text-[11px] text-slate-400">QRIS</p>
+                            <div id="qris-render" data-qr="<?= htmlspecialchars($payment_info['nilai'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="mx-auto inline-block rounded-lg bg-white p-2"></div>
+                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
+                        </div>
+                    <?php } elseif ($payment_info['tipe'] === 'va') { ?>
+                        <div class="rounded-xl border border-slate-200 bg-white p-3">
+                            <p class="mb-1.5 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-400">Nomor Virtual Account</p>
+                            <div class="flex items-center justify-center rounded-lg bg-slate-50 px-3 py-2">
+                                <span id="copy_va" data-text="Nomor VA Berhasil Disalin" data-copy="<?= htmlspecialchars($payment_info['nilai'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="leading-none font-mono text-[18px] font-bold tracking-wide text-slate-900"><?= htmlspecialchars($payment_info['nilai'] ?? '') ?></span>
+                            </div>
+                            <button onclick="copyToClipboard('copy_va')" type="button" class="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand py-1.5 text-[12px] font-bold text-white transition active:scale-[0.99]">
+                                <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                Salin Nomor VA
+                            </button>
+                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
+                        </div>
+                    <?php } elseif ($payment_info['tipe'] === 'link') { ?>
+                        <div class="rounded-xl bg-slate-50 px-3 py-3 text-center">
+                            <p class="mb-2 text-[11px] text-slate-400">Bayar via Link</p>
+                            <a href="<?= htmlspecialchars($payment_info['nilai'] ?? '#', ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-[13px] font-bold text-white transition active:scale-95">
+                                Buka Aplikasi Pembayaran
+                                <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                            </a>
+                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
+                        </div>
+                    <?php } ?>
+                <?php } elseif (!empty($nomor_rekening)) { ?>
+                    <div class="rounded-xl bg-slate-50 px-3 py-3 text-center">
+                        <p class="mb-1 text-[11px] text-slate-400">Nomor Rekening / Tujuan</p>
+                        <div class="flex items-center justify-center gap-2"><p id="copy_rekening" data-text="Nomor Rekening Berhasil Disalin" data-copy="<?= $nomor_rekening ?>" class="font-mono text-[17px] font-bold tracking-wide text-slate-900"><?= $nomor_rekening ?></p><button onclick="copyToClipboard('copy_rekening')" type="button" class="rounded-lg bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 shadow-sm">Salin</button></div>
+                        <?php if (!empty($nama_rekening)) { ?><p class="mt-1 text-[11px] text-slate-500">a/n <?= $nama_rekening ?></p><?php } ?>
+                    </div>
+                <?php } else { ?>
+                    <div class="rounded-xl bg-slate-50 px-3 py-3 text-center text-[12px] text-slate-400">Detail pembayaran mengikuti metode topup yang dipilih.</div>
+                <?php } ?>
+            </div>
+
+            <?php
+            // Payment Info legacy sengaja di-comment dulu. File detail_topup/* tetap disimpan.
+            // if ($metode_id == 29) {
+            //     require_once("detail_topup/$metode_id.php");
+            // }
+            ?>
+            <?php // if ($status == 0 and $metode_id != 29) { ?>
+                <?php // require_once("detail_topup/$metode_id.php"); ?>
+            <?php // } ?>
+
+            <?php if ($status == 1) { ?>
+                <div class="flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                    <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                    <p class="text-[13px] font-semibold text-emerald-700">Saldo sudah masuk ke akun kamu.</p>
+                </div>
+            <?php } ?>
+
+            <?php if ($status == 0) { ?>
+                <button type="button" id="btn-cancel-topup" data-id="<?= $topup_id ?>" data-csrf="<?= htmlspecialchars($_SESSION['csrf'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[13px] font-bold text-rose-700 transition active:scale-[0.99] disabled:opacity-60">
+                    <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+                    <span class="btn-cancel-label">Batalkan Topup</span>
+                </button>
+            <?php } ?>
+
+            <div class="flex gap-2">
+                <a href="<?= "$c_url/info-topup/?id=$topup_id" ?>" class="flex-1 rounded-xl border border-slate-200 py-2 text-center text-[13px] font-medium text-slate-700 transition hover:bg-slate-50">Cek Status</a>
+                <a href="<?= $openurl . $wa_komplain_link ?>" class="flex-1 rounded-xl bg-brand py-2 text-center text-[13px] font-medium text-white transition hover:bg-brandDark">Bantuan</a>
+            </div>
         </div>
-    </div>
+    </main>
 
     <div class="modal" id="modal_notif_bank" tabindex="-1" role="dialog" style="
         background-image: url(<?php echo $url_bg ?>);
@@ -847,156 +831,95 @@ if ($topup_metode_kategori == 1) {
     <script src="../assets/js/sweetalert.min.js"></script>
     <!-- <script src="https://member.bukakios.net/js/lib/notie/notie.js"></script> -->
     <!-- <script src="https://member.bukakios.net/js/me/copy.js"></script> -->
-    <script src="https://unpkg.com/notie"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.3/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-tween/5.5.11/Tween.min.js"></script>
+    <!-- QRCode renderer (dipakai kalau payment.tipe === 'qr') -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        // Android-aware back button (pola reset-pin)
+        (function() {
+            function goBack(e) {
+                e.preventDefault();
+                if (window.android && typeof window.android.back === 'function') {
+                    try { window.android.back(); return; } catch (_) {}
+                }
+                if (history.length > 1) { history.back(); }
+                else { window.location.href = '<?= $c_url ?? "/" ?>'; }
+            }
+            ['backBtn', 'backBtnPage'].forEach(function(id) {
+                var btn = document.getElementById(id);
+                if (btn) btn.addEventListener('click', goBack);
+            });
+        })();
+    </script>
     <script>
         // Create Countdown
-        var tgl = "<?= $expired_at ?>"
-        var tgl_las = "<?= date("Y-m-d H:i:s") ?>"
-        console.log(tgl)
+        var tgl = "<?= $expired_at ?>";
+        var tgl_las = "<?= date("Y-m-d H:i:s") ?>";
+
+        // Countdown flat ala teraflazz: render HH:MM:SS sebagai teks biasa,
+        // bukan flip animation. Update tiap detik via setInterval.
         var Countdown = {
-            // Backbone-like structure
-            $el: $('.countdown'),
+            $el: null,
+            target: 0,
+            interval: null,
 
-            // Params
-            countdown_interval: null,
-            total_seconds: 0,
-            // Initialize the countdown
             init: function() {
-
-                var countDownDate = new Date(tgl).getTime();
-                // DOM
-                console.log(tgl_las)
-                var now = new Date(tgl_las).getTime();
-                console.log(now)
-                var distance = countDownDate - now;
-                console.log(distance)
-                var hours1 = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes1 = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds1 = Math.floor((distance % (1000 * 60)) / 1000);
-                this.$ = {
-                    hours: this.$el.find('.bloc-time.hours .figure'),
-                    minutes: this.$el.find('.bloc-time.min .figure'),
-                    seconds: this.$el.find('.bloc-time.sec .figure'),
-                };
-                //   console.log(this.$)
-                // Init countdown values
-                this.values = {
-                    hours: hours1,
-                    minutes: minutes1,
-                    seconds: seconds1,
-                };
-
-                // Initialize total seconds
-                this.total_seconds =
-                    this.values.hours * 60 * 60 +
-                    this.values.minutes * 60 +
-                    this.values.seconds;
-
-                //   console.log(this.total_seconds)
-                // Animate countdown to the end
-                this.count();
-            },
-
-            count: function() {
-                var that = this,
-                    $hour_1 = this.$.hours.eq(0),
-                    $hour_2 = this.$.hours.eq(1),
-                    $min_1 = this.$.minutes.eq(0),
-                    $min_2 = this.$.minutes.eq(1),
-                    $sec_1 = this.$.seconds.eq(0),
-                    $sec_2 = this.$.seconds.eq(1);
-
-                this.countdown_interval = setInterval(function() {
-                    if (that.total_seconds > 0) {
-                        --that.values.seconds;
-
-                        if (that.values.minutes >= 0 && that.values.seconds < 0) {
-                            that.values.seconds = 59;
-                            --that.values.minutes;
-                        }
-
-                        if (that.values.hours >= 0 && that.values.minutes < 0) {
-                            that.values.minutes = 59;
-                            --that.values.hours;
-                        }
-
-                        // Update DOM values
-                        // Hours
-                        that.checkHour(that.values.hours, $hour_1, $hour_2);
-
-                        // Minutes
-                        that.checkHour(that.values.minutes, $min_1, $min_2);
-
-                        // Seconds
-                        that.checkHour(that.values.seconds, $sec_1, $sec_2);
-
-                        --that.total_seconds;
-                    } else {
-                        clearInterval(that.countdown_interval);
-                        $('#expire').show();
-                    }
-                }, 1000);
-            },
-
-            animateFigure: function($el, value) {
-                var that = this,
-                    $top = $el.find('.top'),
-                    $bottom = $el.find('.bottom'),
-                    $back_top = $el.find('.top-back'),
-                    $back_bottom = $el.find('.bottom-back');
-
-                // Before we begin, change the back value
-                $back_top.find('span').html(value);
-
-                // Also change the back bottom value
-                $back_bottom.find('span').html(value);
-
-                // Then animate
-                TweenMax.to($top, 0.8, {
-                    rotationX: '-180deg',
-                    transformPerspective: 300,
-                    ease: Quart.easeOut,
-                    onComplete: function() {
-                        $top.html(value);
-
-                        $bottom.html(value);
-
-                        TweenMax.set($top, {
-                            rotationX: 0
-                        });
-                    },
-                });
-
-                TweenMax.to($back_top, 0.8, {
-                    rotationX: 0,
-                    transformPerspective: 300,
-                    ease: Quart.easeOut,
-                    clearProps: 'all',
-                });
-            },
-
-            checkHour: function(value, $el_1, $el_2) {
-                var val_1 = value.toString().charAt(0),
-                    val_2 = value.toString().charAt(1),
-                    fig_1_value = $el_1.find('.top').html(),
-                    fig_2_value = $el_2.find('.top').html();
-
-                if (value >= 10) {
-                    // Animate only if the figure has changed
-                    if (fig_1_value !== val_1) this.animateFigure($el_1, val_1);
-                    if (fig_2_value !== val_2) this.animateFigure($el_2, val_2);
-                } else {
-                    // If we are under 10, replace first figure with 0
-                    if (fig_1_value !== '0') this.animateFigure($el_1, 0);
-                    if (fig_2_value !== val_1) this.animateFigure($el_2, val_1);
+                var target = new Date(tgl).getTime();
+                if (isNaN(target)) {
+                    if (this.$el) this.$el.text('--:--:--');
+                    return;
                 }
+                this.$el = document.getElementById('countdown');
+                if (!this.$el) return;
+                this.target = target;
+
+                var tick = function() {
+                    var diff = Math.max(0, target - Date.now());
+                    if (diff === 0) {
+                        Countdown.$el.textContent = '00:00';
+                        if (Countdown.$el) Countdown.$el.classList.add('text-rose-600');
+                        clearInterval(Countdown.interval);
+                        var expire = document.getElementById('expire');
+                        if (expire) expire.style.display = '';
+                        return;
+                    }
+                    var total = Math.floor(diff / 1000);
+                    var h = String(Math.floor(total / 3600)).padStart(2, '0');
+                    var m = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
+                    var s = String(total % 60).padStart(2, '0');
+                    Countdown.$el.textContent = h + ':' + m + ':' + s;
+                };
+
+                tick();
+                this.interval = setInterval(tick, 1000);
             },
         };
 
         var copyToasterTimeout = 0;
         var popupText = "";
+
+        // Toast helper custom — Tailwind-style, fixed top-center, auto-hide 2.5s.
+        function showToast(msg, kind) {
+            if (!msg) return;
+            var wrap = document.getElementById('bk-toast-wrap');
+            if (!wrap) {
+                wrap = document.createElement('div');
+                wrap.id = 'bk-toast-wrap';
+                wrap.className = 'bk-toast-wrap';
+                document.body.appendChild(wrap);
+            }
+            var t = document.createElement('div');
+            t.className = 'bk-toast bk-toast--' + (kind || 'success');
+            t.innerHTML = '<span class="bk-toast-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M20 6L9 17l-5-5"/></svg></span><span class="bk-toast-text">' + msg + '</span>';
+            wrap.appendChild(t);
+            // trigger anim
+            requestAnimationFrame(function () { t.classList.add('is-show'); });
+            setTimeout(function () {
+                t.classList.remove('is-show');
+                setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 250);
+            }, 2500);
+        }
 
         function copyText(input) {
         // Cek apakah input adalah string atau elemen HTML
@@ -1027,11 +950,7 @@ if ($topup_metode_kategori == 1) {
             //   document.getElementById("message").innerText =
             //     "Tidak ada teks untuk disalin!";
             }
-            notie.alert({
-                    type: 'success',
-                    text: "Berhasil menyalin",
-                    time: 2
-            }) // Hides after 2 seconds
+            showToast("Berhasil menyalin", 'success');
         }
 
         function copyToClipboard(elementId) {
@@ -1059,18 +978,90 @@ if ($topup_metode_kategori == 1) {
             aux.blur();
             document.body.removeChild(aux);
             var text = document.getElementById(elementId);
-            popupText = text.getAttribute('data-text');
+            popupText = text.getAttribute('data-text') || 'Berhasil disalin';
             console.log(popupText);
-            //$('.popup-action__text').text(popupText);
-            /// $('.popup-action').addClass('active');
-            //$('.popup-action__text').text(popupText);
             window.clearTimeout(copyToasterTimeout);
-            notie.alert({
-                type: 'success',
-                text: popupText,
-                time: 2
-            }) // Hides after 2 seconds
+            showToast(popupText, 'success');
         }
+
+        // Handler tombol Batalkan Topup: pakai fetch ke endpoint ?act=cancel,
+        // lalu tampilkan toast success/error. Kalau sukses, reload halaman
+        // supaya status badge dan tombol ter-update.
+                // Saat proses cancel, SEMUA tombol interaktif di-disable supaya user
+                // ga bisa double-click / interaksi yang tidak perlu.
+                (function() {
+                    var btn = document.getElementById('btn-cancel-topup');
+                    if (!btn) return;
+
+                    // Global flag: kalau true, semua onclick lain di halaman dibatalkan.
+                    window.__bkCanceling = false;
+
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (window.__bkCanceling) return;
+
+                        var id = btn.getAttribute('data-id');
+                        if (!id) { showToast('ID topup tidak ditemukan', 'error'); return; }
+
+                        // Tandai global lock + disable SEMUA tombol interaktif + tambah overlay spinner.
+                        window.__bkCanceling = true;
+                        var interactive = document.querySelectorAll('button, a[href], [onclick]');
+                        interactive.forEach(function(el) {
+                            if (el === btn) return;
+                            el.setAttribute('aria-disabled', 'true');
+                            el.classList.add('pointer-events-none', 'opacity-60');
+                        });
+                        btn.disabled = true;
+                        var labelEl = btn.querySelector('.btn-cancel-label');
+                        if (labelEl) labelEl.textContent = 'Membatalkan...';
+
+                        // Pasang spinner kecil di tengah tombol
+                        var spinner = document.createElement('span');
+                        spinner.className = 'inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-rose-300 border-t-rose-700';
+                        btn.insertBefore(spinner, labelEl);
+
+                        var url = window.location.pathname + '?id=' + encodeURIComponent(id) + '&act=cancel';
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'id=' + encodeURIComponent(id)
+                        }).then(function(r) { return r.json(); })
+                        .then(function(data) {
+                            if (data && data.status === 1) {
+                                showToast(data.msg || 'Topup berhasil dibatalkan', 'success');
+                                // Reload setelah toast sebentar, supaya status + tombol update
+                                setTimeout(function() { window.location.reload(); }, 900);
+                            } else {
+                                showToast((data && data.msg) || 'Gagal membatalkan topup', 'error');
+                                // Restore state kalau gagal
+                                window.__bkCanceling = false;
+                                interactive.forEach(function(el) {
+                                    if (el === btn) return;
+                                    el.removeAttribute('aria-disabled');
+                                    el.classList.remove('pointer-events-none', 'opacity-60');
+                                });
+                                btn.disabled = false;
+                                if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
+                                if (labelEl) labelEl.textContent = 'Batalkan Topup';
+                            }
+                        }).catch(function() {
+                            showToast('Tidak dapat terhubung ke server', 'error');
+                            window.__bkCanceling = false;
+                            interactive.forEach(function(el) {
+                                if (el === btn) return;
+                                el.removeAttribute('aria-disabled');
+                                el.classList.remove('pointer-events-none', 'opacity-60');
+                            });
+                            btn.disabled = false;
+                            if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
+                            if (labelEl) labelEl.textContent = 'Batalkan Topup';
+                        });
+                    });
+                })();
 
         // Let's go !
         <?php
@@ -1170,6 +1161,24 @@ if ($topup_metode_kategori == 1) {
             });
         });
 
+        // Render QR Code (kalau payment.tipe === 'qr'). Pakai qrcode CDN
+        // yang sudah di-load di <head>. Element target: #qris-render dengan
+        // data-qr="<qr_string>". Render ke <canvas> 192px.
+        (function() {
+            var el = document.getElementById('qris-render');
+            if (!el) return;
+            var payload = el.getAttribute('data-qr');
+            if (!payload || typeof QRCode === 'undefined') return;
+            try {
+                QRCode.toCanvas(el, payload, { width: 192, margin: 1, color: { dark: '#0f172a', light: '#ffffff' } }, function (err) {
+                    if (err) {
+                        el.innerHTML = '<p class="text-[11px] text-rose-500">Gagal render QRIS</p>';
+                    }
+                });
+            } catch (e) {
+                el.innerHTML = '<p class="text-[11px] text-rose-500">Gagal render QRIS</p>';
+            }
+        })();
 
     </script>
 </body>

@@ -7,9 +7,6 @@ require_once("../_session.php");
 require_once("../lib/ApiV2.php");
 $api_v2 = new ApiV2($user_jwt);
 
-if ($user_id==39958){
-   $app->simpan_file("abul.txt", $user_jwt);
-}
 
 $file_me = "index.php";
 $kode_produk = 'PGAS'; //data static kode produk PGN

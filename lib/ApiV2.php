@@ -119,6 +119,14 @@ class ApiV2
         return $response;
     }
 
+    function curl_get_url($url)
+    {
+        // Public wrapper untuk GET request ke WV API. Body-nya identik dengan
+        // grab_data_url (private) supaya function ini bisa dipanggil dari mana
+        // saja tanpa ngubah signature caller existing.
+        return $this->grab_data_url($url);
+    }
+
     private function grab_data_url($url)
     {
         $api_key = $this->api_key;
@@ -266,6 +274,22 @@ class ApiV2
         );
         $url =  $this->api_url_wv."/topup/cancel";
         return $this->curl_post_url($url, $body);
+    }
+
+    function topup_detail($id){
+        $body = array(
+            "id" => $id
+        );
+        $url =  $this->api_url_wv."/topup/detail-new/".$id;
+        return $this->curl_post_url($url, $body);
+    }
+
+    // topup_payment: GET /topup/payment/:id
+    // Generate/refresh instruksi pembayaran Tokopay (qr/link/va) atau return
+    // info rekening bank manual. Tidak ada body — id ada di URL path.
+    function topup_payment($id){
+        $url =  $this->api_url_wv."/topup/payment/".$id;
+        return $this->curl_get_url($url);
     }
 
     function getLevelUser(){
