@@ -5,7 +5,7 @@ if (!isset($primary)) {
     require_once "../config.php";
     require_once "../_session.php";
 }
-$teks_komplain = "Halo kak, saya butuh bantuan terkait transaksi di Bukakios";
+$teks_komplain = "Halo kak, saya butuh bantuan terkait topup di Bukakios";
 $wa_link = wa_link($teks_komplain);
 ?>
 <!doctype html>
@@ -63,7 +63,7 @@ $wa_link = wa_link($teks_komplain);
             </div>
             <div class="mt-3 text-[44px] font-black leading-none tracking-tight text-slate-900">404</div>
             <h1 class="m-0 mt-1.5 text-[15px] font-bold text-slate-900">Transaksi Tidak Ditemukan</h1>
-            <p class="m-0 mt-1 text-[13px] leading-relaxed text-slate-500">Maaf, data transaksi yang kamu cari tidak ditemukan. Kemungkinan ID transaksi salah atau transaksi sudah tidak tersedia.</p>
+            <p class="m-0 mt-1 text-[13px] leading-relaxed text-slate-500">Maaf, data topup yang kamu cari tidak ditemukan. Kemungkinan ID Topup salah atau topup sudah tidak tersedia.</p>
 
             <div class="mt-5 grid grid-cols-2 gap-2.5">
                 <button type="button" id="btnBack" class="flex items-center justify-center gap-1.5 rounded-xl bg-brand py-2.5 text-[13px] font-bold text-white transition hover:bg-brandDark active:scale-[0.99]">

@@ -2,8 +2,6 @@
 require_once "../config.php";
 require_once "../_session.php";
 require_once "../lib/ApiV2.php";
-$openurl = "open://";
-$open_url = "open://";
 $app_id="net.bukakiosapps";
 
 $api_v2 = new ApiV2($user_jwt);
@@ -150,9 +148,7 @@ if (isset($_GET["id"])) {
             " <span class='badge badge-danger' style='color:white;padding:5px 10px 5px 10px'>Refund</span>";
         $teks_komplain = "$trx_id Gagal kenapa ya kak?";
     }
-    $wa_komplain_link =
-        "https://api.whatsapp.com/send?phone=$wa_number&text=" .
-        urlencode($teks_komplain);
+    $wa_komplain_link = wa_link($teks_komplain);
 
     $target = $nomor_tujuan;
     if (

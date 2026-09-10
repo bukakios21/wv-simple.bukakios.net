@@ -59,7 +59,23 @@ $api_url = rtrim(getenv('API_URL') ?: 'https://api.bukakios.net', '/');
 // ---------------------------------------------------------------------------
 // WhatsApp CS
 // ---------------------------------------------------------------------------
-$wa_number = getenv('WA_NUMBER') ?: '6282184284119';
+$wa_number    = getenv('WA_NUMBER') ?: '6282184284119';
+$wa_base_url  = rtrim(getenv('WA_BASE_URL') ?: 'https://api.whatsapp.com/send', '/');
+$wa_app_label = getenv('WA_DEFAULT_TEXT') ?: 'Halo kak, saya butuh bantuan di Bukakios';
+
+/**
+ * Build link WhatsApp CS dari config (jangan hardcode link WA di page masing-masing).
+ * wa_link()                     -> pakai teks default
+ * wa_link('teks komplain kak')  -> pakai teks kustom
+ */
+function wa_link($text = null)
+{
+    global $wa_base_url, $wa_number, $wa_app_label;
+    if ($text === null || $text === '') {
+        $text = $wa_app_label;
+    }
+    return "$wa_base_url?phone=$wa_number&text=" . urlencode($text);
+}
 
 // ---------------------------------------------------------------------------
 // Brand Colors
@@ -70,13 +86,9 @@ $secondary = getenv('SECONDARY_COLOR') ?: '#1976D2';
 // ---------------------------------------------------------------------------
 // Open URL scheme (for webview app links)
 // ---------------------------------------------------------------------------
-$openurl  = 'open://';
-$open_url = 'open://';
-
-// ---------------------------------------------------------------------------
-// Firebase Cloud Messaging
-// ---------------------------------------------------------------------------
-define('_FCM_KEY', getenv('FCM_KEY') ?: '');
+$open_url_scheme = getenv('OPEN_URL_SCHEME') ?: 'open://';
+$openurl  = $open_url_scheme;
+$open_url = $open_url_scheme;
 
 // ---------------------------------------------------------------------------
 // Redis stubs (no direct Redis connection in wv-simple — stub for compatibility)

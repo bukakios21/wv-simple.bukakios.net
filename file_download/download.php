@@ -59,10 +59,4 @@ if(isset($_REQUEST["file"])){
         http_response_code(404);
         die("no file ");
     }
-    exit;
-    if(preg_match('/^[^.][-a-z0-9_.]+[a-z]$/i', $file)){
-       
-    } else {
-        die("Invalid file name!");
-    }
 }

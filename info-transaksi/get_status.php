@@ -3,8 +3,6 @@
 require_once("../config.php");
 require_once("../_session.php");
 require_once("../lib/ApiV2.php");
-$openurl = "open://";
-$open_url = "open://";
 
 $api_v2 = new ApiV2($user_jwt);
 // if ($user_id != 40408) {

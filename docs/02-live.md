@@ -109,7 +109,6 @@ API_V2_WV_URL=https://api-v2.bukakios.net/wv-x7Up2p
 WA_NUMBER=6282184284119
 OPEN_URL=https://wv.bukakios.net/
 PRIMARY=#E53935
-FCM_KEY=your_fcm_key_here
 ```
 
 Setelah edit, restart:

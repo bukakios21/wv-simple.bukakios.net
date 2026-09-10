@@ -3,9 +3,6 @@ require_once("../config.php");
 require_once("../_session.php");
 require_once('../lib/ApiV2.php');
 
-$openurl = "open://";
-$open_url = "open://";
-
 $api_v2 = new ApiV2($user_jwt);
 
 
@@ -120,7 +117,7 @@ if (isset($_GET['id'])) {
         $st_label = "Topup Di Batalkan";
         $teks_komplain = "Topup #$topup_id expirated, mohon di bantu kak";
     }
-    $wa_komplain_link = "https://api.whatsapp.com/send?phone=$wa_number&text=".urlencode($teks_komplain);
+    $wa_komplain_link = wa_link($teks_komplain);
 
     //tambahan url background
     if ($topup_metode == 2 or $topup_metode == 4 or $topup_metode == 1 or $topup_metode == 43 or $topup_metode == 3) {
@@ -177,12 +174,10 @@ if (isset($_GET['id'])) {
         }
     }
 } else {
-    exit;
+    require_once "404.php";
+    exit();
 }
-if ($topup_metode_kategori == 7) {
-    //khusus transfer pulsa;
-    //header("Location:$c_url/info-topup/index2.php?id=$topup_id");
-}
+
 
 ?>
 <!doctype html>
