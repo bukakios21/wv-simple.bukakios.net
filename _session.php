@@ -1,4 +1,5 @@
 <?PHP
+//echo "ada";
 // ============================================================
 // SESSION JWT BYPASS: jika sudah ada JWT di session (dari request sebelumnya),
 // gunakan langsung tanpa perlu parse User-Agent lagi.
@@ -28,14 +29,14 @@ if (isset($_GET['token_dev'])) {
     $new_detail     = !empty($_SESSION['new_detail']);
     $bukakios_version     = $_SESSION['bukakios_version'] ?? '1.0';
     $bukakios_version_int = (int)($_SESSION['bukakios_version_int'] ?? 10);
-// ============================================================
-// DEV BYPASS: tambahkan ?token_dev=<jwt_value> di URL untuk skip
-// validasi session (misal: lupa-pin/?token_dev=eyJhbGciOi...)
-// ============================================================
+    // ============================================================
+    // DEV BYPASS: tambahkan ?token_dev=<jwt_value> di URL untuk skip
+    // validasi session (misal: lupa-pin/?token_dev=eyJhbGciOi...)
+    // ============================================================
 } else {
     // require 'config.php';
     //untuk memverifikasi token user di sini
-    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
     //$user_agent = 'Android 3.0; en-us; Xoom Build/HRI39) AppleWebKit/534.13 |BukaKiosNative|1|1000|f726b6faaf4b8be6bd18aac35f795939|9465fee87e9f913a988d2b8d2c19c9e9';
     $webview_valid = false;
     $new_detail = false;
@@ -102,28 +103,3 @@ if (isset($_GET['token_dev'])) {
     $_SESSION['bukakios_version_int'] = $bukakios_version_int;
 
 } // end dev bypass else
-
-// $a= $api_url.'/cek_token_v2.php';
-
-
-/*
-$data = array(
-	'key' => $api_key,
-	'uid' => $user_id,
-	'token' => $user_token
-);
-
-$cek = $app->curl_post("$api_url/v1/cek_token_v2.php",$data);
-$a = json_decode($cek,true);
-
-if($a['valid'] != true){
-	$html_title = "title::Sesi Login Habis";
-	$lyt_button_link = "opentranslate://10|pulsa";
-	$lyt_button_name = "KEMBALI KE DASHBOARD";
-	$lyt_image = "https://assets.bukakios.net/img/illustration/bc_logout.png";
-	$lyt_title = "Sesi Login Habis!";
-	$lyt_description = "Maaf sepertinya Sesi login kamu sudah habis, biasanya ini terjadi di karekan akun kamu login ke perangkat lain, silahkan login kembali";
-	require_once(ROOT."/_template/general_message.php");
-	exit;
-}
-*/

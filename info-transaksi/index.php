@@ -419,14 +419,26 @@ if (isset($_GET["id"])) {
                 <div class="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3">
                     <div class="flex justify-between py-0.5">
                         <span class="text-emerald-700/80">Harga Jual Kamu</span>
-                        <span class="flex items-center gap-1.5 font-bold text-emerald-700"><?= $app->idr($selling_price_client) ?>
-                            <button type="button" data-toggle="modal" data-target="#exampleModal" aria-label="Ubah harga jual" class="inline-flex items-center justify-center rounded-md px-1 py-0.5 text-emerald-600 hover:text-emerald-800 active:scale-95 transition">
+                        <span class="flex items-center gap-1.5 font-bold text-emerald-700">
+                            <span id="txt-harga-jual"><?= $app->idr($selling_price_client) ?></span>
+                            <button type="button" id="btn-edit-harga" onclick="toggleEditHarga()" aria-label="Ubah harga jual" class="inline-flex items-center justify-center rounded-md px-1 py-0.5 text-emerald-600 hover:text-emerald-800 active:scale-95 transition">
                                 <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
                             </button>
                         </span>
                     </div>
                     <div class="flex justify-between py-0.5"><span class="text-emerald-700/80">Harga Modal/Produk</span><span class="font-bold text-rose-600"><?= $app->idr($price_client) ?></span></div>
-                    <div class="mt-1 flex justify-between border-t border-emerald-200 pt-1.5"><span class="font-semibold text-emerald-800">Profit Kamu</span><span class="font-bold text-emerald-700"><?= $app->idr($selling_price_client - $price_client) ?></span></div>
+                    <div class="mt-1 flex justify-between border-t border-emerald-200 pt-1.5"><span class="font-semibold text-emerald-800">Profit Kamu</span><span class="font-bold text-emerald-700" id="txt-profit"><?= $app->idr($selling_price_client - $price_client) ?></span></div>
+
+                    <!-- Inline Ubah Harga Jual -->
+                    <div id="edit-harga-box" style="display:none" class="mt-3 rounded-xl border border-emerald-200 bg-white p-3">
+                        <p class="m-0 mb-1.5 text-[12px] font-bold text-emerald-800">Ubah Harga Jual</p>
+                        <input type="number" id="fee-inline" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-[14px] font-semibold text-slate-900 outline-none focus:border-brand" value="<?= $selling_price_client ?>">
+                        <div id="msg-invalid-inline" style="display:none" class="mt-1.5 text-[12px] font-medium text-rose-600"></div>
+                        <div class="mt-2.5 grid grid-cols-2 gap-2.5">
+                            <button type="button" id="btn-cancel-harga" onclick="toggleEditHarga()" class="rounded-xl border border-slate-200 py-2 text-[13px] font-semibold text-slate-700 transition hover:bg-slate-50">Batal</button>
+                            <button type="button" id="btn-save-harga" onclick="submitHarga()" class="rounded-xl bg-brand py-2 text-[13px] font-bold text-white transition hover:bg-brandDark active:scale-[0.99]">Simpan</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -478,47 +490,6 @@ if (isset($_GET["id"])) {
             </div>
         </div>
     </main>
-
-    <!-- Modal Ubah Harga Jual -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-2xl border-0 shadow-card">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title m-0 text-[15px] font-bold text-slate-900" id="exampleModalLabel">Ubah Harga Jual Kamu</h5>
-                    <button type="button" class="close m-0 p-0 text-slate-400" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body pt-2">
-                    <div class="loader mx-auto mt-4" id="load" style="display:none"></div>
-                    <div class="text-center mt-1">
-                        <span class="text-[12px] font-semibold text-slate-400" style="display:none" id="wait">Please Wait...</span>
-                        <div class="text-[12px] font-semibold text-slate-600" style="display:none" id="msg"></div>
-                    </div>
-                    <div class="mt-2">
-                        <input type="number" id="fee" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-[14px] font-semibold text-slate-900 outline-none focus:border-brand" value="<?php echo $selling_price_client; ?>">
-                        <div id="msg-invalid" style="display:none" class="mt-1.5 text-[12px] font-medium text-rose-600"></div>
-                        <input type="hidden" id="csrf" value="<?= $app->csrf() ?>">
-                    </div>
-                    <div class="mt-3 grid grid-cols-2 gap-2.5">
-                        <button type="button" class="rounded-xl border border-slate-200 py-2 text-[13px] font-semibold text-slate-700 transition hover:bg-slate-50" id="cancel" data-dismiss="modal">Tidak</button>
-                        <button type="button" onclick="change()" id="change" class="rounded-xl bg-brand py-2 text-[13px] font-bold text-white transition hover:bg-brandDark">Ubah</button>
-                    </div>
-                    <div class="mt-3 text-center">
-                        <a href="" id="refresh" class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2 text-[13px] font-semibold text-slate-700" style="display:none">
-                            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-                            Refresh
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="../assets/js/jquery.js"></script>
-    <!-- <script src="../assets/js/sweetalert.min.js"></script> -->
-    <!-- <script src="https://unpkg.com/notie"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 
     <script>
         // Android-aware back button (pola reset-pin)
@@ -591,46 +562,69 @@ if (isset($_GET["id"])) {
             showToast(popupText, 'success');
         }
 
-        function change() {
-            var feee = document.getElementById("fee");
-            var modal = <?php echo $price_client; ?>;
-            var harga = $('#fee').val();
-            var profit = Number(harga) - Number(modal);
-            var csrf = $('#csrf').val();
-            if (harga < modal) {
-                $('#msg-invalid').show();
-                document.getElementById("msg-invalid").textContent = "Harga Jual Tidak Boleh Dibawah Harga Modal";
-                feee.classList.add("border-rose-400");
-            } else if (profit > 50000) {
-                $('#msg-invalid').show();
-                document.getElementById("msg-invalid").textContent = "Keuntungan Tidak Boleh Diatas 50.000";
-                feee.classList.add("border-rose-400");
-            } else if (harga > modal && profit < 50000) {
-                $('#fee').hide();
-                $('#msg-invalid').hide();
-                $('#cancel').hide();
-                $('#change').hide();
-                $('#load').show();
-                $('#wait').show();
-                $.ajax({
-                    url: 'index.php?msg=update&harga=' + harga + '&csrf=' + csrf + '&id_trx=<?php echo $trx_id; ?>',
-                    success: function(output) {
-                        $('#load').hide();
-                        $('#refresh').show();
-                        $('#wait').hide();
-                        $('#msg').show();
-                        var myJsn = JSON.parse(output);
-                        var d = myJsn.msg;
-                        if (myJsn.status == 1) {
-                            var dataJsn = myJsn.msg;
-                            document.getElementById("msg").textContent = myJsn.msg;
+        // Toggle inline form ubah harga jual
+        function toggleEditHarga() {
+            var box = document.getElementById('edit-harga-box');
+            var btn = document.getElementById('btn-edit-harga');
+            var boxShow = box.style.display !== 'none';
+            box.style.display = boxShow ? 'none' : 'block';
+            btn.style.display = boxShow ? 'inline-flex' : 'none';
+            if (!boxShow) {
+                var inp = document.getElementById('fee-inline');
+                inp.value = '<?= $selling_price_client ?>';
+                showInvalid('');
+            }
+        }
 
-                        } else {
-                            document.getElementById("msg").textContent = myJsn.error_msg;
-                        }
+        function showInvalid(msg) {
+            var div = document.getElementById('msg-invalid-inline');
+            var inp = document.getElementById('fee-inline');
+            div.textContent = msg;
+            div.style.display = msg ? 'block' : 'none';
+            if (msg) { inp.classList.add('border-rose-400'); }
+            else { inp.classList.remove('border-rose-400'); }
+        }
+
+        // Submit ubah harga jual via fetch (vanilla)
+        function submitHarga() {
+            var modal = <?= (int)$price_client ?>;
+            var inp = document.getElementById('fee-inline');
+            var simpan = document.getElementById('btn-save-harga');
+            var batal = document.getElementById('btn-cancel-harga');
+            var harga = Number(inp.value);
+            var profit = harga - modal;
+
+            if (!harga || harga < modal) {
+                showInvalid('Harga jual tidak boleh dibawah harga modal');
+                return;
+            }
+            if (profit > 50000) {
+                showInvalid('Keuntungan tidak boleh diatas 50.000');
+                return;
+            }
+            showInvalid('');
+
+            simpan.disabled = true;
+            batal.disabled = true;
+            var csrf = '<?= $app->csrf() ?>';
+
+            fetch('index.php?msg=update&harga=' + harga + '&csrf=' + csrf + '&id_trx=<?= $trx_id ?>')
+                .then(function(r) { return r.json(); })
+                .then(function(json) {
+                    if (json.status == 1) {
+                        showToast(json.msg || 'Harga jual berhasil diubah', 'success');
+                        setTimeout(function() { location.reload(); }, 1200);
+                    } else {
+                        showToast(json.error_msg || 'Gagal mengubah harga jual', 'danger');
                     }
                 })
-            }
+                .catch(function() {
+                    showToast('Gagal terhubung, coba lagi beberapa saat', 'danger');
+                })
+                .finally(function() {
+                    simpan.disabled = false;
+                    batal.disabled = false;
+                });
         }
     </script>
 <script>

@@ -3,7 +3,7 @@
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 $act = $_REQUEST['msg'];
-include("../lib/ApiV2.php");
+require_once "../lib/ApiV2.php";
 $api_v2 = new ApiV2($user_jwt);
 
 

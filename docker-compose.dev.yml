@@ -1,6 +1,8 @@
 # BukaKios WebView Simple — Docker Compose (Dev)
-# Source code PHP di-bake ke dalam image saat build (SAME as live).
-# Hanya nginx config & .env yang di-mount dari host.
+# Mode DEVELOPMENT LOKAL: source code di-mount dari host → edit PHP langsung kebaca
+# tanpa rebuild. Hanya untuk dev, JANGAN dipakai di live.
+#
+# Live/Production tetap memakai docker-compose.yml (source di-bake ke image).
 #
 # Usage:
 #   Dev:  docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
@@ -18,7 +20,8 @@ services:
     env_file:
       - .env
     volumes:
-      # Mount hanya config nginx & env — BUKAN source code.
-      # Source code PHP sudah di-bake ke dalam image saat build.
       - ./docker/nginx.conf:/etc/nginx/http.d/default.conf:ro
       - ./.env:/var/www/html/.env:ro
+      # DEV ONLY: mount seluruh source code dari host → auto-uupdate tanpa rebuild.
+      # Hapus baris ini di production (pakai docker-compose.yml saja).
+      - .:/var/www/html:ro
