@@ -20,7 +20,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: ".,!.git,!.github,!docs,!.env*"
           target: /var/www/bukakios/wv-simple.bukakios.net
