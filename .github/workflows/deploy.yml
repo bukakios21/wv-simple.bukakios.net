@@ -1,0 +1,40 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout kode di runner GitHub Actions
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Copy semua file ke server via SCP (.env dikelola manual di server)
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: ".,!.git,!.github,!docs,!.env*"
+          target: /var/www/bukakios/wv-simple.bukakios.net
+
+      # 3. Rebuild Docker di server
+      - name: Rebuild Docker
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /var/www/bukakios/wv-simple.bukakios.net
+            docker compose build --no-cache
+            docker compose up -d
+            echo "Deploy selesai: $(date)"

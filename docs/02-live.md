@@ -6,12 +6,25 @@
 - Akses sudo
 - Domain sudah pointing ke server
 - SSL certificate (via Nginx reverse proxy atau Cloudflare)
+- GitHub Actions secrets tersetup (SSH_HOST, SSH_USER, SSH_KEY, SSH_PORT)
 
 ---
 
-## Deploy / Update
+## Deploy Otomatis (Recommended)
 
-Setiap ada perubahan file PHP, config, atau apapun, wajib rebuild + redeploy.
+Setiap push ke branch `main`, GitHub Actions otomatis:
+
+1. Checkout source code.
+2. Copy file ke server via SCP ke `/var/www/bukakios/wv-simple.bukakios.net`.
+3. SSH ke server, lalu `docker compose build --no-cache && docker compose up -d`.
+
+**Cara pakai:** cukup push ke `main`. Tidak perlu login ke server.
+
+> Catatan: `.env` **tidak** dikirim via SCP. Jika belum ada di server, workflow akan membuatnya dari GitHub Secrets. Jika ingin update `.env` manual, edit langsung di server lalu `sudo docker compose up -d`.
+
+---
+
+## Deploy Manual (Opsional)
 
 ```bash
 # 1. Pull perubahan dari git (jika ada)
@@ -77,6 +90,7 @@ Production pakai `Dockerfile` untuk bake seluruh source code ke dalam image Dock
 - Image: `wv-simple:latest` (latest tag)
 
 File tidak di-mount dari host. Seluruh source code baked ke image layer → immutable, lebih secure.
+> SCRIPT PHP di-bake ke dalam image, bukan jalan dari host.
 
 ---
 

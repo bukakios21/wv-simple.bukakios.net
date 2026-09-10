@@ -27,7 +27,7 @@ COPY . .
 RUN chown -R appuser:appgroup /var/www/html \
     && chown -R appuser:appgroup /var/log/nginx \
     && chown -R appuser:appgroup /var/lib/nginx \
-    && chown -R appuser:appgroup /var/run/nginx
+    && chown -R appuser:appgroup /run/nginx
 
 # Expose port 80
 EXPOSE 80

@@ -88,7 +88,7 @@ if($bukakios_version_int>=15){
 
     <!-- Contact Buttons -->
     <div class="space-y-3 mb-6">
-      
+
       <!-- WhatsApp -->
       <a href="<?php echo $open_url . wa_link(); ?>" target="_blank" class="flex items-center gap-4 w-full bg-white rounded-2xl border border-slate-100 p-4 shadow-card transition hover:shadow-md active:scale-[0.99]">
         <div class="w-12 h-12 rounded-xl bg-[#25D366] flex items-center justify-center shrink-0">

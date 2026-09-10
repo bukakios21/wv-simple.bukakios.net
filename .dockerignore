@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# Environment — JANGAN pernah bake ke dalam image
+.env
+.env.*.local
+.env.local
+
+# Docker
+docker-compose.yml
+docker-compose.dev.yml
+
+# Logs & runtime artifacts
+*.log
+logs/
+api_log.txt
+api_log.txt.*
+*_backup.php
+*backup*
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Vendor yang bisa di-rebuild / tidak dibutuhkan saat runtime
+node_modules/
