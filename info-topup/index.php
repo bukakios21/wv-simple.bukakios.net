@@ -3,7 +3,6 @@ require_once("../config.php");
 require_once("../_session.php");
 require_once('../lib/ApiV2.php');
 
-echo "userjwt => ".$user_jwt;
 $api_v2 = new ApiV2($user_jwt);
 
 
@@ -12,7 +11,6 @@ if (isset($_GET['id'])) {
 
     // ambil detail topup dari API V2 (ganti DB lokal)
     $resApi = $api_v2->topup_detail($topup_id);
-    var_dump($resApi);
     $detail_topup = json_decode($resApi, true);
 
     if (!isset($detail_topup['status']) || $detail_topup['status'] != 1 || empty($detail_topup['data']['uid'])) {
