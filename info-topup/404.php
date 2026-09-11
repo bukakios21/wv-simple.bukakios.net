@@ -36,7 +36,7 @@ $wa_link = wa_link($teks_komplain);
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <title>title::Transaksi Tidak Ditemukan</title>
+    <title>title::Topup Tidak Ditemukan</title>
 </head>
 
 <body class="font-sans text-slate-950 antialiased">
