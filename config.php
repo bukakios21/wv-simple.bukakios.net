@@ -4,6 +4,10 @@
  * Loads environment variables from .env file
  */
 
+// Timezone aplikasi (WIB). Diset di sini agar time()/date()/strtotime()
+// konsisten WIB tanpa bergantung timezone container/php.ini.
+date_default_timezone_set(getenv('TZ') ?: 'Asia/Jakarta');
+
 // Start session if not already started (idempotent)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

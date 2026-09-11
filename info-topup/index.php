@@ -732,7 +732,7 @@ if (isset($_GET['id'])) {
                         <div class="rounded-xl bg-slate-50 px-3 py-4 text-center">
                             <p class="mb-2 text-[11px] text-slate-400">QRIS</p>
                             <div class="mx-auto inline-block rounded-lg bg-white p-2">
-                                <img src="<?= htmlspecialchars($payment_info['nilai'] ?? '', ENT_QUOTES, 'UTF-8') ?>" alt="QRIS Bukakios" class="h-44 w-44 object-contain" loading="lazy">
+                                <img src="<?= $payment_info['nilai']?>" alt="QRIS Bukakios" class="h-44 w-44 object-contain" loading="lazy">
                             </div>
                             <?php if (!empty($payment_info['cara_bayar'])) { ?>
                                 <div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div>
@@ -741,7 +741,7 @@ if (isset($_GET['id'])) {
                     <?php } elseif ($payment_info['tipe'] === 'qr') { ?>
                         <div class="rounded-xl bg-slate-50 px-3 py-4 text-center">
                             <p class="mb-2 text-[11px] text-slate-400">QRIS</p>
-                            <div id="qris-render" data-qr="<?= htmlspecialchars($payment_info['nilai'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="mx-auto inline-block rounded-lg bg-white p-2"></div>
+                            <div id="qris-render" data-qr="<?= $payment_info['nilai']?>" class="mx-auto inline-block rounded-lg bg-white p-2"></div>
                             <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
                         </div>
                     <?php } elseif ($payment_info['tipe'] === 'va') { ?>
@@ -759,7 +759,7 @@ if (isset($_GET['id'])) {
                     <?php } elseif ($payment_info['tipe'] === 'link') { ?>
                         <div class="rounded-xl bg-slate-50 px-3 py-3 text-center">
                             <p class="mb-2 text-[11px] text-slate-400">Bayar via Link</p>
-                            <a href="<?= htmlspecialchars($payment_info['nilai'] ?? '#', ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-[13px] font-bold text-white transition active:scale-95">
+                            <a href="<?= $openurl.$payment_info['nilai']?>" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-[13px] font-bold text-white transition active:scale-95">
                                 Buka Aplikasi Pembayaran
                                 <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
                             </a>

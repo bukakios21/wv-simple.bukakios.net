@@ -189,7 +189,7 @@ if (isset($_GET["id"])) {
                 $open_url .
                 "https://play.google.com/store/apps/details?id=$app_id";
             $fakta_teks = "Tahukah kamu bahwa pembelian kamu di proses sangat cepat loh oleh bukakios, hanya dalam <b>$lama_proses detik</b>, pembelian kamu telah berhasil di proses :)
-			<p class='mb-0 mt-2.5'><a target='_blank' href='$link_open_rate' class='flex w-full items-center justify-center gap-1.5 rounded-xl bg-amber-400 py-2 text-[13px] font-bold text-slate-900 transition hover:bg-amber-300 active:scale-[0.99]'><svg viewBox='0 0 24 24' class='h-4 w-4' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Beri Rating</a>
+			<p class='mb-0 mt-2.5'><a target='_blank' href='$link_open_rate' class='flex w-full items-center justify-center gap-1.5 rounded-xl bg-amber-400 py-2 text-[14px] font-bold text-slate-900 transition hover:bg-amber-300 active:scale-[0.99]'><svg viewBox='0 0 24 24' class='h-4 w-4' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Beri Rating</a>
 			";
         } elseif ($lama_proses > 80 and $lama_proses < 420) {
             //8 menit
@@ -263,7 +263,7 @@ if (isset($_GET["id"])) {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: #0f172a;
             opacity: 0;
@@ -346,7 +346,7 @@ if (isset($_GET["id"])) {
             <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
                 <div class="h-full w-full rounded-full bg-brand"></div>
             </div>
-            <div class="shrink-0 text-[15px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
+            <div class="shrink-0 text-[16px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
         </div>
     </header>
 
@@ -360,8 +360,8 @@ if (isset($_GET["id"])) {
                     <svg viewBox="0 0 24 24" class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg>
                 <?php } ?>
             </div>
-            <h1 class="m-0 mt-2.5 text-[15px] font-bold leading-tight text-slate-900"><?= $product_name ?></h1>
-            <p class="m-0 mt-0.5 text-[14px] font-semibold text-slate-600"><?= $nomor_tujuan ?></p>
+            <h1 class="m-0 mt-2.5 text-[16px] font-bold leading-tight text-slate-900"><?= $product_name ?></h1>
+            <p class="m-0 mt-0.5 text-[15px] font-semibold text-slate-600"><?= $nomor_tujuan ?></p>
         </div>
 
         <div class="space-y-3.5">
@@ -369,21 +369,21 @@ if (isset($_GET["id"])) {
             <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div class="flex items-center justify-between gap-3">
                     <?php if ($status == 1) { ?>
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[12px] font-bold text-emerald-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Berhasil</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[13px] font-bold text-emerald-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Berhasil</span>
                     <?php } elseif ($status == 0) { ?>
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[12px] font-bold text-amber-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Sedang Di Proses</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[13px] font-bold text-amber-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Sedang Di Proses</span>
                     <?php } else { ?>
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[12px] font-bold text-rose-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Refund</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[13px] font-bold text-rose-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Refund</span>
                     <?php } ?>
-                    <span class="text-[12px] font-medium text-slate-400">Pada <?= $app->time_ago($created_at) ?></span>
+                    <span class="text-[13px] font-medium text-slate-400">Pada <?= $app->time_ago($created_at) ?></span>
                 </div>
             </div>
 
             <!-- Detail Pembelian -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[13px]">
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[14px]">
                 <div class="mb-3 flex items-center gap-3">
                     <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></div>
-                    <div><h3 class="m-0 text-[14px] font-bold leading-tight text-slate-900">Detail Pembelian</h3><p class="m-0 mt-0.5 text-[12px] font-medium text-slate-500">Informasi transaksi kamu</p></div>
+                    <div><h3 class="m-0 text-[15px] font-bold leading-tight text-slate-900">Detail Pembelian</h3><p class="m-0 mt-0.5 text-[13px] font-medium text-slate-500">Informasi transaksi kamu</p></div>
                 </div>
                 <div class="flex items-center justify-between gap-2 border-b border-slate-100 py-2">
                     <span class="text-slate-500">ID Transaksi</span>
@@ -407,10 +407,10 @@ if (isset($_GET["id"])) {
             </div>
 
             <!-- Detail Pembayaran -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[13px]">
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[14px]">
                 <div class="mb-3 flex items-center gap-3">
                     <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.2" fill="currentColor"/></svg></div>
-                    <div><h3 class="m-0 text-[14px] font-bold leading-tight text-slate-900">Detail Pembayaran</h3><p class="m-0 mt-0.5 text-[12px] font-medium text-slate-500">Ringkasan saldo &amp; harga</p></div>
+                    <div><h3 class="m-0 text-[15px] font-bold leading-tight text-slate-900">Detail Pembayaran</h3><p class="m-0 mt-0.5 text-[13px] font-medium text-slate-500">Ringkasan saldo &amp; harga</p></div>
                 </div>
                 <div class="flex justify-between border-b border-slate-100 py-1.5"><span class="text-slate-500">Saldo Awal</span><span class="font-medium text-slate-900"><?= $app->idr($saldo_before_trx) ?></span></div>
                 <div class="flex justify-between border-b border-slate-100 py-1.5"><span class="text-slate-500">Harga Produk</span><span class="font-medium text-slate-900"><?= $app->idr($price_client) ?></span></div>
@@ -431,12 +431,12 @@ if (isset($_GET["id"])) {
 
                     <!-- Inline Ubah Harga Jual -->
                     <div id="edit-harga-box" style="display:none" class="mt-3 rounded-xl border border-emerald-200 bg-white p-3">
-                        <p class="m-0 mb-1.5 text-[12px] font-bold text-emerald-800">Ubah Harga Jual</p>
-                        <input type="number" id="fee-inline" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-[14px] font-semibold text-slate-900 outline-none focus:border-brand" value="<?= $selling_price_client ?>">
-                        <div id="msg-invalid-inline" style="display:none" class="mt-1.5 text-[12px] font-medium text-rose-600"></div>
+                        <p class="m-0 mb-1.5 text-[13px] font-bold text-emerald-800">Ubah Harga Jual</p>
+                        <input type="number" id="fee-inline" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-[15px] font-semibold text-slate-900 outline-none focus:border-brand" value="<?= $selling_price_client ?>">
+                        <div id="msg-invalid-inline" style="display:none" class="mt-1.5 text-[13px] font-medium text-rose-600"></div>
                         <div class="mt-2.5 grid grid-cols-2 gap-2.5">
-                            <button type="button" id="btn-cancel-harga" onclick="toggleEditHarga()" class="rounded-xl border border-slate-200 py-2 text-[13px] font-semibold text-slate-700 transition hover:bg-slate-50">Batal</button>
-                            <button type="button" id="btn-save-harga" onclick="submitHarga()" class="rounded-xl bg-brand py-2 text-[13px] font-bold text-white transition hover:bg-brandDark active:scale-[0.99]">Simpan</button>
+                            <button type="button" id="btn-cancel-harga" onclick="toggleEditHarga()" class="rounded-xl border border-slate-200 py-2 text-[14px] font-semibold text-slate-700 transition hover:bg-slate-50">Batal</button>
+                            <button type="button" id="btn-save-harga" onclick="submitHarga()" class="rounded-xl bg-brand py-2 text-[14px] font-bold text-white transition hover:bg-brandDark active:scale-[0.99]">Simpan</button>
                         </div>
                     </div>
                 </div>
@@ -449,7 +449,7 @@ if (isset($_GET["id"])) {
             </div>
 
             <?php if (isset($fakta_tipe)) { ?>
-                <div class="flex items-start gap-2.5 rounded-2xl border px-4 py-3 text-[13px] <?= $fakta_tipe == 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : ($fakta_tipe == 'warning' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-rose-200 bg-rose-50 text-rose-700') ?>">
+                <div class="flex items-start gap-2.5 rounded-2xl border px-4 py-3 text-[14px] <?= $fakta_tipe == 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : ($fakta_tipe == 'warning' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-rose-200 bg-rose-50 text-rose-700') ?>">
                     <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
                     <div class="min-w-0 leading-relaxed"><?= $fakta_teks ?></div>
                 </div>
@@ -459,29 +459,29 @@ if (isset($_GET["id"])) {
             <div class="space-y-2.5">
                 <?php if ($status == 1) { ?>
                     <div class="grid grid-cols-2 gap-2.5">
-                        <a href='<?php echo "print://https://member.bukakios.net/print-json/$signature/$id.json"; ?>' class="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2.5 text-[13px] font-semibold text-slate-700 transition hover:bg-slate-50">
+                        <a href='<?php echo "print://https://member.bukakios.net/print-json/$signature/$id.json"; ?>' class="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2.5 text-[14px] font-semibold text-slate-700 transition hover:bg-slate-50">
                             <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                             Cetak Struk
                         </a>
-                        <a href='<?php echo $open_url . "https://member.bukakios.net/pdf-mini/download/$signature/$id.pdf"; ?>' class="flex items-center justify-center gap-1.5 rounded-xl bg-brand/10 py-2.5 text-[13px] font-bold text-brand transition hover:bg-brand/20">
+                        <a href='<?php echo $open_url . "https://member.bukakios.net/pdf-mini/download/$signature/$id.pdf"; ?>' class="flex items-center justify-center gap-1.5 rounded-xl bg-brand/10 py-2.5 text-[14px] font-bold text-brand transition hover:bg-brand/20">
                             <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             Download Struk
                         </a>
                     </div>
-                    <a href='<?php echo "catathutang://$msg"; ?>' class="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[13px] font-bold text-rose-700 transition active:scale-[0.99]">
+                    <a href='<?php echo "catathutang://$msg"; ?>' class="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[14px] font-bold text-rose-700 transition active:scale-[0.99]">
                         <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                         Catat Hutang
                     </a>
                 <?php } ?>
 
                 <div class="rounded-2xl border border-slate-200 bg-white p-4 text-center">
-                    <p class="m-0 text-[12px] font-medium text-slate-500">Butuh bantuan? hubungi customer care kami</p>
+                    <p class="m-0 text-[13px] font-medium text-slate-500">Butuh bantuan? hubungi customer care kami</p>
                     <div class="mt-2.5 grid grid-cols-2 gap-2.5">
-                        <a href='<?php echo $openurl . $wa_komplain_link; ?>' class="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 py-2 text-[13px] font-bold text-white transition hover:bg-emerald-600">
+                        <a href='<?php echo $openurl . $wa_komplain_link; ?>' class="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 py-2 text-[14px] font-bold text-white transition hover:bg-emerald-600">
                             <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                             Via WhatsApp
                         </a>
-                        <a href="../kontak/" class="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 py-2 text-[13px] font-semibold text-slate-700 transition hover:bg-slate-50">
+                        <a href="../kontak/" class="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 py-2 text-[14px] font-semibold text-slate-700 transition hover:bg-slate-50">
                             <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                             Kontak Lainnya
                         </a>

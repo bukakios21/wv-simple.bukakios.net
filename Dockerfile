@@ -3,10 +3,17 @@
 
 FROM php:8.1-fpm-alpine
 
-# Install Nginx + ekstensi PHP
+# Timezone container (WIB)
+ENV TZ=Asia/Jakarta
+
+# Install Nginx + ekstensi PHP + timezone data
 RUN apk add --no-cache \
     nginx \
     curl \
+    tzdata \
+    && cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime \
+    && echo "Asia/Jakarta" > /etc/timezone \
+    && printf 'date.timezone=Asia/Jakarta\n' > /usr/local/etc/php/conf.d/timezone.ini \
     && docker-php-ext-install pdo \
     && rm -rf /var/cache/apk/*
 
