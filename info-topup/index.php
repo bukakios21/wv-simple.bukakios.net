@@ -3,6 +3,7 @@ require_once("../config.php");
 require_once("../_session.php");
 require_once('../lib/ApiV2.php');
 
+echo "userjwt => ".$user_jwt;
 $api_v2 = new ApiV2($user_jwt);
 
 

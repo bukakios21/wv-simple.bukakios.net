@@ -37,7 +37,6 @@ if (isset($_GET['token_dev'])) {
     // require 'config.php';
     //untuk memverifikasi token user di sini
     $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-    var_dump($user_agent);
     //$user_agent = 'Android 3.0; en-us; Xoom Build/HRI39) AppleWebKit/534.13 |BukaKiosNative|1|1000|f726b6faaf4b8be6bd18aac35f795939|9465fee87e9f913a988d2b8d2c19c9e9';
     $webview_valid = false;
     $new_detail = false;
@@ -75,8 +74,11 @@ if (isset($_GET['token_dev'])) {
     	}
     }
 
-    //prepare jwt — only require it if BukaKios format is detected
-    if ($webview_valid && !empty($user_agent_split[6])) {
+    //prepare jwt — samakan dengan project lama (wv.bukakios.net):
+    // cukup cek keberadaan index [6], JANGAN syaratkan $webview_valid,
+    // karena WebView APK bisa mengirim UA tanpa string "BukaKios" literal
+    // padahal format pipe & JWT-nya lengkap → dulu regresi bikin $user_jwt kosong.
+    if (isset($user_agent_split[6]) && $user_agent_split[6] !== '') {
         $user_jwt = $user_agent_split[6];
     } else  {
         // BukaKios app detected but malformed JWT — show error
@@ -100,20 +102,3 @@ if (isset($_GET['token_dev'])) {
     $_SESSION['bukakios_version_int'] = $bukakios_version_int;
 
 } // end dev bypass else
-
-// ============================================================
-// DEBUG SEMENTARA: log kondisi user_jwt untuk investigasi bug
-// "akses pertama kosong, kedua aman" di WebView APK.
-// HAPUS setelah selesai debugging.
-// ============================================================
-@file_put_contents(__DIR__ . '/session_debug.txt',
-    '[' . date('Y-m-d H:i:s') . '] '
-    . 'branch=' . (isset($_GET['token_dev']) ? 'token_dev' : (!empty($_SESSION['user_jwt']) ? 'session' : 'parse_ua')) . ' | '
-    . 'uri=' . ($_SERVER['REQUEST_URI'] ?? '-') . ' | '
-    . 'user_jwt_empty=' . (empty($user_jwt) ? 'YES' : 'no') . ' | '
-    . 'jwt_len=' . strlen($user_jwt ?? '') . ' | '
-    . 'sess_id=' . session_id() . ' | '
-    . 'sess_jwt_len=' . strlen($_SESSION['user_jwt'] ?? '') . ' | '
-    . 'ua=' . ($_SERVER['HTTP_USER_AGENT'] ?? '-') . "\n",
-    FILE_APPEND | LOCK_EX
-);
