@@ -802,7 +802,7 @@ if (isset($_GET['id'])) {
             <?php } ?>
 
             <div class="flex gap-2">
-                <a href="<?= "$c_url/info-topup/?id=$topup_id" ?>" class="flex-1 rounded-xl border border-slate-200 py-2 text-center text-[14px] font-medium text-slate-700 transition hover:bg-slate-50">Cek Status</a>
+                <button type="button" onclick="location.reload()" class="flex-1 rounded-xl border border-slate-200 py-2 text-center text-[14px] font-medium text-slate-700 transition hover:bg-slate-50 active:scale-[0.99]">Cek Status</button>
                 <a href="<?= $openurl . $wa_komplain_link ?>" class="flex-1 rounded-xl bg-brand py-2 text-center text-[14px] font-medium text-white transition hover:bg-brandDark">Bantuan</a>
             </div>
         </div>
