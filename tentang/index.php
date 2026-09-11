@@ -47,7 +47,7 @@ require_once("../_session.php");
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -56,29 +56,29 @@ require_once("../_session.php");
     <!-- Logo & Title -->
     <div class="flex flex-col items-center text-center mb-8">
       <img src="../assets/img/info/logo.png" alt="BukaKios" class="w-28 h-28 object-contain mb-4 drop-shadow-md" onerror="this.style.display='none'">
-      <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Tentang BukaKios</h1>
+      <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Tentang BukaKios</h1>
       <p class="text-sm text-slate-500 mt-1">Versi <?= htmlspecialchars($bukakios_version ?? '1.0') ?></p>
     </div>
 
     <!-- About Card -->
     <div class="bg-white rounded-2xl border border-slate-100 p-5 shadow-card mb-4">
-      <h2 class="text-[15px] font-extrabold text-slate-800 mb-3 flex items-center gap-2">
+      <h2 class="text-[16px] font-extrabold text-slate-800 mb-3 flex items-center gap-2">
         <svg viewBox="0 0 24 24" class="w-4 h-4 text-brand shrink-0" fill="currentColor">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
         </svg>
         Apa itu BukaKios?
       </h2>
-      <p class="text-[13px] text-slate-600 leading-relaxed">
+      <p class="text-[14px] text-slate-600 leading-relaxed">
         BukaKios merupakan aplikasi dan layanan web yang bergerak di bidang transaksi digital atau yang lebih dikenal dengan <strong class="text-slate-800 font-semibold">PPOB (Payment Point Online Bank)</strong>. Produk yang dapat dibeli di layanan ini antara lain pulsa, paket data, paket telepon, token listrik, top up saldo E-Money, voucher game, pembayaran tagihan BPJS, Indihome, listrik pascabayar, dan masih banyak lagi.
       </p>
-      <p class="text-[13px] text-slate-600 leading-relaxed mt-3">
+      <p class="text-[14px] text-slate-600 leading-relaxed mt-3">
         Aplikasi dan fitur yang diberikan dijamin <strong class="text-brand font-semibold">100% GRATIS</strong> dan harga produk yang disediakan <strong class="text-brand font-semibold">SANGAT MURAH</strong>, sehingga sangat memungkinkan untuk menjadikan BukaKios sebagai distributor bisnis PPOB kamu.
       </p>
     </div>
 
     <!-- Fitur Unggulan -->
     <div class="mb-4">
-      <h2 class="text-[15px] font-extrabold text-slate-800 mb-3">Fitur Unggulan</h2>
+      <h2 class="text-[16px] font-extrabold text-slate-800 mb-3">Fitur Unggulan</h2>
       <div class="grid grid-cols-2 gap-3">
 
         <div class="bg-white rounded-xl border border-slate-100 p-4 shadow-soft">
@@ -88,8 +88,8 @@ require_once("../_session.php");
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
           </div>
-          <div class="text-[13px] font-bold text-slate-800">Reset PIN</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Atur ulang PIN dengan mudah</div>
+          <div class="text-[14px] font-bold text-slate-800">Reset PIN</div>
+          <div class="text-[12px] text-slate-500 mt-0.5">Atur ulang PIN dengan mudah</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-100 p-4 shadow-soft">
@@ -99,8 +99,8 @@ require_once("../_session.php");
               <path d="M1 10h22"/>
             </svg>
           </div>
-          <div class="text-[13px] font-bold text-slate-800">Kode Voucher</div>
-          <div class="text-[11px] text-slate-500 mt-0.5"> voucher &amp; kode promo</div>
+          <div class="text-[14px] font-bold text-slate-800">Kode Voucher</div>
+          <div class="text-[12px] text-slate-500 mt-0.5"> voucher &amp; kode promo</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-100 p-4 shadow-soft">
@@ -112,8 +112,8 @@ require_once("../_session.php");
               <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
-          <div class="text-[13px] font-bold text-slate-800">Downline</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Kelola jaringan bisnis</div>
+          <div class="text-[14px] font-bold text-slate-800">Downline</div>
+          <div class="text-[12px] text-slate-500 mt-0.5">Kelola jaringan bisnis</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-100 p-4 shadow-soft">
@@ -123,8 +123,8 @@ require_once("../_session.php");
               <path d="M12 6v6l4 2"/>
             </svg>
           </div>
-          <div class="text-[13px] font-bold text-slate-800">Tukar Poin</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Tukarkan poin jadi reward</div>
+          <div class="text-[14px] font-bold text-slate-800">Tukar Poin</div>
+          <div class="text-[12px] text-slate-500 mt-0.5">Tukarkan poin jadi reward</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-100 p-4 shadow-soft">
@@ -133,8 +133,8 @@ require_once("../_session.php");
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
           </div>
-          <div class="text-[13px] font-bold text-slate-800">PDAM</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Pembayaran tagihan air</div>
+          <div class="text-[14px] font-bold text-slate-800">PDAM</div>
+          <div class="text-[12px] text-slate-500 mt-0.5">Pembayaran tagihan air</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-100 p-4 shadow-soft">
@@ -143,8 +143,8 @@ require_once("../_session.php");
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
             </svg>
           </div>
-          <div class="text-[13px] font-bold text-slate-800">Token Listrik</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Token PLN cepat &amp; mudah</div>
+          <div class="text-[14px] font-bold text-slate-800">Token Listrik</div>
+          <div class="text-[12px] text-slate-500 mt-0.5">Token PLN cepat &amp; mudah</div>
         </div>
 
       </div>
@@ -152,7 +152,7 @@ require_once("../_session.php");
 
     <!-- Produk & Layanan -->
     <div class="bg-white rounded-2xl border border-slate-100 p-5 shadow-card mb-4">
-      <h2 class="text-[15px] font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+      <h2 class="text-[16px] font-extrabold text-slate-800 mb-4 flex items-center gap-2">
         <svg viewBox="0 0 24 24" class="w-4 h-4 text-brand shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
           <line x1="3" y1="6" x2="21" y2="6"/>
@@ -164,7 +164,7 @@ require_once("../_session.php");
         <?php
         $produk = ['Pulsa', 'Paket Data', 'Paket Telepon', 'Token Listrik', 'E-Money', 'Voucher Game', 'BPJS', 'Indihome', 'PLN Pascabayar', 'PDAM', 'PGN', 'TV Kabel'];
         foreach ($produk as $item): ?>
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-medium text-slate-600">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[12px] font-medium text-slate-600">
           <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
           <?= htmlspecialchars($item) ?>
         </span>
@@ -174,7 +174,7 @@ require_once("../_session.php");
 
     <!-- Keunggulan -->
     <div class="bg-gradient-to-br from-brand to-brandDark rounded-2xl p-5 shadow-card mb-4">
-      <h2 class="text-[15px] font-extrabold text-white mb-4 flex items-center gap-2">
+      <h2 class="text-[16px] font-extrabold text-white mb-4 flex items-center gap-2">
         <svg viewBox="0 0 24 24" class="w-4 h-4 shrink-0" fill="currentColor">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
         </svg>
@@ -188,8 +188,8 @@ require_once("../_session.php");
             </svg>
           </div>
           <div>
-            <div class="text-[13px] font-bold text-white">100% Gratis</div>
-            <div class="text-[11px] text-white/70 mt-0.5">Tidak dipungut biaya pendaftaran maupun langganan</div>
+            <div class="text-[14px] font-bold text-white">100% Gratis</div>
+            <div class="text-[12px] text-white/70 mt-0.5">Tidak dipungut biaya pendaftaran maupun langganan</div>
           </div>
         </div>
         <div class="flex items-start gap-3">
@@ -199,8 +199,8 @@ require_once("../_session.php");
             </svg>
           </div>
           <div>
-            <div class="text-[13px] font-bold text-white">Harga Paling Murah</div>
-            <div class="text-[11px] text-white/70 mt-0.5">Dapatkan harga terbaik untuk setiap produk digital</div>
+            <div class="text-[14px] font-bold text-white">Harga Paling Murah</div>
+            <div class="text-[12px] text-white/70 mt-0.5">Dapatkan harga terbaik untuk setiap produk digital</div>
           </div>
         </div>
         <div class="flex items-start gap-3">
@@ -210,8 +210,8 @@ require_once("../_session.php");
             </svg>
           </div>
           <div>
-            <div class="text-[13px] font-bold text-white">Transaksi Cepat</div>
-            <div class="text-[11px] text-white/70 mt-0.5">Proses otomatis 24 jam dengan hasil instan</div>
+            <div class="text-[14px] font-bold text-white">Transaksi Cepat</div>
+            <div class="text-[12px] text-white/70 mt-0.5">Proses otomatis 24 jam dengan hasil instan</div>
           </div>
         </div>
         <div class="flex items-start gap-3">
@@ -221,8 +221,8 @@ require_once("../_session.php");
             </svg>
           </div>
           <div>
-            <div class="text-[13px] font-bold text-white">Bisnis PPOB</div>
-            <div class="text-[11px] text-white/70 mt-0.5">Cocok untuk memulai usaha distributor digital</div>
+            <div class="text-[14px] font-bold text-white">Bisnis PPOB</div>
+            <div class="text-[12px] text-white/70 mt-0.5">Cocok untuk memulai usaha distributor digital</div>
           </div>
         </div>
       </div>
@@ -230,8 +230,8 @@ require_once("../_session.php");
 
     <!-- Footer info -->
     <div class="text-center mt-6">
-      <div class="text-[11px] text-slate-400">© <?= date('Y') ?> BukaKios. Seluruh hak dilindungi.</div>
-      <div class="text-[11px] text-slate-300 mt-1">www.bukakios.net</div>
+      <div class="text-[12px] text-slate-400">© <?= date('Y') ?> BukaKios. Seluruh hak dilindungi.</div>
+      <div class="text-[12px] text-slate-300 mt-1">www.bukakios.net</div>
     </div>
 
   </main>

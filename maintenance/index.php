@@ -47,7 +47,7 @@ require_once(__DIR__ . "/../_session.php");
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -62,14 +62,14 @@ require_once(__DIR__ . "/../_session.php");
       </svg>
     </div>
 
-    <h1 class="text-[24px] font-extrabold tracking-tight text-slate-900 text-center">Maintenance</h1>
+    <h1 class="text-[25px] font-extrabold tracking-tight text-slate-900 text-center">Maintenance</h1>
     <p class="text-sm text-slate-500 mt-2 text-center max-w-xs leading-relaxed">
       Fitur ini sedang dalam perbaikan. Mohon tunggu beberapa saat lagi.
     </p>
 
     <!-- Info Card -->
     <div class="w-full max-w-sm bg-white rounded-2xl border border-slate-100 p-5 shadow-card mt-6">
-      <h2 class="text-[13px] font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+      <h2 class="text-[14px] font-extrabold text-slate-800 mb-4 flex items-center gap-2">
         <svg viewBox="0 0 24 24" class="w-4 h-4 text-brand shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/>
           <polyline points="12 6 12 12 16 14"/>
@@ -79,15 +79,15 @@ require_once(__DIR__ . "/../_session.php");
       <div class="space-y-3">
         <div class="flex items-start gap-3">
           <div class="w-6 h-6 rounded-full bg-brand/10 flex items-center justify-center shrink-0 mt-0.5">
-            <span class="text-[11px] font-bold text-brand">1</span>
+            <span class="text-[12px] font-bold text-brand">1</span>
           </div>
-          <div class="text-[13px] text-slate-600 leading-relaxed">Tim kami sedang melakukan pemeliharaan sistem</div>
+          <div class="text-[14px] text-slate-600 leading-relaxed">Tim kami sedang melakukan pemeliharaan sistem</div>
         </div>
         <div class="flex items-start gap-3">
           <div class="w-6 h-6 rounded-full bg-brand/10 flex items-center justify-center shrink-0 mt-0.5">
-            <span class="text-[11px] font-bold text-brand">3</span>
+            <span class="text-[12px] font-bold text-brand">3</span>
           </div>
-          <div class="text-[13px] text-slate-600 leading-relaxed">Mohon kembali nanti untuk melanjutkan</div>
+          <div class="text-[14px] text-slate-600 leading-relaxed">Mohon kembali nanti untuk melanjutkan</div>
         </div>
       </div>
     </div>
@@ -100,15 +100,15 @@ require_once(__DIR__ . "/../_session.php");
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
           </svg>
         </div>
-        <div class="text-[12px] text-amber-700 leading-relaxed">Jika masalah tetap berlanjut, silakan hubungi kami melalui menu <strong class="font-semibold">Bantuan</strong> di aplikasi.</div>
+        <div class="text-[13px] text-amber-700 leading-relaxed">Jika masalah tetap berlanjut, silakan hubungi kami melalui menu <strong class="font-semibold">Bantuan</strong> di aplikasi.</div>
       </div>
     </div>
 
     <div class="flex gap-3 mt-6 w-full max-w-sm">
-      <button onclick="history.back()" class="flex-1 rounded-xl border border-slate-200 bg-white py-3 text-[14px] font-bold text-slate-700 shadow-soft transition hover:bg-slate-50 active:scale-[0.98]">
+      <button onclick="history.back()" class="flex-1 rounded-xl border border-slate-200 bg-white py-3 text-[15px] font-bold text-slate-700 shadow-soft transition hover:bg-slate-50 active:scale-[0.98]">
         Kembali
       </button>
-      <a href="index.php" class="flex-1 rounded-xl bg-brand py-3 text-[14px] font-bold text-white text-center shadow-lg transition hover:bg-brandDark active:scale-[0.98]">
+      <a href="index.php" class="flex-1 rounded-xl bg-brand py-3 text-[15px] font-bold text-white text-center shadow-lg transition hover:bg-brandDark active:scale-[0.98]">
         Coba Lagi
       </a>
     </div>

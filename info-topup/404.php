@@ -52,7 +52,7 @@ $wa_link = wa_link($teks_komplain);
             <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
                 <div class="h-full w-full rounded-full bg-brand"></div>
             </div>
-            <div class="shrink-0 text-[15px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
+            <div class="shrink-0 text-[16px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
         </div>
     </header>
 
@@ -61,23 +61,23 @@ $wa_link = wa_link($teks_komplain);
             <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-rose-200 bg-rose-50">
                 <svg viewBox="0 0 24 24" class="h-9 w-9 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
             </div>
-            <div class="mt-3 text-[44px] font-black leading-none tracking-tight text-slate-900">404</div>
-            <h1 class="m-0 mt-1.5 text-[15px] font-bold text-slate-900">Transaksi Tidak Ditemukan</h1>
-            <p class="m-0 mt-1 text-[13px] leading-relaxed text-slate-500">Maaf, data topup yang kamu cari tidak ditemukan. Kemungkinan ID Topup salah atau topup sudah tidak tersedia.</p>
+            <div class="mt-3 text-[45px] font-black leading-none tracking-tight text-slate-900">404</div>
+            <h1 class="m-0 mt-1.5 text-[16px] font-bold text-slate-900">Transaksi Tidak Ditemukan</h1>
+            <p class="m-0 mt-1 text-[14px] leading-relaxed text-slate-500">Maaf, data topup yang kamu cari tidak ditemukan. Kemungkinan ID Topup salah atau topup sudah tidak tersedia.</p>
 
             <div class="mt-5 grid grid-cols-2 gap-2.5">
-                <button type="button" id="btnBack" class="flex items-center justify-center gap-1.5 rounded-xl bg-brand py-2.5 text-[13px] font-bold text-white transition hover:bg-brandDark active:scale-[0.99]">
+                <button type="button" id="btnBack" class="flex items-center justify-center gap-1.5 rounded-xl bg-brand py-2.5 text-[14px] font-bold text-white transition hover:bg-brandDark active:scale-[0.99]">
                     <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     Kembali
                 </button>
-                <a href='<?php echo $openurl . $wa_link; ?>' class="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 py-2.5 text-[13px] font-bold text-white transition hover:bg-emerald-600">
+                <a href='<?php echo $openurl . $wa_link; ?>' class="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 py-2.5 text-[14px] font-bold text-white transition hover:bg-emerald-600">
                     <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                     Via WhatsApp
                 </a>
             </div>
         </div>
 
-        <p class="m-0 mt-4 text-center text-[12px] font-medium text-slate-400">Butuh bantuan lainnya? Customer care kami siap membantu kamu.</p>
+        <p class="m-0 mt-4 text-center text-[13px] font-medium text-slate-400">Butuh bantuan lainnya? Customer care kami siap membantu kamu.</p>
     </main>
 
     <script>

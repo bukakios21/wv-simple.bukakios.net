@@ -196,7 +196,7 @@ $csrf_token = $app->csrf();
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
       </svg>
-      <p class="text-[13px] font-extrabold text-slate-700" id="loadingText">Memproses…</p>
+      <p class="text-[14px] font-extrabold text-slate-700" id="loadingText">Memproses…</p>
     </div>
   </div>
 
@@ -204,7 +204,7 @@ $csrf_token = $app->csrf();
   <div id="toastError" class="fixed top-4 left-1/2 z-[9998] hidden -translate-x-1/2 max-w-[90vw] w-full px-4">
     <div class="flex items-start gap-3 rounded-xl bg-red-600 px-4 py-3 shadow-lg text-white">
       <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      <p id="toastErrorMsg" class="text-[13px] font-semibold leading-5"></p>
+      <p id="toastErrorMsg" class="text-[14px] font-semibold leading-5"></p>
     </div>
   </div>
 
@@ -212,7 +212,7 @@ $csrf_token = $app->csrf();
   <div id="customModal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/50 backdrop-blur-[2px] px-4">
     <div class="w-[92vw] max-w-[400px] rounded-3xl bg-white px-7 py-7 shadow-2xl ring-1 ring-slate-900/5">
       <div id="customModalBody"></div>
-      <button id="customModalBtn" type="button" class="mt-6 w-full rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white text-[15px] font-bold py-3.5 px-5 transition">
+      <button id="customModalBtn" type="button" class="mt-6 w-full rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white text-[16px] font-bold py-3.5 px-5 transition">
         Tutup
       </button>
     </div>
@@ -239,8 +239,8 @@ $csrf_token = $app->csrf();
           <img src="<?= htmlspecialchars($product_logo ?? '') ?>" class="h-full w-full object-contain" alt="Internet" onerror="this.style.display='none';this.parentElement.innerHTML='<svg class=\'h-6 w-6 text-brand\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.8\'><path d=\'M5 12.55a11 11 0 0114 0\'/><path d=\'M1.42 9a16 16 0 0121.16 0\'/><path d=\'M8.53 16.11a6 6 0 016.95 0\'/><line x1=\'12\' y1=\'20\' x2=\'12.01\' y2=\'20\'/></svg>'"/>
         </div>
         <div>
-          <h1 class="text-[17px] font-bold text-slate-900 leading-tight"><?= htmlspecialchars($product_name) ?></h1>
-          <p class="text-[12px] text-mutedText mt-0.5"><?= htmlspecialchars($code) ?></p>
+          <h1 class="text-[18px] font-bold text-slate-900 leading-tight"><?= htmlspecialchars($product_name) ?></h1>
+          <p class="text-[13px] text-mutedText mt-0.5"><?= htmlspecialchars($code) ?></p>
         </div>
       </div>
     </section>
@@ -249,14 +249,14 @@ $csrf_token = $app->csrf();
     <section class="px-4 pb-4">
       <div class="rounded-[16px] border border-slate-200 bg-white shadow-soft overflow-hidden">
         <div class="px-5 pt-5 pb-4" id="inputSection">
-          <label class="text-[13px] font-semibold text-slate-700">Nomor Pelanggan / ID Tagihan</label>
+          <label class="text-[14px] font-semibold text-slate-700">Nomor Pelanggan / ID Tagihan</label>
           <div class="mt-2 flex gap-2">
             <input
               type="tel"
               inputmode="numeric"
               pattern="[0-9]*"
               id="nope"
-              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[15px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[16px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
               placeholder="Masukkan nomor pelanggan"
               autocomplete="off"
             />
@@ -265,7 +265,7 @@ $csrf_token = $app->csrf();
             </button>
           </div>
           <input type="hidden" id="csrf" value="<?= $csrf_token ?>" />
-          <p class="text-[12px] text-mutedText mt-2">Masukkan nomor pelanggan Internet <?= htmlspecialchars($product_name) ?></p>
+          <p class="text-[13px] text-mutedText mt-2">Masukkan nomor pelanggan Internet <?= htmlspecialchars($product_name) ?></p>
         </div>
 
         <!-- Info card -->
@@ -275,11 +275,11 @@ $csrf_token = $app->csrf();
               <svg class="h-4 w-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-[12px] text-emerald-700 leading-snug">
+              <p class="text-[13px] text-emerald-700 leading-snug">
                 Bayar tagihan <?= htmlspecialchars($product_name) ?> di bukakios, kamu otomatis mendapatkan keuntungan dari biaya admin.
               </p>
             </div>
-            <a href="index.php" class="shrink-0 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-red-500 hover:bg-red-50 transition">
+            <a href="index.php" class="shrink-0 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-[12px] font-semibold text-red-500 hover:bg-red-50 transition">
               Ganti
             </a>
           </div>
@@ -291,7 +291,7 @@ $csrf_token = $app->csrf();
     <div id="errorMsg" class="hidden mx-4 mb-3 rounded-xl bg-red-50 border border-red-100 px-4 py-3">
       <div class="flex items-start gap-3">
         <svg class="h-4 w-4 text-red-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        <p id="errorText" class="text-[13px] text-red-600 font-medium leading-snug"></p>
+        <p id="errorText" class="text-[14px] text-red-600 font-medium leading-snug"></p>
       </div>
     </div>
 
@@ -301,34 +301,34 @@ $csrf_token = $app->csrf();
 
         <!-- Header -->
         <div class="px-5 py-4 bg-brand text-white">
-          <h2 class="text-[14px] font-bold">Detail Tagihan</h2>
+          <h2 class="text-[15px] font-bold">Detail Tagihan</h2>
         </div>
 
         <!-- Billing rows -->
         <div class="divide-y divide-slate-100">
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[13px] text-slate-600">Total Tagihan</span>
-            <span class="text-[15px] font-extrabold text-brand" id="tot_ta">-</span>
+            <span class="text-[14px] text-slate-600">Total Tagihan</span>
+            <span class="text-[16px] font-extrabold text-brand" id="tot_ta">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[13px] text-slate-600">Nama Pelanggan</span>
-            <span class="text-[13px] font-semibold text-slate-800" id="nama">-</span>
+            <span class="text-[14px] text-slate-600">Nama Pelanggan</span>
+            <span class="text-[14px] font-semibold text-slate-800" id="nama">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[13px] text-slate-600">Tagihan</span>
-            <span class="text-[13px] font-semibold text-slate-800" id="tagihan">-</span>
+            <span class="text-[14px] text-slate-600">Tagihan</span>
+            <span class="text-[14px] font-semibold text-slate-800" id="tagihan">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[13px] text-slate-600">Biaya Admin</span>
-            <span class="text-[13px] font-semibold text-slate-800" id="biaya">-</span>
+            <span class="text-[14px] text-slate-600">Biaya Admin</span>
+            <span class="text-[14px] font-semibold text-slate-800" id="biaya">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[13px] text-slate-600">Diskon Biaya Admin</span>
-            <span class="text-[13px] font-semibold text-emerald-600" id="potongan">-</span>
+            <span class="text-[14px] text-slate-600">Diskon Biaya Admin</span>
+            <span class="text-[14px] font-semibold text-emerald-600" id="potongan">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3 bg-slate-50">
-            <span class="text-[14px] font-bold text-slate-800">Total Bayar</span>
-            <span class="text-[17px] font-extrabold text-brand" id="tot_ka">-</span>
+            <span class="text-[15px] font-bold text-slate-800">Total Bayar</span>
+            <span class="text-[18px] font-extrabold text-brand" id="tot_ka">-</span>
           </div>
         </div>
       </div>
@@ -336,35 +336,35 @@ $csrf_token = $app->csrf();
       <!-- Profit detail -->
       <div class="mt-3 rounded-[20px] border border-slate-200 bg-white shadow-soft overflow-hidden">
         <div class="px-5 py-4 bg-slate-800 text-white">
-          <h2 class="text-[14px] font-bold">Detail Keuntungan</h2>
+          <h2 class="text-[15px] font-bold">Detail Keuntungan</h2>
         </div>
         <div class="divide-y divide-slate-100">
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[13px] text-slate-600">Pelanggan Kamu Bayar</span>
-            <span class="text-[13px] font-semibold text-slate-800" id="tot_ta2">-</span>
+            <span class="text-[14px] text-slate-600">Pelanggan Kamu Bayar</span>
+            <span class="text-[14px] font-semibold text-slate-800" id="tot_ta2">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[13px] text-slate-600">Saldo Kamu Berkurang</span>
-            <span class="text-[13px] font-semibold text-red-500" id="tot_ka2">-</span>
+            <span class="text-[14px] text-slate-600">Saldo Kamu Berkurang</span>
+            <span class="text-[14px] font-semibold text-red-500" id="tot_ka2">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3 bg-emerald-50/50">
-            <span class="text-[14px] font-bold text-emerald-700">Profit Kamu</span>
-            <span class="text-[17px] font-extrabold text-emerald-600" id="profit">-</span>
+            <span class="text-[15px] font-bold text-emerald-700">Profit Kamu</span>
+            <span class="text-[18px] font-extrabold text-emerald-600" id="profit">-</span>
           </div>
         </div>
       </div>
 
       <!-- Biaya layanan -->
       <div class="mt-3 rounded-[20px] border border-slate-200 bg-white shadow-soft px-5 py-4">
-        <h3 class="text-[13px] font-bold text-slate-700 mb-1">Buat Biaya Layanan Toko/Kios</h3>
+        <h3 class="text-[14px] font-bold text-slate-700 mb-1">Buat Biaya Layanan Toko/Kios</h3>
         <input
           type="number"
           id="biaya_profit"
-          class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[14px] text-slate-800 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
+          class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[15px] text-slate-800 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
           value="0"
           min="0"
         />
-        <p class="text-[11px] text-mutedText mt-1.5">* Akan muncul di struk transaksi</p>
+        <p class="text-[12px] text-mutedText mt-1.5">* Akan muncul di struk transaksi</p>
       </div>
     </section>
 
@@ -372,15 +372,15 @@ $csrf_token = $app->csrf();
 
   <!-- Fixed footer -->
   <footer class="fixed bottom-0 left-0 right-0 z-10 bg-white border-t border-slate-200 shadow-soft px-4 py-3">
-    <button id="btnCek" onclick="doCek()" class="w-full rounded-2xl bg-brand py-3.5 text-[15px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
+    <button id="btnCek" onclick="doCek()" class="w-full rounded-2xl bg-brand py-3.5 text-[16px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
       Cek Tagihan
     </button>
 
     <div id="btnActionGroup" class="hidden grid grid-cols-2 gap-3">
-      <button id="btnBatal" onclick="doBatal()" class="rounded-2xl border border-slate-200 bg-white py-3.5 text-[14px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
+      <button id="btnBatal" onclick="doBatal()" class="rounded-2xl border border-slate-200 bg-white py-3.5 text-[15px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
         Batal
       </button>
-      <button id="btnBayar" onclick="doBayar()" class="rounded-2xl bg-emerald-500 py-3.5 text-[14px] font-bold text-white shadow-cta transition hover:bg-emerald-600 active:scale-[0.99]">
+      <button id="btnBayar" onclick="doBayar()" class="rounded-2xl bg-emerald-500 py-3.5 text-[15px] font-bold text-white shadow-cta transition hover:bg-emerald-600 active:scale-[0.99]">
         Bayar Sekarang
       </button>
     </div>
@@ -391,7 +391,7 @@ $csrf_token = $app->csrf();
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
         </svg>
-        <span class="text-[14px] font-semibold text-slate-600">Memproses transaksi…</span>
+        <span class="text-[15px] font-semibold text-slate-600">Memproses transaksi…</span>
       </div>
     </div>
   </footer>
@@ -558,7 +558,7 @@ $csrf_token = $app->csrf();
         inner =
           '<div class="flex flex-col items-center text-center">' +
             '<div class="w-20 h-20 rounded-full flex items-center justify-center mb-5 ring-8 ' + iconRing + ' ' + iconAnimClass + '">' + iconHtml + '</div>' +
-            '<h2 class="modal-title text-[20px] font-extrabold leading-tight text-slate-900 mb-2">' + titleText + '</h2>' +
+            '<h2 class="modal-title text-[21px] font-extrabold leading-tight text-slate-900 mb-2">' + titleText + '</h2>' +
             '<p class="modal-subtitle text-[13.5px] text-slate-600 leading-relaxed max-w-[300px] mx-auto font-medium px-2">' + messageText + '</p>' +
           '</div>';
       }
@@ -569,7 +569,7 @@ $csrf_token = $app->csrf();
 
       bodyEl.innerHTML = inner;
       btnEl.textContent = btnText;
-      btnEl.className = 'modal-btn mt-6 w-full rounded-xl text-white text-[15px] font-bold py-3.5 px-5 transition active:scale-[0.99] ' + btnColorClass;
+      btnEl.className = 'modal-btn mt-6 w-full rounded-xl text-white text-[16px] font-bold py-3.5 px-5 transition active:scale-[0.99] ' + btnColorClass;
 
       var newBtn = btnEl.cloneNode(true);
       btnEl.parentNode.replaceChild(newBtn, btnEl);
@@ -667,7 +667,7 @@ $csrf_token = $app->csrf();
             } catch(e) {
               console.error('[doCek] parse error:', e);
               var rawResp = (xhr.responseText || '').substring(0, 500);
-              var debugInfo = '<div class="mt-2 text-left"><details class="text-left"><summary class="text-[11px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-1 max-h-32 overflow-auto rounded-lg bg-slate-100 p-2 text-[10px] text-slate-700 whitespace-pre-wrap break-all">' +
+              var debugInfo = '<div class="mt-2 text-left"><details class="text-left"><summary class="text-[12px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-1 max-h-32 overflow-auto rounded-lg bg-slate-100 p-2 text-[11px] text-slate-700 whitespace-pre-wrap break-all">' +
                 'Parse error: ' + (e.message || e) + '\n\nRaw response:\n' + rawResp + '</pre></details></div>';
               showErrorState('Respons server tidak valid' + debugInfo);
             }
@@ -783,12 +783,12 @@ $csrf_token = $app->csrf();
                         '<path class="modal-check-path" d="M4 12.5 L10 18.5 L20 6.5"/>' +
                       '</svg>' +
                     '</div>' +
-                    '<h2 class="modal-title text-[20px] font-extrabold text-slate-900 mb-1.5 leading-tight">Pembayaran Berhasil</h2>' +
+                    '<h2 class="modal-title text-[21px] font-extrabold text-slate-900 mb-1.5 leading-tight">Pembayaran Berhasil</h2>' +
                     '<p class="modal-subtitle text-[13.5px] text-slate-500 leading-relaxed mb-5 px-2">Transaksi sedang diproses. Silahkan periksa riwayat transaksi kamu.</p>' +
                     '<div class="modal-body w-full rounded-2xl bg-slate-50 border border-slate-100 p-4 text-left divide-y divide-slate-200/70">' +
-                      '<div class="flex justify-between items-center py-2.5 text-[13px]"><span class="text-slate-500">ID Transaksi</span><span class="font-bold text-slate-900 font-mono">' + trxId + '</span></div>' +
-                      '<div class="flex justify-between items-center py-2.5 text-[13px]"><span class="text-slate-500">Nama Pelanggan</span><span class="font-semibold text-slate-800 text-right ml-2 truncate max-w-[60%]">' + namaPelanggan + '</span></div>' +
-                      '<div class="flex justify-between items-center py-2.5 text-[13px]"><span class="text-slate-500">Saldo Kamu Berkurang</span><span class="font-extrabold text-red-500 text-[15px]">' + saldoBerkurang + '</span></div>' +
+                      '<div class="flex justify-between items-center py-2.5 text-[14px]"><span class="text-slate-500">ID Transaksi</span><span class="font-bold text-slate-900 font-mono">' + trxId + '</span></div>' +
+                      '<div class="flex justify-between items-center py-2.5 text-[14px]"><span class="text-slate-500">Nama Pelanggan</span><span class="font-semibold text-slate-800 text-right ml-2 truncate max-w-[60%]">' + namaPelanggan + '</span></div>' +
+                      '<div class="flex justify-between items-center py-2.5 text-[14px]"><span class="text-slate-500">Saldo Kamu Berkurang</span><span class="font-extrabold text-red-500 text-[16px]">' + saldoBerkurang + '</span></div>' +
                     '</div>' +
                   '</div>';
 
@@ -810,7 +810,7 @@ $csrf_token = $app->csrf();
             } catch(e) {
               console.error('[doBayar] parse error:', e);
               var rawResp = (xhr.responseText || '').substring(0, 500);
-              var debugInfo = '<div class="mt-4 w-full text-left"><details class="text-left"><summary class="text-[12px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-2 max-h-40 overflow-auto rounded-lg bg-slate-100 p-3 text-[11px] text-slate-700 whitespace-pre-wrap break-all">' +
+              var debugInfo = '<div class="mt-4 w-full text-left"><details class="text-left"><summary class="text-[13px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-2 max-h-40 overflow-auto rounded-lg bg-slate-100 p-3 text-[12px] text-slate-700 whitespace-pre-wrap break-all">' +
                 'Parse error: ' + (e.message || e) + '\n\nRaw response:\n' + rawResp + '</pre></details></div>';
               showFailDialog('Respons Tidak Valid', 'Server mengembalikan data yang tidak dapat diproses. Silakan coba lagi.' + debugInfo);
               document.getElementById('btnProcessing').classList.add('hidden');

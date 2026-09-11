@@ -72,7 +72,7 @@ if (isset($_REQUEST['msg'])) {
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -87,17 +87,17 @@ if (isset($_REQUEST['msg'])) {
           <polyline points="21 15 16 10 5 21"/>
         </svg>
       </div>
-      <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Bahan Promosi</h1>
+      <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Bahan Promosi</h1>
       <p class="text-sm text-slate-500 mt-1">Download materi promosi untuk media sosial</p>
     </div>
 
     <!-- Info Pills -->
     <div class="flex flex-wrap gap-2 mb-6">
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft">
         <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
         Free Download
       </span>
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         File Photoshop & CorelDraw
       </span>
@@ -113,7 +113,7 @@ if (isset($_REQUEST['msg'])) {
             <path d="M9 21V9"/>
           </svg>
         </div>
-        <h2 class="text-[15px] font-bold text-slate-800">Spanduk Banner</h2>
+        <h2 class="text-[16px] font-bold text-slate-800">Spanduk Banner</h2>
       </div>
 
       <div class="space-y-3">
@@ -124,10 +124,10 @@ if (isset($_REQUEST['msg'])) {
           </div>
           <div class="p-4 flex items-center justify-between">
             <div>
-              <h3 class="text-[13px] font-semibold text-slate-800">Spanduk Toko Bukakios</h3>
-              <p class="text-[11px] text-slate-500 mt-0.5">Photoshop & CorelDraw</p>
+              <h3 class="text-[14px] font-semibold text-slate-800">Spanduk Toko Bukakios</h3>
+              <p class="text-[12px] text-slate-500 mt-0.5">Photoshop & CorelDraw</p>
             </div>
-            <button onclick="showPsDownload()" class="inline-flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-[12px] font-bold text-white shadow-sm transition hover:bg-brandDark active:scale-95">
+            <button onclick="showPsDownload()" class="inline-flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-[13px] font-bold text-white shadow-sm transition hover:bg-brandDark active:scale-95">
               <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
@@ -145,10 +145,10 @@ if (isset($_REQUEST['msg'])) {
           </div>
           <div class="p-4 flex items-center justify-between">
             <div>
-              <h3 class="text-[13px] font-semibold text-slate-800">Spanduk Mitra Bukakios</h3>
-              <p class="text-[11px] text-slate-500 mt-0.5">Photoshop & CorelDraw</p>
+              <h3 class="text-[14px] font-semibold text-slate-800">Spanduk Mitra Bukakios</h3>
+              <p class="text-[12px] text-slate-500 mt-0.5">Photoshop & CorelDraw</p>
             </div>
-            <button onclick="showCdDownload()" class="inline-flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-[12px] font-bold text-white shadow-sm transition hover:bg-brandDark active:scale-95">
+            <button onclick="showCdDownload()" class="inline-flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-[13px] font-bold text-white shadow-sm transition hover:bg-brandDark active:scale-95">
               <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
@@ -172,8 +172,8 @@ if (isset($_REQUEST['msg'])) {
           </svg>
         </div>
         <div>
-          <h3 class="text-[13px] font-bold text-white">Tips Penggunaan</h3>
-          <p class="text-[11px] text-white/80 mt-1 leading-relaxed">
+          <h3 class="text-[14px] font-bold text-white">Tips Penggunaan</h3>
+          <p class="text-[12px] text-white/80 mt-1 leading-relaxed">
             File tersedia dalam format Photoshop (.PSD) dan CorelDraw (.CDR). Link download akan dikirim ke email kamu.
           </p>
         </div>
@@ -186,7 +186,7 @@ if (isset($_REQUEST['msg'])) {
   <div id="loading-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;align-items:center;justify-content:center;">
     <div style="background:#fff;border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);min-width:200px;">
       <div style="width:44px;height:44px;border:4px solid rgba(26,127,206,0.2);border-top-color:#1a7fce;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-      <div style="font-size:14px;font-weight:600;color:#334155;">Mengirim link download...</div>
+      <div style="font-size:15px;font-weight:600;color:#334155;">Mengirim link download...</div>
     </div>
   </div>
 
@@ -197,10 +197,10 @@ if (isset($_REQUEST['msg'])) {
   <script>
     function showPsDownload() {
       Swal.fire({
-        title: '<span class="text-[18px] font-bold text-slate-800">Download Spanduk Toko</span>',
+        title: '<span class="text-[19px] font-bold text-slate-800">Download Spanduk Toko</span>',
         html: `
           <div class="text-left">
-            <p class="text-[13px] text-slate-600 mb-4">Pilih format file yang diinginkan:</p>
+            <p class="text-[14px] text-slate-600 mb-4">Pilih format file yang diinginkan:</p>
             <div class="space-y-2">
               <button onclick="sendDownloadLink('<?php echo $ps ?>', 'Photoshop')" class="w-full flex items-center justify-between px-4 py-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition">
                 <div class="flex items-center gap-3">
@@ -211,8 +211,8 @@ if (isset($_REQUEST['msg'])) {
                     </svg>
                   </div>
                   <div>
-                    <p class="text-[13px] font-semibold text-slate-800">Photoshop</p>
-                    <p class="text-[11px] text-slate-500">.PSD format</p>
+                    <p class="text-[14px] font-semibold text-slate-800">Photoshop</p>
+                    <p class="text-[12px] text-slate-500">.PSD format</p>
                   </div>
                 </div>
                 <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2">
@@ -228,8 +228,8 @@ if (isset($_REQUEST['msg'])) {
                     </svg>
                   </div>
                   <div>
-                    <p class="text-[13px] font-semibold text-slate-800">CorelDraw</p>
-                    <p class="text-[11px] text-slate-500">.CDR format</p>
+                    <p class="text-[14px] font-semibold text-slate-800">CorelDraw</p>
+                    <p class="text-[12px] text-slate-500">.CDR format</p>
                   </div>
                 </div>
                 <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2">
@@ -250,10 +250,10 @@ if (isset($_REQUEST['msg'])) {
 
     function showCdDownload() {
       Swal.fire({
-        title: '<span class="text-[18px] font-bold text-slate-800">Download Spanduk Mitra</span>',
+        title: '<span class="text-[19px] font-bold text-slate-800">Download Spanduk Mitra</span>',
         html: `
           <div class="text-left">
-            <p class="text-[13px] text-slate-600 mb-4">File akan dikirim ke email kamu.</p>
+            <p class="text-[14px] text-slate-600 mb-4">File akan dikirim ke email kamu.</p>
             <div class="bg-emerald-50 rounded-xl p-4 flex items-start gap-3">
               <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
                 <svg viewBox="0 0 24 24" class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2">
@@ -262,11 +262,11 @@ if (isset($_REQUEST['msg'])) {
                 </svg>
               </div>
               <div>
-                <p class="text-[13px] font-semibold text-emerald-800">Proses Instan</p>
-                <p class="text-[11px] text-emerald-600 mt-0.5">Cek email untuk link download</p>
+                <p class="text-[14px] font-semibold text-emerald-800">Proses Instan</p>
+                <p class="text-[12px] text-emerald-600 mt-0.5">Cek email untuk link download</p>
               </div>
             </div>
-            <button onclick="sendDownloadLink('<?php echo $spn ?>', 'Spanduk Mitra')" class="w-full mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-[13px] font-bold text-white transition hover:bg-brandDark active:scale-95">
+            <button onclick="sendDownloadLink('<?php echo $spn ?>', 'Spanduk Mitra')" class="w-full mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-[14px] font-bold text-white transition hover:bg-brandDark active:scale-95">
               <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"/>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -297,23 +297,23 @@ if (isset($_REQUEST['msg'])) {
           if (data.status == 1) {
             Swal.fire({
               icon: 'success',
-              title: '<span class="text-[18px] font-bold text-slate-800">Link Terkirim!</span>',
-              html: '<p class="text-[13px] text-slate-600">Silakan cek email kamu untuk link download file ' + formatName + '.</p>',
+              title: '<span class="text-[19px] font-bold text-slate-800">Link Terkirim!</span>',
+              html: '<p class="text-[14px] text-slate-600">Silakan cek email kamu untuk link download file ' + formatName + '.</p>',
               confirmButtonText: 'OK',
               customClass: {
                 popup: 'rounded-2xl',
-                confirmButton: 'rounded-xl bg-brand px-6 py-2.5 text-[13px] font-bold'
+                confirmButton: 'rounded-xl bg-brand px-6 py-2.5 text-[14px] font-bold'
               }
             });
           } else {
             Swal.fire({
               icon: 'error',
-              title: '<span class="text-[18px] font-bold text-slate-800">Gagal</span>',
-              html: '<p class="text-[13px] text-slate-600">' + (data.error_msg || 'Pastikan koneksi internet aktif.') + '</p>',
+              title: '<span class="text-[19px] font-bold text-slate-800">Gagal</span>',
+              html: '<p class="text-[14px] text-slate-600">' + (data.error_msg || 'Pastikan koneksi internet aktif.') + '</p>',
               confirmButtonText: 'OK',
               customClass: {
                 popup: 'rounded-2xl',
-                confirmButton: 'rounded-xl bg-red-500 px-6 py-2.5 text-[13px] font-bold'
+                confirmButton: 'rounded-xl bg-red-500 px-6 py-2.5 text-[14px] font-bold'
               }
             });
           }
@@ -322,12 +322,12 @@ if (isset($_REQUEST['msg'])) {
           $overlay.hide();
           Swal.fire({
             icon: 'error',
-            title: '<span class="text-[18px] font-bold text-slate-800">Gagal</span>',
-            html: '<p class="text-[13px] text-slate-600">Terjadi kesalahan koneksi. Silakan coba lagi.</p>',
+            title: '<span class="text-[19px] font-bold text-slate-800">Gagal</span>',
+            html: '<p class="text-[14px] text-slate-600">Terjadi kesalahan koneksi. Silakan coba lagi.</p>',
             confirmButtonText: 'OK',
             customClass: {
               popup: 'rounded-2xl',
-              confirmButton: 'rounded-xl bg-red-500 px-6 py-2.5 text-[13px] font-bold'
+              confirmButton: 'rounded-xl bg-red-500 px-6 py-2.5 text-[14px] font-bold'
             }
           });
         }

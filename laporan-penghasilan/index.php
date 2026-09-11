@@ -147,7 +147,7 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -163,7 +163,7 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
           <line x1="2" y1="20" x2="22" y2="20"/>
         </svg>
       </div>
-      <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Laporan Penghasilan</h1>
+      <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Laporan Penghasilan</h1>
       <p class="text-sm text-slate-500 mt-1">Ringkasan keuangan usahamu</p>
     </div>
 
@@ -179,7 +179,7 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
           </svg>
         </div>
         <div>
-          <p class="text-[13px] text-red-800 leading-relaxed"><?php echo $msg ?></p>
+          <p class="text-[14px] text-red-800 leading-relaxed"><?php echo $msg ?></p>
         </div>
       </div>
     </div>
@@ -194,9 +194,9 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
           <line x1="8" y1="2" x2="8" y2="6"/>
           <line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
-        <span class="text-[12px] text-slate-500 font-medium">Periode</span>
+        <span class="text-[13px] text-slate-500 font-medium">Periode</span>
       </div>
-      <p class="text-[14px] font-semibold text-slate-800"><?php echo $date_range_text ?></p>
+      <p class="text-[15px] font-semibold text-slate-800"><?php echo $date_range_text ?></p>
     </div>
 
     <!-- Summary Cards -->
@@ -209,8 +209,8 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
             <polyline points="5 12 12 5 19 12"/>
           </svg>
         </div>
-        <p class="text-[10px] text-slate-500 font-medium mb-1">Pemasukan</p>
-        <p class="text-[13px] font-bold text-emerald-600 leading-tight"><?php echo $summary_pemasukan ?></p>
+        <p class="text-[11px] text-slate-500 font-medium mb-1">Pemasukan</p>
+        <p class="text-[14px] font-bold text-emerald-600 leading-tight"><?php echo $summary_pemasukan ?></p>
       </div>
 
       <!-- Pengeluaran -->
@@ -221,8 +221,8 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
             <polyline points="19 12 12 19 5 12"/>
           </svg>
         </div>
-        <p class="text-[10px] text-slate-500 font-medium mb-1">Pengeluaran</p>
-        <p class="text-[13px] font-bold text-red-500 leading-tight"><?php echo $summary_pengeluaran ?></p>
+        <p class="text-[11px] text-slate-500 font-medium mb-1">Pengeluaran</p>
+        <p class="text-[14px] font-bold text-red-500 leading-tight"><?php echo $summary_pengeluaran ?></p>
       </div>
 
       <!-- Keuntungan -->
@@ -232,8 +232,8 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
           </svg>
         </div>
-        <p class="text-[10px] text-slate-500 font-medium mb-1">Keuntungan</p>
-        <p class="text-[13px] font-bold text-brand leading-tight"><?php echo $summary_keuntungan ?></p>
+        <p class="text-[11px] text-slate-500 font-medium mb-1">Keuntungan</p>
+        <p class="text-[14px] font-bold text-brand leading-tight"><?php echo $summary_keuntungan ?></p>
       </div>
     </div>
 
@@ -245,7 +245,7 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        <span class="text-[13px] font-semibold text-white">Download Laporan</span>
+        <span class="text-[14px] font-semibold text-white">Download Laporan</span>
       </a>
     </div>
 
@@ -253,9 +253,9 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
     <?php if (isset($show) && $show): ?>
     <div class="bg-white rounded-2xl border border-slate-100 shadow-card overflow-hidden mb-6">
       <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
-        <h2 class="text-[14px] font-bold text-slate-800">Detail Transaksi</h2>
+        <h2 class="text-[15px] font-bold text-slate-800">Detail Transaksi</h2>
         <div class="flex items-center gap-2">
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-[12px] font-semibold text-slate-600">
             <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
             <?php echo $summary_total_trx ?>
           </span>
@@ -269,10 +269,10 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
 
       <!-- Table Header -->
       <div class="grid grid-cols-4 gap-2 px-4 py-2 bg-slate-50 border-b border-slate-100">
-        <span class="text-[11px] font-semibold text-slate-500">Tanggal</span>
-        <span class="text-[11px] font-semibold text-slate-500 text-right">Pemasukan</span>
-        <span class="text-[11px] font-semibold text-slate-500 text-right">Pengeluaran</span>
-        <span class="text-[11px] font-semibold text-slate-500 text-right">Trx</span>
+        <span class="text-[12px] font-semibold text-slate-500">Tanggal</span>
+        <span class="text-[12px] font-semibold text-slate-500 text-right">Pemasukan</span>
+        <span class="text-[12px] font-semibold text-slate-500 text-right">Pengeluaran</span>
+        <span class="text-[12px] font-semibold text-slate-500 text-right">Trx</span>
       </div>
 
       <!-- Table Body -->
@@ -283,10 +283,10 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
         foreach($data_res['data'] as $data):
         ?>
         <div class="grid grid-cols-4 gap-2 px-4 py-3 items-center hover:bg-slate-50/50 transition">
-          <span class="text-[12px] text-slate-700 font-medium"><?php echo tgl_indo($data['tanggal']); ?></span>
-          <span class="text-[12px] text-emerald-600 font-semibold text-right"><?php echo "Rp. ".$app->angka_id($data['jual']); ?></span>
-          <span class="text-[12px] text-red-500 font-semibold text-right"><?php echo "Rp. ".$app->angka_id($data['modal']); ?></span>
-          <span class="text-[12px] text-slate-600 text-right"><?php echo $app->angka_id($data['jumlah_trx']); ?></span>
+          <span class="text-[13px] text-slate-700 font-medium"><?php echo tgl_indo($data['tanggal']); ?></span>
+          <span class="text-[13px] text-emerald-600 font-semibold text-right"><?php echo "Rp. ".$app->angka_id($data['jual']); ?></span>
+          <span class="text-[13px] text-red-500 font-semibold text-right"><?php echo "Rp. ".$app->angka_id($data['modal']); ?></span>
+          <span class="text-[13px] text-slate-600 text-right"><?php echo $app->angka_id($data['jumlah_trx']); ?></span>
         </div>
         <?php
         $no++;
@@ -294,7 +294,7 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
         else:
         ?>
         <div class="px-4 py-8 text-center">
-          <p class="text-[13px] text-slate-500">Tidak ada data transaksi</p>
+          <p class="text-[14px] text-slate-500">Tidak ada data transaksi</p>
         </div>
         <?php endif; ?>
       </div>
@@ -310,9 +310,9 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
       <div class="px-4 py-3 border-t border-slate-100">
         <div class="flex items-center justify-between">
           <?php if ($page > 1): ?>
-          <a href="?act=filter&start=<?php echo $start_date ?>&end=<?php echo $end_date ?>&page=1" class="text-[12px] font-medium text-brand hover:underline">Pertama</a>
+          <a href="?act=filter&start=<?php echo $start_date ?>&end=<?php echo $end_date ?>&page=1" class="text-[13px] font-medium text-brand hover:underline">Pertama</a>
           <?php else: ?>
-          <span class="text-[12px] font-medium text-slate-400">Pertama</span>
+          <span class="text-[13px] font-medium text-slate-400">Pertama</span>
           <?php endif; ?>
 
           <div class="flex items-center gap-1">
@@ -332,9 +332,9 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
             while ($i <= $show_page && $i < $totalPages + 1):
                 if ($i == $page):
             ?>
-            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-brand text-white text-[12px] font-semibold"><?php echo $i ?></span>
+            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-brand text-white text-[13px] font-semibold"><?php echo $i ?></span>
             <?php else: ?>
-            <a href="?act=filter&start=<?php echo $start_date ?>&end=<?php echo $end_date ?>&page=<?php echo $i ?>" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 text-[12px] font-medium hover:bg-slate-200 transition"><?php echo $i ?></a>
+            <a href="?act=filter&start=<?php echo $start_date ?>&end=<?php echo $end_date ?>&page=<?php echo $i ?>" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 text-[13px] font-medium hover:bg-slate-200 transition"><?php echo $i ?></a>
             <?php
                 endif;
                 $i++;
@@ -343,9 +343,9 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
           </div>
 
           <?php if ($page < $totalPages): ?>
-          <a href="?act=filter&start=<?php echo $start_date ?>&end=<?php echo $end_date ?>&page=<?php echo $totalPages ?>" class="text-[12px] font-medium text-brand hover:underline">Terakhir</a>
+          <a href="?act=filter&start=<?php echo $start_date ?>&end=<?php echo $end_date ?>&page=<?php echo $totalPages ?>" class="text-[13px] font-medium text-brand hover:underline">Terakhir</a>
           <?php else: ?>
-          <span class="text-[12px] font-medium text-slate-400">Terakhir</span>
+          <span class="text-[13px] font-medium text-slate-400">Terakhir</span>
           <?php endif; ?>
         </div>
       </div>
@@ -355,11 +355,11 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
 
     <!-- Info Pills -->
     <div class="flex flex-wrap gap-2">
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         Data Real-time
       </span>
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft">
         <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
         Akurat & Terpercaya
       </span>
@@ -375,7 +375,7 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
     <div class="fixed inset-0 flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden transform transition-all">
         <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
-          <h5 class="text-[15px] font-bold text-slate-800">Filter Tanggal</h5>
+          <h5 class="text-[16px] font-bold text-slate-800">Filter Tanggal</h5>
           <button type="button" onclick="closeFilterModal()" class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200">
             <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"/>
@@ -387,19 +387,19 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
           <form method="get">
             <!-- Quick Filters -->
             <div class="flex flex-wrap gap-2 mb-4">
-              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo $today ?>" data-end="<?php echo $today ?>">
+              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo $today ?>" data-end="<?php echo $today ?>">
                 Hari ini
               </button>
-              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo date('Y-m-d', strtotime('-1 days', strtotime($today))) ?>" data-end="<?php echo $today ?>">
+              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo date('Y-m-d', strtotime('-1 days', strtotime($today))) ?>" data-end="<?php echo $today ?>">
                 Kemarin
               </button>
-              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo date('Y-m-d', strtotime('-7 days', strtotime($today))) ?>" data-end="<?php echo $today ?>">
+              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo date('Y-m-d', strtotime('-7 days', strtotime($today))) ?>" data-end="<?php echo $today ?>">
                 Minggu ini
               </button>
-              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo $bulan_now_t ?>" data-end="<?php echo $bulan_last ?>">
+              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo $bulan_now_t ?>" data-end="<?php echo $bulan_last ?>">
                 Bulan ini
               </button>
-              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo $bulan_kemaren ?>" data-end="<?php echo $bulan_kemaren_last ?>">
+              <button type="button" class="quick-filter inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft transition hover:border-brand hover:text-brand" data-start="<?php echo $bulan_kemaren ?>" data-end="<?php echo $bulan_kemaren_last ?>">
                 Bulan kemarin
               </button>
             </div>
@@ -407,12 +407,12 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
             <!-- Date Inputs -->
             <div class="space-y-3">
               <div>
-                <label class="block text-[12px] font-semibold text-slate-600 mb-1.5">Tanggal Awal</label>
-                <input type="date" id="start" name="start" value="<?php echo $start_date ?>" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-[13px] text-slate-700 transition focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none">
+                <label class="block text-[13px] font-semibold text-slate-600 mb-1.5">Tanggal Awal</label>
+                <input type="date" id="start" name="start" value="<?php echo $start_date ?>" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-[14px] text-slate-700 transition focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none">
               </div>
               <div>
-                <label class="block text-[12px] font-semibold text-slate-600 mb-1.5">Tanggal Akhir</label>
-                <input type="date" id="end" name="end" value="<?php echo $end_date ?>" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-[13px] text-slate-700 transition focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none">
+                <label class="block text-[13px] font-semibold text-slate-600 mb-1.5">Tanggal Akhir</label>
+                <input type="date" id="end" name="end" value="<?php echo $end_date ?>" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-[14px] text-slate-700 transition focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none">
               </div>
             </div>
 
@@ -420,8 +420,8 @@ $date_range_text = tgl_indo($start_date)." - ".tgl_indo($end_date);
 
             <!-- Actions -->
             <div class="flex gap-3 mt-5">
-              <button type="button" onclick="closeFilterModal()" class="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[13px] font-semibold text-slate-600 transition hover:bg-slate-50">Batal</button>
-              <button type="submit" class="flex-1 rounded-xl bg-brand px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-brandDark">Terapkan</button>
+              <button type="button" onclick="closeFilterModal()" class="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-semibold text-slate-600 transition hover:bg-slate-50">Batal</button>
+              <button type="submit" class="flex-1 rounded-xl bg-brand px-4 py-2.5 text-[14px] font-semibold text-white transition hover:bg-brandDark">Terapkan</button>
             </div>
           </form>
         </div>

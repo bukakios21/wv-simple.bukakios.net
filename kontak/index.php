@@ -51,7 +51,7 @@ if($bukakios_version_int>=15){
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -64,7 +64,7 @@ if($bukakios_version_int>=15){
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
       </div>
-      <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Butuh Bantuan?</h1>
+      <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Butuh Bantuan?</h1>
       <p class="text-sm text-slate-500 mt-1">Tim kami siap membantu 24 jam</p>
     </div>
 
@@ -79,7 +79,7 @@ if($bukakios_version_int>=15){
           </svg>
         </div>
         <div>
-          <p class="text-[13px] text-blue-800 leading-relaxed">
+          <p class="text-[14px] text-blue-800 leading-relaxed">
             Saat ini untuk menghubungi tim CS BukaKios tersedia melalui: WhatsApp, Telegram, Facebook, dan Email.
           </p>
         </div>
@@ -97,8 +97,8 @@ if($bukakios_version_int>=15){
           </svg>
         </div>
         <div class="flex-1 text-left">
-          <h3 class="text-[15px] font-bold text-slate-800">WhatsApp</h3>
-          <p class="text-[12px] text-slate-500">Chat Langsung</p>
+          <h3 class="text-[16px] font-bold text-slate-800">WhatsApp</h3>
+          <p class="text-[13px] text-slate-500">Chat Langsung</p>
         </div>
         <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"/>
@@ -113,8 +113,8 @@ if($bukakios_version_int>=15){
           </svg>
         </div>
         <div class="flex-1 text-left">
-          <h3 class="text-[15px] font-bold text-slate-800">Telegram</h3>
-          <p class="text-[12px] text-slate-500">@cs1_bukakiosbot</p>
+          <h3 class="text-[16px] font-bold text-slate-800">Telegram</h3>
+          <p class="text-[13px] text-slate-500">@cs1_bukakiosbot</p>
         </div>
         <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"/>
@@ -129,8 +129,8 @@ if($bukakios_version_int>=15){
           </svg>
         </div>
         <div class="flex-1 text-left">
-          <h3 class="text-[15px] font-bold text-slate-800">Facebook</h3>
-          <p class="text-[12px] text-slate-500">bukakiosnet</p>
+          <h3 class="text-[16px] font-bold text-slate-800">Facebook</h3>
+          <p class="text-[13px] text-slate-500">bukakiosnet</p>
         </div>
         <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"/>
@@ -146,8 +146,8 @@ if($bukakios_version_int>=15){
           </svg>
         </div>
         <div class="flex-1 text-left">
-          <h3 class="text-[15px] font-bold text-slate-800">Email</h3>
-          <p class="text-[12px] text-slate-500">support@bukakios.net</p>
+          <h3 class="text-[16px] font-bold text-slate-800">Email</h3>
+          <p class="text-[13px] text-slate-500">support@bukakios.net</p>
         </div>
         <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"/>
@@ -166,19 +166,19 @@ if($bukakios_version_int>=15){
           </svg>
         </div>
         <div>
-          <p class="text-[12px] text-slate-500">Jam Kerja Bukakios Care</p>
-          <p class="text-[14px] font-bold text-emerald-600">Setiap Hari, 24 Jam Non Stop</p>
+          <p class="text-[13px] text-slate-500">Jam Kerja Bukakios Care</p>
+          <p class="text-[15px] font-bold text-emerald-600">Setiap Hari, 24 Jam Non Stop</p>
         </div>
       </div>
     </div>
 
     <!-- Info Pills -->
     <div class="flex flex-wrap gap-2">
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         Respon Cepat
       </span>
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft">
         <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
         24/7 Online
       </span>

@@ -60,7 +60,7 @@ if (isset($_GET['act'])){
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -77,7 +77,7 @@ if (isset($_GET['act'])){
           <line x1="16" y1="10" x2="16" y2="10"/>
         </svg>
       </div>
-      <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Tukar Voucher</h1>
+      <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Tukar Voucher</h1>
       <p class="text-sm text-slate-500 mt-1">Masukkan kode voucher untuk redeem</p>
     </div>
 
@@ -92,7 +92,7 @@ if (isset($_GET['act'])){
           </svg>
         </div>
         <div>
-          <p class="text-[13px] text-amber-800 leading-relaxed">
+          <p class="text-[14px] text-amber-800 leading-relaxed">
             Kode voucher hanya bisa digunakan <strong class="font-semibold">sekali</strong>. Pastikan tidak ada yang mengetahui kode voucher kamu!
           </p>
         </div>
@@ -101,7 +101,7 @@ if (isset($_GET['act'])){
 
     <!-- Input Card -->
     <div class="bg-white rounded-2xl border border-slate-100 p-4 mb-6 shadow-card">
-      <label for="kode" class="block text-[12px] font-semibold text-slate-600 mb-2">Masukkan Kode Voucher *</label>
+      <label for="kode" class="block text-[13px] font-semibold text-slate-600 mb-2">Masukkan Kode Voucher *</label>
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -109,9 +109,9 @@ if (isset($_GET['act'])){
             <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
           </svg>
         </div>
-        <input type="text" required="" placeholder="ZBND1792SB10" id="kode" class="w-full rounded-xl border border-slate-200 bg-white pl-12 pr-4 py-3.5 text-[14px] text-slate-700 transition focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none font-mono tracking-wider" oninput="toggleButton()">
+        <input type="text" required="" placeholder="ZBND1792SB10" id="kode" class="w-full rounded-xl border border-slate-200 bg-white pl-12 pr-4 py-3.5 text-[15px] text-slate-700 transition focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none font-mono tracking-wider" oninput="toggleButton()">
       </div>
-      <button id="btn-use" onclick="useVoucher()" disabled class="w-full rounded-xl bg-brand px-4 py-3.5 mt-4 text-[14px] font-semibold text-white transition hover:bg-brandDark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+      <button id="btn-use" onclick="useVoucher()" disabled class="w-full rounded-xl bg-brand px-4 py-3.5 mt-4 text-[15px] font-semibold text-white transition hover:bg-brandDark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
         <span id="btn-text">Gunakan Kode</span>
       </button>
     </div>
@@ -127,7 +127,7 @@ if (isset($_GET['act'])){
           </svg>
         </div>
         <div>
-          <p id="error-message" class="text-[13px] text-red-800 leading-relaxed"></p>
+          <p id="error-message" class="text-[14px] text-red-800 leading-relaxed"></p>
         </div>
       </div>
     </div>
@@ -203,7 +203,7 @@ if (isset($_GET['act'])){
       </div>
       <h2 class="text-xl font-bold text-slate-900 mb-2">Berhasil!</h2>
       <p id="success-message" class="text-sm text-slate-600 mb-6"></p>
-      <button onclick="closeSuccessModal()" class="w-full rounded-xl bg-brand px-4 py-3.5 text-[14px] font-semibold text-white transition hover:bg-brandDark active:scale-[0.98]">
+      <button onclick="closeSuccessModal()" class="w-full rounded-xl bg-brand px-4 py-3.5 text-[15px] font-semibold text-white transition hover:bg-brandDark active:scale-[0.98]">
         Tutup
       </button>
     </div>

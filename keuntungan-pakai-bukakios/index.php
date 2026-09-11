@@ -46,7 +46,7 @@ require_once('../_session.php');
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -59,7 +59,7 @@ require_once('../_session.php');
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
         </svg>
       </div>
-      <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Keuntungan Pakai BukaKios</h1>
+      <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Keuntungan Pakai BukaKios</h1>
       <p class="text-sm text-slate-500 mt-1">Nikmati berbagai keuntungan untuk bisnismu</p>
     </div>
 

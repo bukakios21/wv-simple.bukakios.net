@@ -45,7 +45,7 @@ require_once("../_session.php");
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -58,7 +58,7 @@ require_once("../_session.php");
           <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
         </svg>
       </div>
-      <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Social Media Kami</h1>
+      <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Social Media Kami</h1>
       <p class="text-sm text-slate-500 mt-1">Ikuti kami untuk info terbaru</p>
     </div>
 
@@ -74,8 +74,8 @@ require_once("../_session.php");
             </svg>
           </div>
           <div class="flex-1">
-            <h3 class="text-[15px] font-bold text-slate-800">Facebook</h3>
-            <p class="text-[12px] text-slate-500">@bukakios.net</p>
+            <h3 class="text-[16px] font-bold text-slate-800">Facebook</h3>
+            <p class="text-[13px] text-slate-500">@bukakios.net</p>
           </div>
           <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"/>
@@ -94,8 +94,8 @@ require_once("../_session.php");
             </svg>
           </div>
           <div class="flex-1">
-            <h3 class="text-[15px] font-bold text-slate-800">Instagram</h3>
-            <p class="text-[12px] text-slate-500">@bukakiosnet</p>
+            <h3 class="text-[16px] font-bold text-slate-800">Instagram</h3>
+            <p class="text-[13px] text-slate-500">@bukakiosnet</p>
           </div>
           <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"/>
@@ -113,8 +113,8 @@ require_once("../_session.php");
             </svg>
           </div>
           <div class="flex-1">
-            <h3 class="text-[15px] font-bold text-slate-800">YouTube</h3>
-            <p class="text-[12px] text-slate-500">BukaKios Official</p>
+            <h3 class="text-[16px] font-bold text-slate-800">YouTube</h3>
+            <p class="text-[13px] text-slate-500">BukaKios Official</p>
           </div>
           <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"/>
@@ -131,8 +131,8 @@ require_once("../_session.php");
             </svg>
           </div>
           <div class="flex-1">
-            <h3 class="text-[15px] font-bold text-slate-800">Telegram Channel</h3>
-            <p class="text-[12px] text-slate-500">@infobukakios</p>
+            <h3 class="text-[16px] font-bold text-slate-800">Telegram Channel</h3>
+            <p class="text-[13px] text-slate-500">@infobukakios</p>
           </div>
           <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"/>
@@ -154,8 +154,8 @@ require_once("../_session.php");
           </svg>
         </div>
         <div>
-          <h3 class="text-[13px] font-bold text-white">Ikuti Kami</h3>
-          <p class="text-[11px] text-white/80 mt-1 leading-relaxed">
+          <h3 class="text-[14px] font-bold text-white">Ikuti Kami</h3>
+          <p class="text-[12px] text-white/80 mt-1 leading-relaxed">
             Dapatkan info terbaru, promo spesial, dan update produk BukaKios di semua social media kami.
           </p>
         </div>

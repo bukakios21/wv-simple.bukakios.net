@@ -295,7 +295,7 @@ function getCategoryIconBg($slug) {
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
       </svg>
-      <p class="text-[13px] font-extrabold text-slate-700">Mengirim kode verifikasi…</p>
+      <p class="text-[14px] font-extrabold text-slate-700">Mengirim kode verifikasi…</p>
     </div>
   </div>
 
@@ -303,7 +303,7 @@ function getCategoryIconBg($slug) {
   <div id="toastError" class="fixed top-4 left-1/2 z-[9998] hidden -translate-x-1/2 max-w-[90vw] w-full px-4">
     <div class="flex items-start gap-3 rounded-xl bg-red-600 px-4 py-3 shadow-lg text-white">
       <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      <p id="toastErrorMsg" class="text-[13px] font-semibold leading-5"></p>
+      <p id="toastErrorMsg" class="text-[14px] font-semibold leading-5"></p>
     </div>
   </div>
 
@@ -320,16 +320,16 @@ function getCategoryIconBg($slug) {
         <div class="h-1.5 flex-1 rounded-full bg-slate-200 overflow-hidden">
           <div id="topProgress" class="h-full w-[27%] rounded-full bg-[#1a7fce] transition-all duration-300"></div>
         </div>
-        <div class="text-[20px] font-extrabold tracking-[-0.04em] text-[#1a7fce]">BukaKios</div>
+        <div class="text-[21px] font-extrabold tracking-[-0.04em] text-[#1a7fce]">BukaKios</div>
       </div>
     </header>
 
     <!-- PAGE 1: pilih metode -->
     <section id="pageSelect" class="px-6 pt-8 pb-8">
-      <h1 class="text-[26px] leading-8 font-extrabold tracking-[-0.04em]">Pilih cara verifikasi</h1>
+      <h1 class="text-[27px] leading-8 font-extrabold tracking-[-0.04em]">Pilih cara verifikasi</h1>
 
       <?php if (empty($otp_categories)): ?>
-      <div class="mt-6 rounded-xl bg-red-50 px-4 py-4 text-[13px] text-red-600 border border-red-200">
+      <div class="mt-6 rounded-xl bg-red-50 px-4 py-4 text-[14px] text-red-600 border border-red-200">
         Gagal memuat metode verifikasi. Silahkan tutup dan buka kembali halaman ini.
       </div>
       <?php else: ?>
@@ -365,7 +365,7 @@ function getCategoryIconBg($slug) {
         $main_chs  = array_values(array_filter($all_chs, function($ch) { return !isHiddenChannel($ch); }));
         if (empty($main_chs)) continue;
       ?>
-      <div class="mt-5 flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.08em] text-slate-500">
+      <div class="mt-5 flex items-center gap-2 text-[12px] font-extrabold uppercase tracking-[0.08em] text-slate-500">
         <span class="grid h-5 w-5 place-items-center rounded-md <?php echo getCategoryIconBg($cat['slug']) ?> text-white">
           <?php echo getCategoryIcon($cat['slug']) ?>
         </span>
@@ -387,13 +387,13 @@ function getCategoryIconBg($slug) {
           </div>
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2">
-              <h2 class="text-[15px] leading-5 font-extrabold"><?php echo htmlspecialchars($ch['name']) ?></h2>
+              <h2 class="text-[16px] leading-5 font-extrabold"><?php echo htmlspecialchars($ch['name']) ?></h2>
               <?php if ($badge): ?>
-              <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-extrabold text-brandDark"><?php echo htmlspecialchars($badge) ?></span>
+              <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-brandDark"><?php echo htmlspecialchars($badge) ?></span>
               <?php endif; ?>
             </div>
             <?php if ($desc): ?>
-            <p class="mt-0.5 text-[12px] leading-4 text-slate-500"><?php echo htmlspecialchars($desc) ?></p>
+            <p class="mt-0.5 text-[13px] leading-4 text-slate-500"><?php echo htmlspecialchars($desc) ?></p>
             <?php endif; ?>
           </div>
           <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
@@ -403,16 +403,16 @@ function getCategoryIconBg($slug) {
       <?php endforeach; // end main categories ?>
 
       <?php if ($has_other): ?>
-      <button id="toggleOtherOptions" type="button" class="mt-5 inline-block text-left text-[12px] font-extrabold text-brandDark">Lihat opsi lain (missed call, SMS)</button>
+      <button id="toggleOtherOptions" type="button" class="mt-5 inline-block text-left text-[13px] font-extrabold text-brandDark">Lihat opsi lain (missed call, SMS)</button>
 
       <div id="otherOptions" class="hidden">
-        <button id="hideOtherOptions" type="button" class="mt-5 inline-block text-left text-[12px] font-extrabold text-brandDark">Sembunyikan opsi lain</button>
+        <button id="hideOtherOptions" type="button" class="mt-5 inline-block text-left text-[13px] font-extrabold text-brandDark">Sembunyikan opsi lain</button>
 
         <?php // ---- OPSI LAIN: missed_call & sms, dikelompokkan per kategori asal ----
         foreach ($other_groups as $group):
           $cat = $group['cat'];
         ?>
-        <div class="mt-6 flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.08em] text-slate-500">
+        <div class="mt-6 flex items-center gap-2 text-[12px] font-extrabold uppercase tracking-[0.08em] text-slate-500">
           <span class="grid h-5 w-5 place-items-center rounded-md <?php echo getCategoryIconBg($cat['slug']) ?> text-white">
             <?php echo getCategoryIcon($cat['slug']) ?>
           </span>
@@ -433,10 +433,10 @@ function getCategoryIconBg($slug) {
             </div>
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-2">
-                <h2 class="text-[15px] leading-5 font-extrabold"><?php echo htmlspecialchars($ch['name']) ?></h2>
-                <?php if ($badge): ?><span class="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-extrabold text-slate-500"><?php echo htmlspecialchars($badge) ?></span><?php endif; ?>
+                <h2 class="text-[16px] leading-5 font-extrabold"><?php echo htmlspecialchars($ch['name']) ?></h2>
+                <?php if ($badge): ?><span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500"><?php echo htmlspecialchars($badge) ?></span><?php endif; ?>
               </div>
-              <?php if ($desc): ?><p class="mt-0.5 text-[12px] leading-4 text-slate-500"><?php echo htmlspecialchars($desc) ?></p><?php endif; ?>
+              <?php if ($desc): ?><p class="mt-0.5 text-[13px] leading-4 text-slate-500"><?php echo htmlspecialchars($desc) ?></p><?php endif; ?>
             </div>
             <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
           </div>
@@ -455,42 +455,42 @@ function getCategoryIconBg($slug) {
       <div class="overflow-hidden rounded-[11px] bg-chatBg shadow-soft ring-1 ring-slate-200/60">
         <div class="flex items-center justify-between bg-waDark px-3 py-2 text-white">
           <div class="flex items-center gap-2">
-            <div class="grid h-7 w-7 place-items-center rounded-full bg-white text-waDark text-[11px] font-extrabold">BK</div>
+            <div class="grid h-7 w-7 place-items-center rounded-full bg-white text-waDark text-[12px] font-extrabold">BK</div>
             <div>
-              <div class="flex items-center gap-1 text-[12px] font-extrabold leading-none">
+              <div class="flex items-center gap-1 text-[13px] font-extrabold leading-none">
                 BukaKios
-                <span class="grid h-3 w-3 place-items-center rounded-full bg-sky-500 text-[7px]">✓</span>
+                <span class="grid h-3 w-3 place-items-center rounded-full bg-sky-500 text-[8px]">✓</span>
               </div>
-              <div class="mt-0.5 text-[9px] text-white/80">Akun bisnis resmi · online</div>
+              <div class="mt-0.5 text-[10px] text-white/80">Akun bisnis resmi · online</div>
             </div>
           </div>
         </div>
 
         <div class="px-3 pb-3 pt-2.5">
-          <div class="mx-auto mb-1.5 w-max rounded-full bg-white/80 px-2 py-0.5 text-[8px] font-bold text-slate-500 shadow-sm">Hari ini</div>
+          <div class="mx-auto mb-1.5 w-max rounded-full bg-white/80 px-2 py-0.5 text-[9px] font-bold text-slate-500 shadow-sm">Hari ini</div>
           <div class="ml-auto w-max max-w-[60%] rounded-lg rounded-tr-sm bg-[#d7ffd8] px-2.5 py-1.5 shadow-sm">
-            <div class="text-[10px] font-extrabold tracking-[0.06em] text-slate-900">VERIFY &nbsp;BK02H-BKA</div>
-            <div class="mt-0.5 text-right text-[8px] font-semibold text-teal-600">09.41 ✓✓</div>
+            <div class="text-[11px] font-extrabold tracking-[0.06em] text-slate-900">VERIFY &nbsp;BK02H-BKA</div>
+            <div class="mt-0.5 text-right text-[9px] font-semibold text-teal-600">09.41 ✓✓</div>
           </div>
-          <div class="mt-2 text-center text-[9px] font-medium text-slate-500">pesan udah kami siapin — tinggal kirim</div>
+          <div class="mt-2 text-center text-[10px] font-medium text-slate-500">pesan udah kami siapin — tinggal kirim</div>
         </div>
       </div>
 
-      <h1 class="mt-7 text-[24px] leading-[25px] font-black tracking-[-0.055em]">Kirim 1 pesan, langsung terverifikasi</h1>
-      <p class="mt-2 text-[13px] leading-[18px] text-slate-500">
+      <h1 class="mt-7 text-[25px] leading-[25px] font-black tracking-[-0.055em]">Kirim 1 pesan, langsung terverifikasi</h1>
+      <p class="mt-2 text-[14px] leading-[18px] text-slate-500">
         Dari nomor <b id="directWaNumber" class="font-extrabold text-slate-900">—</b> — begitu pesan masuk, kami cocokkan otomatis. Nggak ada kode yang perlu diketik.
       </p>
 
-      <button id="openWa" type="button" onclick="handleOpenWa()" class="mt-6 flex h-[54px] w-full items-center justify-center rounded-full bg-brand text-[15px] font-extrabold text-white shadow-cta transition active:scale-[0.99] hover:bg-brandDark disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100">
+      <button id="openWa" type="button" onclick="handleOpenWa()" class="mt-6 flex h-[54px] w-full items-center justify-center rounded-full bg-brand text-[16px] font-extrabold text-white shadow-cta transition active:scale-[0.99] hover:bg-brandDark disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100">
         Buka WhatsApp &amp; Kirim pesan
       </button>
 
-      <p class="mt-4 text-center text-[11px] leading-4 text-slate-400">
+      <p class="mt-4 text-center text-[12px] leading-4 text-slate-400">
         Pastikan WhatsApp di HP ini pakai nomor<br /><span id="directWaNumberHint" class="font-semibold text-slate-600">—</span>
       </p>
 
       <div id="directTimerSection" class="hidden mt-5 text-center">
-        <p class="text-[12px] text-slate-500">
+        <p class="text-[13px] text-slate-500">
           Kirim ulang? Tunggu <b id="timer" class="font-extrabold text-slate-900">00:49</b>
         </p>
         <div class="mt-2 h-0.5 w-full bg-slate-200">
@@ -501,8 +501,8 @@ function getCategoryIconBg($slug) {
 
     <!-- PAGE 3: OTP (wa_otp / sms) -->
     <section id="pageOtp" class="hidden px-5 pt-5 pb-8">
-      <h1 class="text-[24px] leading-[28px] font-black tracking-[-0.055em]">Masukkan kode verifikasi</h1>
-      <p id="otpSubtitle" class="mt-1.5 text-[13px] leading-[18px] text-slate-500">Masukkan 6 digit kode yang sudah dikirim.</p>
+      <h1 class="text-[25px] leading-[28px] font-black tracking-[-0.055em]">Masukkan kode verifikasi</h1>
+      <p id="otpSubtitle" class="mt-1.5 text-[14px] leading-[18px] text-slate-500">Masukkan 6 digit kode yang sudah dikirim.</p>
 
       <div class="mt-6 flex justify-between gap-2 w-full">
         <input class="otpBox flex-1 min-w-0" inputmode="numeric" maxlength="1" autofocus />
@@ -515,7 +515,7 @@ function getCategoryIconBg($slug) {
 
       <!-- Timer countdown -->
       <div id="otpTimerWrap" class="mt-5">
-        <p class="text-center text-[12px] text-slate-500">
+        <p class="text-center text-[13px] text-slate-500">
           Kode belum sampai? Tunggu <b id="otpTimer" class="font-extrabold text-slate-900">00:30</b>
         </p>
         <div class="mt-2 h-0.5 w-full bg-slate-200">
@@ -525,7 +525,7 @@ function getCategoryIconBg($slug) {
 
       <!-- Tombol kirim ulang — muncul setelah countdown habis -->
       <button id="otpResendBtn" type="button" onclick="resendOtp()"
-        class="hidden mt-5 flex h-[50px] w-full items-center justify-center rounded-full border border-brand text-[14px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
+        class="hidden mt-5 flex h-[50px] w-full items-center justify-center rounded-full border border-brand text-[15px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
         Kirim ulang kode
       </button>
 
@@ -533,17 +533,17 @@ function getCategoryIconBg($slug) {
       <div id="otpPinSection" class="hidden mt-7">
         <div class="flex items-center gap-2 mb-3">
           <div class="h-px flex-1 bg-slate-200"></div>
-          <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Buat PIN baru</span>
+          <span class="text-[12px] font-bold text-slate-400 uppercase tracking-wide">Buat PIN baru</span>
           <div class="h-px flex-1 bg-slate-200"></div>
         </div>
-        <p class="text-[13px] text-slate-500 mb-3">Masukkan 6 digit PIN baru kamu.</p>
+        <p class="text-[14px] text-slate-500 mb-3">Masukkan 6 digit PIN baru kamu.</p>
         <div class="flex justify-between gap-2 w-full">
-          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="otpNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
         </div>
       </div>
     </section>
@@ -562,12 +562,12 @@ function getCategoryIconBg($slug) {
         </div>
 
         <div class="relative mt-5 text-center">
-          <div class="text-[14px] font-extrabold leading-none">BukaKios Verifikasi</div>
+          <div class="text-[15px] font-extrabold leading-none">BukaKios Verifikasi</div>
         </div>
       </div>
 
-      <h1 class="mt-6 text-[24px] leading-[28px] font-black tracking-[-0.055em]">Angkat &amp; dengerin 4 digitnya</h1>
-      <p class="mt-1 text-[13px] leading-[18px] text-slate-500">
+      <h1 class="mt-6 text-[25px] leading-[28px] font-black tracking-[-0.055em]">Angkat &amp; dengerin 4 digitnya</h1>
+      <p class="mt-1 text-[14px] leading-[18px] text-slate-500">
         Robot kami bacain kodenya <b class="font-extrabold text-slate-900">1 kali</b>, pelan-pelan.
       </p>
 
@@ -580,7 +580,7 @@ function getCategoryIconBg($slug) {
 
       <!-- Timer countdown -->
       <div id="phoneTimerWrap" class="mt-5">
-        <p class="text-center text-[12px] text-slate-500">
+        <p class="text-center text-[13px] text-slate-500">
           Kode belum sampai? Tunggu <b id="phoneTimer" class="font-extrabold text-slate-900">00:30</b>
         </p>
         <div class="mt-2 h-0.5 w-full bg-slate-200">
@@ -590,7 +590,7 @@ function getCategoryIconBg($slug) {
 
       <!-- Tombol kirim ulang — muncul setelah countdown habis -->
       <button id="phoneResendBtn" type="button" onclick="resendPhone()"
-        class="hidden mt-5 flex h-[50px] w-full items-center justify-center rounded-full border border-brand text-[14px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
+        class="hidden mt-5 flex h-[50px] w-full items-center justify-center rounded-full border border-brand text-[15px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
         Kirim ulang panggilan
       </button>
 
@@ -598,34 +598,34 @@ function getCategoryIconBg($slug) {
       <div id="phonePinSection" class="hidden mt-7">
         <div class="flex items-center gap-2 mb-3">
           <div class="h-px flex-1 bg-slate-200"></div>
-          <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Buat PIN baru</span>
+          <span class="text-[12px] font-bold text-slate-400 uppercase tracking-wide">Buat PIN baru</span>
           <div class="h-px flex-1 bg-slate-200"></div>
         </div>
-        <p class="text-[13px] text-slate-500 mb-3">Masukkan 6 digit PIN baru kamu.</p>
+        <p class="text-[14px] text-slate-500 mb-3">Masukkan 6 digit PIN baru kamu.</p>
         <div class="flex justify-between gap-2 w-full">
-          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="phoneNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
         </div>
       </div>
     </section>
 
     <!-- PAGE 5: Missed Call -->
     <section id="pageMissed" class="hidden px-6 pt-5 pb-8">
-      <h1 class="text-[24px] leading-[28px] font-black tracking-[-0.055em]">Lihat nomor yang missed call kamu</h1>
-      <p class="mt-1.5 text-[13px] leading-[18px] text-slate-500">
+      <h1 class="text-[25px] leading-[28px] font-black tracking-[-0.055em]">Lihat nomor yang missed call kamu</h1>
+      <p class="mt-1.5 text-[14px] leading-[18px] text-slate-500">
         Masukkan <b class="font-extrabold text-slate-900">4 digit terakhir</b> nomor penelepon ke kolom di bawah.
       </p>
 
       <!-- Card prefix nomor penelepon -->
       <div class="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-        <p class="text-[11px] font-semibold text-slate-400 leading-none mb-1.5">Nomor penelepon</p>
+        <p class="text-[12px] font-semibold text-slate-400 leading-none mb-1.5">Nomor penelepon</p>
         <div class="flex items-center gap-1.5">
-          <p id="missedPrefix" class="text-[17px] font-extrabold text-slate-800 tracking-wide leading-none">—</p>
-          <span class="text-[17px] font-extrabold text-brand leading-none" id="missedPrefixDots">_ _ _ _</span>
+          <p id="missedPrefix" class="text-[18px] font-extrabold text-slate-800 tracking-wide leading-none">—</p>
+          <span class="text-[18px] font-extrabold text-brand leading-none" id="missedPrefixDots">_ _ _ _</span>
         </div>
       </div>
 
@@ -636,7 +636,7 @@ function getCategoryIconBg($slug) {
 
       <!-- Timer countdown -->
       <div id="missedTimerWrap" class="mt-5">
-        <p class="text-center text-[12px] text-slate-500">
+        <p class="text-center text-[13px] text-slate-500">
           Belum ada missed call? Tunggu <b id="missedTimer" class="font-extrabold text-slate-900">00:30</b>
         </p>
         <div class="mt-2 h-0.5 w-full bg-slate-200">
@@ -646,7 +646,7 @@ function getCategoryIconBg($slug) {
 
       <!-- Tombol kirim ulang — muncul setelah countdown habis -->
       <button id="missedResendBtn" type="button" onclick="resendMissed()"
-        class="hidden mt-5 flex h-[50px] w-full items-center justify-center rounded-full border border-brand text-[14px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
+        class="hidden mt-5 flex h-[50px] w-full items-center justify-center rounded-full border border-brand text-[15px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
         Kirim ulang missed call
       </button>
 
@@ -654,17 +654,17 @@ function getCategoryIconBg($slug) {
       <div id="missedPinSection" class="hidden mt-7">
         <div class="flex items-center gap-2 mb-3">
           <div class="h-px flex-1 bg-slate-200"></div>
-          <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Buat PIN baru</span>
+          <span class="text-[12px] font-bold text-slate-400 uppercase tracking-wide">Buat PIN baru</span>
           <div class="h-px flex-1 bg-slate-200"></div>
         </div>
-        <p class="text-[13px] text-slate-500 mb-3">Masukkan 6 digit PIN baru kamu.</p>
+        <p class="text-[14px] text-slate-500 mb-3">Masukkan 6 digit PIN baru kamu.</p>
         <div class="flex justify-between gap-2 w-full">
-          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
-          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
+          <input class="missedNewPinBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40" inputmode="numeric" maxlength="1" type="text" />
         </div>
       </div>
     </section>
@@ -680,14 +680,14 @@ function getCategoryIconBg($slug) {
         </div>
       </div>
 
-      <h1 class="mt-5 text-[24px] leading-[28px] font-black tracking-[-0.055em]">Buat PIN baru</h1>
-      <p class="mt-1.5 text-[13px] leading-[18px] text-slate-500">
+      <h1 class="mt-5 text-[25px] leading-[28px] font-black tracking-[-0.055em]">Buat PIN baru</h1>
+      <p class="mt-1.5 text-[14px] leading-[18px] text-slate-500">
         Identitas kamu sudah terverifikasi. Masukkan 6 digit PIN baru, lalu sistem akan langsung memproses.
       </p>
 
       <!-- Input PIN baru -->
       <div class="mt-6">
-        <label class="block text-[12px] font-bold text-slate-600 mb-2">PIN Baru</label>
+        <label class="block text-[13px] font-bold text-slate-600 mb-2">PIN Baru</label>
         <div class="flex justify-between gap-2 w-full" id="newPinBoxesWrap">
           <input class="newPinBox flex-1 min-w-0" inputmode="numeric" maxlength="1" />
           <input class="newPinBox flex-1 min-w-0" inputmode="numeric" maxlength="1" />
@@ -700,7 +700,7 @@ function getCategoryIconBg($slug) {
 
       <!-- Konfirmasi PIN lama — tidak dipakai, disimpan hidden agar kompatibel dengan JS lama -->
       <div id="confirmPinSection" class="hidden mt-5 transition-all">
-        <label class="block text-[12px] font-bold text-slate-600 mb-2">Ulangi PIN Baru</label>
+        <label class="block text-[13px] font-bold text-slate-600 mb-2">Ulangi PIN Baru</label>
         <div class="flex justify-between gap-2 w-full" id="confirmPinBoxesWrap">
           <input class="confirmPinBox flex-1 min-w-0" inputmode="numeric" maxlength="1" />
           <input class="confirmPinBox flex-1 min-w-0" inputmode="numeric" maxlength="1" />
@@ -709,11 +709,11 @@ function getCategoryIconBg($slug) {
           <input class="confirmPinBox flex-1 min-w-0" inputmode="numeric" maxlength="1" />
           <input class="confirmPinBox flex-1 min-w-0" inputmode="numeric" maxlength="1" />
         </div>
-        <p id="pinMismatchMsg" class="hidden mt-2 text-[12px] font-semibold text-red-500">PIN tidak cocok. Coba lagi.</p>
+        <p id="pinMismatchMsg" class="hidden mt-2 text-[13px] font-semibold text-red-500">PIN tidak cocok. Coba lagi.</p>
       </div>
 
       <button id="submitNewPin" type="button" onclick="submitNewPin()"
-        class="hidden mt-7 flex h-[54px] w-full items-center justify-center rounded-full bg-brand text-[15px] font-extrabold text-white shadow-cta transition active:scale-[0.99] hover:bg-brandDark disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100">
+        class="hidden mt-7 flex h-[54px] w-full items-center justify-center rounded-full bg-brand text-[16px] font-extrabold text-white shadow-cta transition active:scale-[0.99] hover:bg-brandDark disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100">
         Simpan PIN Baru
       </button>
     </section>
@@ -861,7 +861,7 @@ function getCategoryIconBg($slug) {
     const confirmPinSection = document.getElementById('confirmPinSection');
     const submitNewPinBtn   = document.getElementById('submitNewPin');
 
-    const pinBoxClass = 'flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40';
+    const pinBoxClass = 'flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40';
 
     // Setup box PIN baru wa_self — saat digit ke-6 terisi, langsung submit seperti metode lain
     newPinBoxes.forEach((box, index) => {
@@ -1013,7 +1013,7 @@ function getCategoryIconBg($slug) {
       if (dotsEl) dotsEl.textContent = Array(n).fill('_').join(' ');
       for (let i = 0; i < n; i++) {
         const inp = document.createElement('input');
-        inp.className = 'missedBox flex-1 min-w-0 h-[64px] rounded-xl border border-slate-300 bg-white text-center text-[26px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40';
+        inp.className = 'missedBox flex-1 min-w-0 h-[64px] rounded-xl border border-slate-300 bg-white text-center text-[27px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40';
         inp.inputMode = 'numeric';
         inp.maxLength = 1;
         if (i === 0) inp.autofocus = true;
@@ -1139,8 +1139,8 @@ function getCategoryIconBg($slug) {
               <div class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-emerald-100 text-emerald-600">
                 <svg viewBox="0 0 24 24" class="h-10 w-10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
-              <h1 class="mt-6 text-[26px] font-black tracking-[-0.055em]">PIN berhasil direset!</h1>
-              <button onclick="window.location.replace('<?php echo $file_me ?>')" class="mt-8 flex h-[50px] w-full max-w-xs items-center justify-center rounded-full border border-brand text-[14px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
+              <h1 class="mt-6 text-[27px] font-black tracking-[-0.055em]">PIN berhasil direset!</h1>
+              <button onclick="window.location.replace('<?php echo $file_me ?>')" class="mt-8 flex h-[50px] w-full max-w-xs items-center justify-center rounded-full border border-brand text-[15px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
                 Kembali
               </button>
             </section>
@@ -1341,8 +1341,8 @@ function getCategoryIconBg($slug) {
                 <div class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-emerald-100 text-emerald-600">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
-                <h1 class="mt-6 text-[26px] font-black tracking-[-0.055em]">PIN berhasil direset!</h1>
-                <button onclick="window.location.replace('<?php echo $file_me ?>')" class="mt-8 flex h-[50px] w-full max-w-xs items-center justify-center rounded-full border-2 border-brand text-[14px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
+                <h1 class="mt-6 text-[27px] font-black tracking-[-0.055em]">PIN berhasil direset!</h1>
+                <button onclick="window.location.replace('<?php echo $file_me ?>')" class="mt-8 flex h-[50px] w-full max-w-xs items-center justify-center rounded-full border-2 border-brand text-[15px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
                   Kembali
                 </button>
               </section>
@@ -1394,8 +1394,8 @@ function getCategoryIconBg($slug) {
                 <div class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-emerald-100 text-emerald-600">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
-                <h1 class="mt-6 text-[26px] font-black tracking-[-0.055em]">PIN berhasil direset!</h1>
-                <button onclick="window.location.replace('<?php echo $file_me ?>')" class="mt-8 flex h-[50px] w-full max-w-xs items-center justify-center rounded-full border-2 border-brand text-[14px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
+                <h1 class="mt-6 text-[27px] font-black tracking-[-0.055em]">PIN berhasil direset!</h1>
+                <button onclick="window.location.replace('<?php echo $file_me ?>')" class="mt-8 flex h-[50px] w-full max-w-xs items-center justify-center rounded-full border-2 border-brand text-[15px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
                   Kembali
                 </button>
               </section>
@@ -1447,8 +1447,8 @@ function getCategoryIconBg($slug) {
                 <div class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-emerald-100 text-emerald-600">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
-                <h1 class="mt-6 text-[26px] font-black tracking-[-0.055em]">PIN berhasil direset!</h1>
-                <button onclick="window.location.replace('<?php echo $file_me ?>')" class="mt-8 flex h-[50px] w-full max-w-xs items-center justify-center rounded-full border-2 border-brand text-[14px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
+                <h1 class="mt-6 text-[27px] font-black tracking-[-0.055em]">PIN berhasil direset!</h1>
+                <button onclick="window.location.replace('<?php echo $file_me ?>')" class="mt-8 flex h-[50px] w-full max-w-xs items-center justify-center rounded-full border-2 border-brand text-[15px] font-extrabold text-brand transition hover:bg-emerald-50 active:scale-[0.99]">
                   Kembali
                 </button>
               </section>
@@ -1632,7 +1632,7 @@ function getCategoryIconBg($slug) {
     }
 
     otpBoxes.forEach((box, index) => {
-      box.className = 'otpBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[22px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40';
+      box.className = 'otpBox flex-1 min-w-0 h-[54px] rounded-xl border border-slate-300 bg-white text-center text-[23px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40';
       box.addEventListener('input', (event) => {
         const value = event.target.value.replace(/\D/g, '');
         event.target.value = value.slice(-1);
@@ -1740,7 +1740,7 @@ function getCategoryIconBg($slug) {
     }
 
     phoneBoxes.forEach((box, index) => {
-      box.className = 'phoneBox flex-1 min-w-0 h-[64px] rounded-xl border border-slate-300 bg-white text-center text-[26px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40';
+      box.className = 'phoneBox flex-1 min-w-0 h-[64px] rounded-xl border border-slate-300 bg-white text-center text-[27px] font-extrabold outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/40';
       box.addEventListener('input', (event) => {
         const value = event.target.value.replace(/\D/g, '');
         event.target.value = value.slice(-1);

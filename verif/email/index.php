@@ -131,7 +131,7 @@ $_SESSION['csrf'] = $csrf;
       <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[19px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -147,7 +147,7 @@ $_SESSION['csrf'] = $csrf;
             <polyline points="22,6 12,13 2,6"/>
           </svg>
         </div>
-        <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Verifikasi Email</h1>
+        <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Verifikasi Email</h1>
         <p class="text-sm text-slate-500 mt-1">Aktifkan email untuk keamanan akunmu</p>
       <?php else: ?>
         <!-- Email already verified -->
@@ -157,7 +157,7 @@ $_SESSION['csrf'] = $csrf;
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
         </div>
-        <h1 class="text-[22px] font-extrabold tracking-tight text-slate-900">Email Terverifikasi</h1>
+        <h1 class="text-[23px] font-extrabold tracking-tight text-slate-900">Email Terverifikasi</h1>
         <p class="text-sm text-slate-500 mt-1">Email kamu sudah aktif dan terverifikasi</p>
       <?php endif; ?>
     </div>
@@ -172,12 +172,12 @@ $_SESSION['csrf'] = $csrf;
           </svg>
         </div>
         <div>
-          <div class="text-[13px] font-bold text-slate-800">Link verifikasi akan dikirim ke:</div>
-          <div class="text-[13px] text-brand font-semibold mt-1 font-mono"><?= htmlspecialchars($email) ?></div>
+          <div class="text-[14px] font-bold text-slate-800">Link verifikasi akan dikirim ke:</div>
+          <div class="text-[14px] text-brand font-semibold mt-1 font-mono"><?= htmlspecialchars($email) ?></div>
         </div>
       </div>
 
-      <p class="text-[13px] text-slate-600 leading-relaxed">
+      <p class="text-[14px] text-slate-600 leading-relaxed">
         Klik tombol <strong class="text-slate-800 font-semibold">Kirim Link Verifikasi</strong> di bawah untuk mengirim email verifikasi ke alamat di atas. Buka email lalu klik tombol <strong class="text-slate-800 font-semibold">"Verifikasi Sekarang"</strong> untuk mengaktifkan email kamu.
       </p>
 
@@ -185,11 +185,11 @@ $_SESSION['csrf'] = $csrf;
 
     <!-- Info Pills -->
     <div class="flex flex-wrap gap-2 mb-6">
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         Keamanan Akun
       </span>
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-soft">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 shadow-soft">
         <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
         Proses Instan
       </span>
@@ -197,7 +197,7 @@ $_SESSION['csrf'] = $csrf;
     </div>
 
     <!-- Send Button -->
-    <button id="btn-kirim" class="w-full rounded-xl bg-brand py-3.5 text-[15px] font-bold text-white shadow-lg transition hover:bg-brandDark active:scale-[0.98] flex items-center justify-center gap-2">
+    <button id="btn-kirim" class="w-full rounded-xl bg-brand py-3.5 text-[16px] font-bold text-white shadow-lg transition hover:bg-brandDark active:scale-[0.98] flex items-center justify-center gap-2">
       <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="22" y1="2" x2="11" y2="13"/>
         <polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -206,7 +206,7 @@ $_SESSION['csrf'] = $csrf;
     </button>
 
     <!-- Status message -->
-    <div id="status-msg" class="hidden mt-3 text-center text-[13px] font-medium"></div>
+    <div id="status-msg" class="hidden mt-3 text-center text-[14px] font-medium"></div>
 
     <?php else: ?>
     <!-- Already Verified Card -->
@@ -217,8 +217,8 @@ $_SESSION['csrf'] = $csrf;
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
-        <h2 class="text-[15px] font-extrabold text-slate-800">Email Sudah Aktif</h2>
-        <p class="text-[13px] text-slate-500 mt-2 leading-relaxed">
+        <h2 class="text-[16px] font-extrabold text-slate-800">Email Sudah Aktif</h2>
+        <p class="text-[14px] text-slate-500 mt-2 leading-relaxed">
           Email kamu <strong class="text-slate-700"><?= htmlspecialchars($email) ?></strong> sudah terverifikasi dan aktif untuk keamanan akun BukaKios.
         </p>
       </div>
@@ -234,8 +234,8 @@ $_SESSION['csrf'] = $csrf;
             </svg>
           </div>
           <div>
-            <div class="text-[13px] font-bold text-white">Akun Lebih Aman</div>
-            <div class="text-[11px] text-white/70 mt-0.5">Email terverifikasi menambah lapisan keamanan akunmu</div>
+            <div class="text-[14px] font-bold text-white">Akun Lebih Aman</div>
+            <div class="text-[12px] text-white/70 mt-0.5">Email terverifikasi menambah lapisan keamanan akunmu</div>
           </div>
         </div>
         <div class="flex items-start gap-3">
@@ -245,14 +245,14 @@ $_SESSION['csrf'] = $csrf;
             </svg>
           </div>
           <div>
-            <div class="text-[13px] font-bold text-white">Notifikasi Transaksi</div>
-            <div class="text-[11px] text-white/70 mt-0.5">Dapatkan notifikasi setiap transaksi via email</div>
+            <div class="text-[14px] font-bold text-white">Notifikasi Transaksi</div>
+            <div class="text-[12px] text-white/70 mt-0.5">Dapatkan notifikasi setiap transaksi via email</div>
           </div>
         </div>
       </div>
     </div>
 
-    <button onclick="history.back()" class="w-full rounded-xl border border-slate-200 bg-white py-3.5 text-[15px] font-bold text-slate-700 shadow-soft transition hover:bg-slate-50 active:scale-[0.98]">
+    <button onclick="history.back()" class="w-full rounded-xl border border-slate-200 bg-white py-3.5 text-[16px] font-bold text-slate-700 shadow-soft transition hover:bg-slate-50 active:scale-[0.98]">
       Kembali
     </button>
     <?php endif; ?>
@@ -263,7 +263,7 @@ $_SESSION['csrf'] = $csrf;
   <div id="loading-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;align-items:center;justify-content:center;">
     <div style="background:#fff;border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);min-width:200px;">
       <div style="width:44px;height:44px;border:4px solid rgba(26,127,206,0.2);border-top-color:#1a7fce;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-      <div style="font-size:14px;font-weight:600;color:#334155;">Mengirim email...</div>
+      <div style="font-size:15px;font-weight:600;color:#334155;">Mengirim email...</div>
     </div>
   </div>
   <style>

@@ -66,7 +66,7 @@ $products    = isset($lists['data']) ? $lists['data'] : [];
   <div id="toastError" class="fixed top-4 left-1/2 z-[9998] hidden -translate-x-1/2 max-w-[90vw] w-full px-4">
     <div class="flex items-start gap-3 rounded-xl bg-red-600 px-4 py-3 shadow-lg text-white">
       <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      <p id="toastErrorMsg" class="text-[13px] font-semibold leading-5"></p>
+      <p id="toastErrorMsg" class="text-[14px] font-semibold leading-5"></p>
     </div>
   </div>
 
@@ -99,8 +99,8 @@ $products    = isset($lists['data']) ? $lists['data'] : [];
           </svg>
         </div>
         <div>
-          <h1 class="text-[17px] font-bold text-slate-900 leading-tight">Tagihan Internet Pascabayar</h1>
-          <p class="text-[12px] text-mutedText mt-0.5">Pilih provider untuk membayar tagihan</p>
+          <h1 class="text-[18px] font-bold text-slate-900 leading-tight">Tagihan Internet Pascabayar</h1>
+          <p class="text-[13px] text-mutedText mt-0.5">Pilih provider untuk membayar tagihan</p>
         </div>
       </div>
     </section>
@@ -121,7 +121,7 @@ $products    = isset($lists['data']) ? $lists['data'] : [];
           autocomplete="off"
           onkeyup="filterInternet(this.value)"
           placeholder="Cari provider / ISP..."
-          class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-[14px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition shadow-soft"
+          class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-[15px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition shadow-soft"
         />
       </div>
     </section>
@@ -131,8 +131,8 @@ $products    = isset($lists['data']) ? $lists['data'] : [];
       <?php if (count($products) > 0): ?>
         <!-- Product count pill -->
         <div class="flex items-center gap-2 mb-3 px-1">
-          <span class="text-[11px] font-semibold text-mutedText uppercase tracking-wide">Daftar Internet</span>
-          <span class="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand/10 px-1.5 text-[11px] font-bold text-brand">
+          <span class="text-[12px] font-semibold text-mutedText uppercase tracking-wide">Daftar Internet</span>
+          <span class="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand/10 px-1.5 text-[12px] font-bold text-brand">
             <?= count($products) ?>
           </span>
         </div>
@@ -146,8 +146,8 @@ $products    = isset($lists['data']) ? $lists['data'] : [];
             </svg>
           </div>
           <div>
-            <p class="text-[14px] font-semibold text-slate-700">Provider tidak ditemukan</p>
-            <p class="text-[12px] text-mutedText mt-1">Coba kata kunci lain, misalnya nama ISP.</p>
+            <p class="text-[15px] font-semibold text-slate-700">Provider tidak ditemukan</p>
+            <p class="text-[13px] text-mutedText mt-1">Coba kata kunci lain, misalnya nama ISP.</p>
           </div>
         </div>
 
@@ -173,10 +173,10 @@ $products    = isset($lists['data']) ? $lists['data'] : [];
 
               <!-- Product name -->
               <div class="flex-1 min-w-0">
-                <p class="text-[14px] font-semibold text-slate-800 truncate leading-tight">
+                <p class="text-[15px] font-semibold text-slate-800 truncate leading-tight">
                   <?= htmlspecialchars($list['product_name']) ?>
                 </p>
-                <p class="text-[11px] text-mutedText mt-0.5 truncate">
+                <p class="text-[12px] text-mutedText mt-0.5 truncate">
                   <?= htmlspecialchars($list['code']) ?>
                 </p>
               </div>
@@ -201,10 +201,10 @@ $products    = isset($lists['data']) ? $lists['data'] : [];
             </svg>
           </div>
           <div>
-            <p class="text-[14px] font-semibold text-slate-700">Gagal memuat daftar Internet</p>
-            <p class="text-[12px] text-mutedText mt-1">Silakan coba lagi dalam beberapa saat.</p>
+            <p class="text-[15px] font-semibold text-slate-700">Gagal memuat daftar Internet</p>
+            <p class="text-[13px] text-mutedText mt-1">Silakan coba lagi dalam beberapa saat.</p>
           </div>
-          <button onclick="location.reload()" class="mt-1 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-[13px] font-semibold text-slate-700 shadow-soft transition hover:bg-slate-50 active:bg-slate-100">
+          <button onclick="location.reload()" class="mt-1 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-[14px] font-semibold text-slate-700 shadow-soft transition hover:bg-slate-50 active:bg-slate-100">
             Coba Lagi
           </button>
         </div>

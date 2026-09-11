@@ -239,7 +239,7 @@ if (isset($_GET['id'])) {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: #0f172a;
             opacity: 0;
@@ -635,7 +635,7 @@ if (isset($_GET['id'])) {
             <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
                 <div class="h-full w-full rounded-full bg-brand"></div>
             </div>
-            <div class="shrink-0 text-[15px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
+            <div class="shrink-0 text-[16px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
         </div>
     </header>
 
@@ -656,20 +656,20 @@ if (isset($_GET['id'])) {
             <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div class="flex items-center justify-between gap-3">
                     <?php if ($status == 1) { ?>
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[12px] font-bold text-emerald-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Topup Berhasil</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[13px] font-bold text-emerald-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Topup Berhasil</span>
                     <?php } elseif ($status == 2) { ?>
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[12px] font-bold text-rose-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Topup Dibatalkan</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[13px] font-bold text-rose-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Topup Dibatalkan</span>
                     <?php } else { ?>
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[12px] font-bold text-amber-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Menunggu Pembayaran</span>
-                        <span id="countdown" class="font-mono text-[13px] font-bold tabular-nums text-amber-600">--:--:--</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[13px] font-bold text-amber-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Menunggu Pembayaran</span>
+                        <span id="countdown" class="font-mono text-[14px] font-bold tabular-nums text-amber-600">--:--:--</span>
                     <?php } ?>
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[13px]">
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[14px]">
                 <div class="mb-3 flex items-center gap-3">
                     <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.2" fill="currentColor"/></svg></div>
-                    <div><h3 class="m-0 text-[14px] font-bold leading-tight text-slate-900">Rincian Nominal</h3><p class="m-0 mt-0.5 text-[12px] font-medium text-slate-500">Pastikan bayar sesuai total transfer</p></div>
+                    <div><h3 class="m-0 text-[15px] font-bold leading-tight text-slate-900">Rincian Nominal</h3><p class="m-0 mt-0.5 text-[13px] font-medium text-slate-500">Pastikan bayar sesuai total transfer</p></div>
                 </div>
                 <div class="flex items-center justify-between py-1.5 border-b border-slate-100 mb-1">
                     <span class="text-slate-500">Topup ID</span>
@@ -695,7 +695,7 @@ if (isset($_GET['id'])) {
                 <?php } ?>
                 <div class="mt-2 flex items-center justify-between border-t border-slate-200 pt-2.5">
                     <span class="font-semibold text-slate-700">Total Transfer</span>
-                    <button id="nominal_transfer" onclick="copyToClipboard('nominal_transfer')" data-text="Jumlah Transfer Berhasil Di Salin" data-copy="<?= ($metode_id == 40) ? $app->idr($nominal_topup + $fee) : $total_transfer ?>" type="button" class="text-right text-[15px] font-bold text-brand active:scale-95"><?php if ($metode_id == 40) { echo $app->idr($nominal_topup + $fee); } else { echo $total_transfer_rp; } ?></button>
+                    <button id="nominal_transfer" onclick="copyToClipboard('nominal_transfer')" data-text="Jumlah Transfer Berhasil Di Salin" data-copy="<?= ($metode_id == 40) ? $app->idr($nominal_topup + $fee) : $total_transfer ?>" type="button" class="text-right text-[16px] font-bold text-brand active:scale-95"><?php if ($metode_id == 40) { echo $app->idr($nominal_topup + $fee); } else { echo $total_transfer_rp; } ?></button>
                 </div>
             </div>
 
@@ -704,76 +704,76 @@ if (isset($_GET['id'])) {
                     <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
                         <?php if (!empty($gambar_metode)) { ?><img src="<?= $gambar_metode ?>" alt="<?= $nama_metode ?>" class="h-7 w-7 object-contain"><?php } else { ?><svg viewBox="0 0 24 24" class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg><?php } ?>
                     </div>
-                    <div class="min-w-0 flex-1"><h3 class="m-0 truncate text-[14px] font-bold leading-tight text-slate-900"><?= $nama_metode ?></h3><p class="m-0 mt-0.5 truncate text-[11px] capitalize text-slate-400"><?= $nama_kategori ?></p></div>
+                    <div class="min-w-0 flex-1"><h3 class="m-0 truncate text-[15px] font-bold leading-tight text-slate-900"><?= $nama_metode ?></h3><p class="m-0 mt-0.5 truncate text-[12px] capitalize text-slate-400"><?= $nama_kategori ?></p></div>
                 </div>
                 <?php if (!empty($payment_error)) { ?>
                     <div class="flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3">
                         <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0 text-rose-500" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
                         <div class="min-w-0">
-                            <p class="m-0 text-[12px] font-bold text-rose-700">Gagal memuat info pembayaran</p>
-                            <p class="m-0 mt-0.5 break-words text-[12px] text-rose-600"><?= htmlspecialchars($payment_error) ?></p>
+                            <p class="m-0 text-[13px] font-bold text-rose-700">Gagal memuat info pembayaran</p>
+                            <p class="m-0 mt-0.5 break-words text-[13px] text-rose-600"><?= htmlspecialchars($payment_error) ?></p>
                         </div>
                     </div>
                 <?php } elseif ($payment_info !== null && in_array($payment_info['tipe'], ['qr','link','va','bank','image_src'], true)) { ?>
                     <?php if ($payment_info['tipe'] === 'bank') { ?>
                         <div class="rounded-xl border border-slate-200 bg-white p-3">
-                            <p class="mb-1.5 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-400">Nomor Rekening / Tujuan</p>
+                            <p class="mb-1.5 text-center text-[12px] font-semibold uppercase tracking-wide text-slate-400">Nomor Rekening / Tujuan</p>
                             <div class="flex items-center justify-center rounded-lg bg-slate-50 px-3 py-2">
-                                <span id="copy_rekening" data-text="Nomor Rekening Berhasil Disalin" data-copy="<?= htmlspecialchars($payment_info['nilai']['nomor'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="leading-none font-mono text-[18px] font-bold tracking-wide text-slate-900"><?= htmlspecialchars($payment_info['nilai']['nomor'] ?? '') ?></span>
+                                <span id="copy_rekening" data-text="Nomor Rekening Berhasil Disalin" data-copy="<?= htmlspecialchars($payment_info['nilai']['nomor'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="leading-none font-mono text-[19px] font-bold tracking-wide text-slate-900"><?= htmlspecialchars($payment_info['nilai']['nomor'] ?? '') ?></span>
                             </div>
-                            <button onclick="copyToClipboard('copy_rekening')" type="button" class="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand py-1.5 text-[12px] font-bold text-white transition active:scale-[0.99]">
+                            <button onclick="copyToClipboard('copy_rekening')" type="button" class="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand py-1.5 text-[13px] font-bold text-white transition active:scale-[0.99]">
                                 <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                                 Salin Nomor Rekening
                             </button>
-                            <?php if (!empty($payment_info['nilai']['nama'])) { ?><p class="mt-1.5 text-center text-[12px] text-slate-500">a/n <span class="font-semibold text-slate-700"><?= htmlspecialchars($payment_info['nilai']['nama']) ?></span></p><?php } ?>
+                            <?php if (!empty($payment_info['nilai']['nama'])) { ?><p class="mt-1.5 text-center text-[13px] text-slate-500">a/n <span class="font-semibold text-slate-700"><?= htmlspecialchars($payment_info['nilai']['nama']) ?></span></p><?php } ?>
                         </div>
                     <?php } elseif ($payment_info['tipe'] === 'image_src') { ?>
                         <!-- image_src: Tokopay sudah generate gambar QR PNG, FE tinggal <img> -->
                         <div class="rounded-xl bg-slate-50 px-3 py-4 text-center">
-                            <p class="mb-2 text-[11px] text-slate-400">QRIS</p>
+                            <p class="mb-2 text-[12px] text-slate-400">QRIS</p>
                             <div class="mx-auto inline-block rounded-lg bg-white p-2">
                                 <img src="<?= $payment_info['nilai']?>" alt="QRIS Bukakios" class="h-44 w-44 object-contain" loading="lazy">
                             </div>
                             <?php if (!empty($payment_info['cara_bayar'])) { ?>
-                                <div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div>
+                                <div class="mt-3 text-left text-[13px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div>
                             <?php } ?>
                         </div>
                     <?php } elseif ($payment_info['tipe'] === 'qr') { ?>
                         <div class="rounded-xl bg-slate-50 px-3 py-4 text-center">
-                            <p class="mb-2 text-[11px] text-slate-400">QRIS</p>
+                            <p class="mb-2 text-[12px] text-slate-400">QRIS</p>
                             <div id="qris-render" data-qr="<?= $payment_info['nilai']?>" class="mx-auto inline-block rounded-lg bg-white p-2"></div>
-                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
+                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[13px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
                         </div>
                     <?php } elseif ($payment_info['tipe'] === 'va') { ?>
                         <div class="rounded-xl border border-slate-200 bg-white p-3">
-                            <p class="mb-1.5 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-400">Nomor Virtual Account</p>
+                            <p class="mb-1.5 text-center text-[12px] font-semibold uppercase tracking-wide text-slate-400">Nomor Virtual Account</p>
                             <div class="flex items-center justify-center rounded-lg bg-slate-50 px-3 py-2">
-                                <span id="copy_va" data-text="Nomor VA Berhasil Disalin" data-copy="<?= htmlspecialchars($payment_info['nilai'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="leading-none font-mono text-[18px] font-bold tracking-wide text-slate-900"><?= htmlspecialchars($payment_info['nilai'] ?? '') ?></span>
+                                <span id="copy_va" data-text="Nomor VA Berhasil Disalin" data-copy="<?= htmlspecialchars($payment_info['nilai'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="leading-none font-mono text-[19px] font-bold tracking-wide text-slate-900"><?= htmlspecialchars($payment_info['nilai'] ?? '') ?></span>
                             </div>
-                            <button onclick="copyToClipboard('copy_va')" type="button" class="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand py-1.5 text-[12px] font-bold text-white transition active:scale-[0.99]">
+                            <button onclick="copyToClipboard('copy_va')" type="button" class="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand py-1.5 text-[13px] font-bold text-white transition active:scale-[0.99]">
                                 <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                                 Salin Nomor VA
                             </button>
-                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
+                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[13px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
                         </div>
                     <?php } elseif ($payment_info['tipe'] === 'link') { ?>
                         <div class="rounded-xl bg-slate-50 px-3 py-3 text-center">
-                            <p class="mb-2 text-[11px] text-slate-400">Bayar via Link</p>
-                            <a href="<?= $openurl.$payment_info['nilai']?>" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-[13px] font-bold text-white transition active:scale-95">
+                            <p class="mb-2 text-[12px] text-slate-400">Bayar via Link</p>
+                            <a href="<?= $openurl.$payment_info['nilai']?>" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-[14px] font-bold text-white transition active:scale-95">
                                 Buka Aplikasi Pembayaran
                                 <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
                             </a>
-                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[12px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
+                            <?php if (!empty($payment_info['cara_bayar'])) { ?><div class="mt-3 text-left text-[13px] text-slate-600 leading-relaxed [&>p]:mb-1.5"><?= _renderCaraBayar($payment_info['cara_bayar']) ?></div><?php } ?>
                         </div>
                     <?php } ?>
                 <?php } elseif (!empty($nomor_rekening)) { ?>
                     <div class="rounded-xl bg-slate-50 px-3 py-3 text-center">
-                        <p class="mb-1 text-[11px] text-slate-400">Nomor Rekening / Tujuan</p>
-                        <div class="flex items-center justify-center gap-2"><p id="copy_rekening" data-text="Nomor Rekening Berhasil Disalin" data-copy="<?= $nomor_rekening ?>" class="font-mono text-[17px] font-bold tracking-wide text-slate-900"><?= $nomor_rekening ?></p><button onclick="copyToClipboard('copy_rekening')" type="button" class="rounded-lg bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 shadow-sm">Salin</button></div>
-                        <?php if (!empty($nama_rekening)) { ?><p class="mt-1 text-[11px] text-slate-500">a/n <?= $nama_rekening ?></p><?php } ?>
+                        <p class="mb-1 text-[12px] text-slate-400">Nomor Rekening / Tujuan</p>
+                        <div class="flex items-center justify-center gap-2"><p id="copy_rekening" data-text="Nomor Rekening Berhasil Disalin" data-copy="<?= $nomor_rekening ?>" class="font-mono text-[18px] font-bold tracking-wide text-slate-900"><?= $nomor_rekening ?></p><button onclick="copyToClipboard('copy_rekening')" type="button" class="rounded-lg bg-white px-2.5 py-1 text-[12px] font-semibold text-slate-700 shadow-sm">Salin</button></div>
+                        <?php if (!empty($nama_rekening)) { ?><p class="mt-1 text-[12px] text-slate-500">a/n <?= $nama_rekening ?></p><?php } ?>
                     </div>
                 <?php } else { ?>
-                    <div class="rounded-xl bg-slate-50 px-3 py-3 text-center text-[12px] text-slate-400">Detail pembayaran mengikuti metode topup yang dipilih.</div>
+                    <div class="rounded-xl bg-slate-50 px-3 py-3 text-center text-[13px] text-slate-400">Detail pembayaran mengikuti metode topup yang dipilih.</div>
                 <?php } ?>
             </div>
 
@@ -790,20 +790,20 @@ if (isset($_GET['id'])) {
             <?php if ($status == 1) { ?>
                 <div class="flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
                     <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-                    <p class="text-[13px] font-semibold text-emerald-700">Saldo sudah masuk ke akun kamu.</p>
+                    <p class="text-[14px] font-semibold text-emerald-700">Saldo sudah masuk ke akun kamu.</p>
                 </div>
             <?php } ?>
 
             <?php if ($status == 0) { ?>
-                <button type="button" id="btn-cancel-topup" data-id="<?= $topup_id ?>" data-csrf="<?= htmlspecialchars($_SESSION['csrf'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[13px] font-bold text-rose-700 transition active:scale-[0.99] disabled:opacity-60">
+                <button type="button" id="btn-cancel-topup" data-id="<?= $topup_id ?>" data-csrf="<?= htmlspecialchars($_SESSION['csrf'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[14px] font-bold text-rose-700 transition active:scale-[0.99] disabled:opacity-60">
                     <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
                     <span class="btn-cancel-label">Batalkan Topup</span>
                 </button>
             <?php } ?>
 
             <div class="flex gap-2">
-                <a href="<?= "$c_url/info-topup/?id=$topup_id" ?>" class="flex-1 rounded-xl border border-slate-200 py-2 text-center text-[13px] font-medium text-slate-700 transition hover:bg-slate-50">Cek Status</a>
-                <a href="<?= $openurl . $wa_komplain_link ?>" class="flex-1 rounded-xl bg-brand py-2 text-center text-[13px] font-medium text-white transition hover:bg-brandDark">Bantuan</a>
+                <a href="<?= "$c_url/info-topup/?id=$topup_id" ?>" class="flex-1 rounded-xl border border-slate-200 py-2 text-center text-[14px] font-medium text-slate-700 transition hover:bg-slate-50">Cek Status</a>
+                <a href="<?= $openurl . $wa_komplain_link ?>" class="flex-1 rounded-xl bg-brand py-2 text-center text-[14px] font-medium text-white transition hover:bg-brandDark">Bantuan</a>
             </div>
         </div>
     </main>
@@ -1167,11 +1167,11 @@ if (isset($_GET['id'])) {
             try {
                 QRCode.toCanvas(el, payload, { width: 192, margin: 1, color: { dark: '#0f172a', light: '#ffffff' } }, function (err) {
                     if (err) {
-                        el.innerHTML = '<p class="text-[11px] text-rose-500">Gagal render QRIS</p>';
+                        el.innerHTML = '<p class="text-[12px] text-rose-500">Gagal render QRIS</p>';
                     }
                 });
             } catch (e) {
-                el.innerHTML = '<p class="text-[11px] text-rose-500">Gagal render QRIS</p>';
+                el.innerHTML = '<p class="text-[12px] text-rose-500">Gagal render QRIS</p>';
             }
         })();
 

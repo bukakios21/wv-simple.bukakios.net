@@ -133,7 +133,7 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
       </div>
       <div class="shrink-0">
         <div class="flex items-center gap-2 bg-gradient-to-r from-brand to-brandDark px-4 py-1.5 rounded-full shadow-glow-sm">
-          <span class="text-[16px] font-extrabold tracking-[-0.04em] text-white">BukaKios</span>
+          <span class="text-[17px] font-extrabold tracking-[-0.04em] text-white">BukaKios</span>
         </div>
       </div>
     </div>
@@ -169,20 +169,20 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
             
             <!-- User Info -->
             <div class="flex-1">
-              <h1 class="text-[18px] font-bold text-white"><?= htmlspecialchars($user_name) ?></h1>
+              <h1 class="text-[19px] font-bold text-white"><?= htmlspecialchars($user_name) ?></h1>
               <div class="flex items-center gap-2 mt-1">
-                <span class="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-lg">
+                <span class="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-lg">
                   <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                   </svg>
                   <?= htmlspecialchars($level) ?>
                 </span>
                 <?php if ($unverified_count > 0): ?>
-                <span class="inline-flex items-center gap-1 bg-white/20 backdrop-blur text-white/90 text-[11px] font-semibold px-3 py-1 rounded-full">
+                <span class="inline-flex items-center gap-1 bg-white/20 backdrop-blur text-white/90 text-[12px] font-semibold px-3 py-1 rounded-full">
                   <?= $verif_done ?>/<?= $total_verif ?> Terverifikasi
                 </span>
                 <?php else: ?>
-                <span class="inline-flex items-center gap-1 bg-emerald-400/90 backdrop-blur text-white text-[11px] font-bold px-3 py-1 rounded-full">
+                <span class="inline-flex items-center gap-1 bg-emerald-400/90 backdrop-blur text-white text-[12px] font-bold px-3 py-1 rounded-full">
                   <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
@@ -195,8 +195,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
           
           <!-- Saldo Display -->
           <div class="mt-4 bg-white/10 backdrop-blur rounded-xl p-3 border border-white/10">
-            <p class="text-white/70 text-[11px] font-medium">Saldo Tersedia</p>
-            <p class="text-[22px] font-bold text-white"><?= $app->idr($saldo) ?></p>
+            <p class="text-white/70 text-[12px] font-medium">Saldo Tersedia</p>
+            <p class="text-[23px] font-bold text-white"><?= $app->idr($saldo) ?></p>
           </div>
         </div>
       </div>
@@ -213,8 +213,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
             <line x1="1" y1="10" x2="23" y2="10"/>
           </svg>
         </div>
-        <p class="text-[11px] text-slate-500 font-medium mb-1">Limit Saldo</p>
-        <p class="text-[15px] font-bold text-slate-800"><?= $app->idr($limit_saldo) ?></p>
+        <p class="text-[12px] text-slate-500 font-medium mb-1">Limit Saldo</p>
+        <p class="text-[16px] font-bold text-slate-800"><?= $app->idr($limit_saldo) ?></p>
         <button onclick="showInfo('Limit Saldo', 'Jumlah maksimal saldo yang dapat ditransfer ke akun Anda dalam satu waktu.')" class="absolute top-3 right-3 w-7 h-7 rounded-full bg-slate-100 hover:bg-brand/10 flex items-center justify-center transition-colors">
           <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -233,8 +233,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
             <polyline points="19 12 12 5 5 12"/>
           </svg>
         </div>
-        <p class="text-[11px] text-slate-500 font-medium mb-1">Max Topup</p>
-        <p class="text-[15px] font-bold text-slate-800"><?= $app->idr($max_nominal_topup) ?></p>
+        <p class="text-[12px] text-slate-500 font-medium mb-1">Max Topup</p>
+        <p class="text-[16px] font-bold text-slate-800"><?= $app->idr($max_nominal_topup) ?></p>
         <button onclick="showInfo('Maksimal Topup', 'Batas tertinggi nominal yang dapat Anda topup dalam satu transaksi.')" class="absolute top-3 right-3 w-7 h-7 rounded-full bg-slate-100 hover:bg-emerald-500/10 flex items-center justify-center transition-colors">
           <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -255,8 +255,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
             <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
           </svg>
         </div>
-        <p class="text-[11px] text-slate-500 font-medium mb-1">Max Transaksi</p>
-        <p class="text-[15px] font-bold text-slate-800"><?= $app->idr($max_nominal_trx) ?></p>
+        <p class="text-[12px] text-slate-500 font-medium mb-1">Max Transaksi</p>
+        <p class="text-[16px] font-bold text-slate-800"><?= $app->idr($max_nominal_trx) ?></p>
         <button onclick="showInfo('Maksimal Transaksi', 'Batas tertinggi nominal transaksi yang dapat Anda lakukan dalam satu kali transaksi.')" class="absolute top-3 right-3 w-7 h-7 rounded-full bg-slate-100 hover:bg-amber-500/10 flex items-center justify-center transition-colors">
           <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -276,8 +276,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
             <line x1="6" y1="20" x2="6" y2="14"/>
           </svg>
         </div>
-        <p class="text-[11px] text-slate-500 font-medium mb-1">Max Akumulasi</p>
-        <p class="text-[15px] font-bold text-slate-800"><?= $app->idr($max_akumulasi_trx) ?></p>
+        <p class="text-[12px] text-slate-500 font-medium mb-1">Max Akumulasi</p>
+        <p class="text-[16px] font-bold text-slate-800"><?= $app->idr($max_akumulasi_trx) ?></p>
         <button onclick="showInfo('Maksimal Akumulasi', 'Total nominal transaksi maksimum yang dapat Anda kumulasi dalam periode tertentu.')" class="absolute top-3 right-3 w-7 h-7 rounded-full bg-slate-100 hover:bg-purple-500/10 flex items-center justify-center transition-colors">
           <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -292,19 +292,19 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
     <div class="bg-white rounded-3xl border border-slate-100 p-5 shadow-card mb-6">
       <div class="flex items-center justify-between mb-5">
         <div>
-          <h3 class="text-[16px] font-bold text-slate-800">Verifikasi Akun</h3>
-          <p class="text-[12px] text-slate-500 mt-0.5">Lengkapi verifikasi untuk naik level</p>
+          <h3 class="text-[17px] font-bold text-slate-800">Verifikasi Akun</h3>
+          <p class="text-[13px] text-slate-500 mt-0.5">Lengkapi verifikasi untuk naik level</p>
         </div>
         <?php if ($unverified_count > 0): ?>
         <div class="flex items-center gap-2 bg-brand/10 px-3 py-1.5 rounded-full">
-          <span class="text-[12px] font-bold text-brand"><?= $verif_percent ?>%</span>
+          <span class="text-[13px] font-bold text-brand"><?= $verif_percent ?>%</span>
         </div>
         <?php else: ?>
         <div class="flex items-center gap-2 bg-emerald-100 px-3 py-1.5 rounded-full">
           <svg viewBox="0 0 24 24" class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
-          <span class="text-[12px] font-bold text-emerald-600">Lengkap</span>
+          <span class="text-[13px] font-bold text-emerald-600">Lengkap</span>
         </div>
         <?php endif; ?>
       </div>
@@ -317,8 +317,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
           </div>
         </div>
         <div class="flex justify-between mt-2">
-          <span class="text-[11px] text-slate-400"><?= $verif_done ?> dari <?= $total_verif ?> lengkap</span>
-          <span class="text-[11px] text-slate-400"><?= $unverified_count ?> tersisa</span>
+          <span class="text-[12px] text-slate-400"><?= $verif_done ?> dari <?= $total_verif ?> lengkap</span>
+          <span class="text-[12px] text-slate-400"><?= $unverified_count ?> tersisa</span>
         </div>
       </div>
 
@@ -339,8 +339,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
             <?php endif; ?>
           </div>
           <div class="flex-1">
-            <h4 class="text-[13px] font-semibold <?= $hp == 1 ? 'text-emerald-800' : 'text-red-800' ?>">Verifikasi HP</h4>
-            <p class="text-[11px] <?= $hp == 1 ? 'text-emerald-600' : 'text-red-600' ?> mt-0.5"><?= $hp == 1 ? 'Terverifikasi' : 'Belum verifikasi' ?></p>
+            <h4 class="text-[14px] font-semibold <?= $hp == 1 ? 'text-emerald-800' : 'text-red-800' ?>">Verifikasi HP</h4>
+            <p class="text-[12px] <?= $hp == 1 ? 'text-emerald-600' : 'text-red-600' ?> mt-0.5"><?= $hp == 1 ? 'Terverifikasi' : 'Belum verifikasi' ?></p>
           </div>
           <svg viewBox="0 0 24 24" class="w-5 h-5 <?= $hp == 1 ? 'text-emerald-500' : 'text-red-400' ?> group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="9 18 15 12 9 6"/>
@@ -362,8 +362,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
             <?php endif; ?>
           </div>
           <div class="flex-1">
-            <h4 class="text-[13px] font-semibold <?= $email == 1 ? 'text-emerald-800' : 'text-red-800' ?>">Verifikasi Email</h4>
-            <p class="text-[11px] <?= $email == 1 ? 'text-emerald-600' : 'text-red-600' ?> mt-0.5"><?= $email == 1 ? 'Terverifikasi' : 'Belum verifikasi' ?></p>
+            <h4 class="text-[14px] font-semibold <?= $email == 1 ? 'text-emerald-800' : 'text-red-800' ?>">Verifikasi Email</h4>
+            <p class="text-[12px] <?= $email == 1 ? 'text-emerald-600' : 'text-red-600' ?> mt-0.5"><?= $email == 1 ? 'Terverifikasi' : 'Belum verifikasi' ?></p>
           </div>
           <svg viewBox="0 0 24 24" class="w-5 h-5 <?= $email == 1 ? 'text-emerald-500' : 'text-red-400' ?> group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="9 18 15 12 9 6"/>
@@ -385,8 +385,8 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
             <?php endif; ?>
           </div>
           <div class="flex-1">
-            <h4 class="text-[13px] font-semibold <?= $ktp == 1 ? 'text-emerald-800' : 'text-red-800' ?>">Verifikasi KTP</h4>
-            <p class="text-[11px] <?= $ktp == 1 ? 'text-emerald-600' : 'text-red-600' ?> mt-0.5"><?= $ktp == 1 ? 'Terverifikasi' : 'Belum verifikasi' ?></p>
+            <h4 class="text-[14px] font-semibold <?= $ktp == 1 ? 'text-emerald-800' : 'text-red-800' ?>">Verifikasi KTP</h4>
+            <p class="text-[12px] <?= $ktp == 1 ? 'text-emerald-600' : 'text-red-600' ?> mt-0.5"><?= $ktp == 1 ? 'Terverifikasi' : 'Belum verifikasi' ?></p>
           </div>
           <svg viewBox="0 0 24 24" class="w-5 h-5 <?= $ktp == 1 ? 'text-emerald-500' : 'text-red-400' ?> group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="9 18 15 12 9 6"/>
@@ -407,10 +407,10 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
           </svg>
         </div>
         <div>
-          <p class="text-[13px] text-amber-800 leading-relaxed">
+          <p class="text-[14px] text-amber-800 leading-relaxed">
             Silahkan verifikasi akun kamu untuk meningkatkan level dan limit transaksi.
           </p>
-          <button onclick="showSyarat()" class="mt-3 inline-flex items-center gap-2 bg-amber-500 text-white text-[12px] font-bold px-4 py-2 rounded-xl hover:bg-amber-600 transition">
+          <button onclick="showSyarat()" class="mt-3 inline-flex items-center gap-2 bg-amber-500 text-white text-[13px] font-bold px-4 py-2 rounded-xl hover:bg-amber-600 transition">
             <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14 2 14 8 20 8"/>
@@ -436,7 +436,7 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       const bgColor = type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-red-500' : 'bg-slate-800';
-      toast.className = `${bgColor} text-white px-4 py-3 rounded-xl shadow-lg text-[13px] font-medium pointer-events-auto transform translate-y-20 opacity-0 transition-all duration-300`;
+      toast.className = `${bgColor} text-white px-4 py-3 rounded-xl shadow-lg text-[14px] font-medium pointer-events-auto transform translate-y-20 opacity-0 transition-all duration-300`;
       toast.textContent = message;
       container.appendChild(toast);
       
@@ -452,22 +452,22 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
 
     function showInfo(title, message) {
       Swal.fire({
-        title: `<span class="text-[18px] font-bold text-slate-800">${title}</span>`,
-        html: `<p class="text-[13px] text-slate-600">${message}</p>`,
+        title: `<span class="text-[19px] font-bold text-slate-800">${title}</span>`,
+        html: `<p class="text-[14px] text-slate-600">${message}</p>`,
         confirmButtonText: 'OK',
         confirmButtonColor: '#1a7fce',
         customClass: {
           popup: 'rounded-2xl',
-          confirmButton: 'rounded-xl px-6 py-2.5 text-[13px] font-bold'
+          confirmButton: 'rounded-xl px-6 py-2.5 text-[14px] font-bold'
         }
       });
     }
 
     function showSyarat() {
       Swal.fire({
-        title: `<span class="text-[18px] font-bold text-slate-800">Syarat & Ketentuan</span>`,
+        title: `<span class="text-[19px] font-bold text-slate-800">Syarat & Ketentuan</span>`,
         html: `
-          <div class="text-left text-[13px] text-slate-600">
+          <div class="text-left text-[14px] text-slate-600">
             <p class="mb-3 font-semibold text-slate-800">Syarat verifikasi identitas:</p>
             <ol class="list-decimal ml-4 space-y-2">
               <li>Gunakan kartu identitas milik sendiri</li>
@@ -489,7 +489,7 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
         confirmButtonColor: '#1a7fce',
         customClass: {
           popup: 'rounded-2xl',
-          confirmButton: 'rounded-xl px-6 py-2.5 text-[13px] font-bold'
+          confirmButton: 'rounded-xl px-6 py-2.5 text-[14px] font-bold'
         }
       });
     }
