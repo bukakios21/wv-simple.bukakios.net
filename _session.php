@@ -20,7 +20,8 @@ if (isset($_GET['token_dev'])) {
     $bukakios_version     = '1.0';
     $bukakios_version_int = 10;
     // Dev bypass aktif — skip semua validasi di bawah
-} else if (!empty($_SESSION['user_jwt'])) {
+}
+/* else if (!empty($_SESSION['user_jwt'])) {
     $user_jwt = $_SESSION['user_jwt'];
     $user_id  = abs((int)($_SESSION['user_id'] ?? 1));
     $user_token     = $_SESSION['user_token'] ?? 'session_token';
@@ -33,7 +34,8 @@ if (isset($_GET['token_dev'])) {
     // DEV BYPASS: tambahkan ?token_dev=<jwt_value> di URL untuk skip
     // validasi session (misal: lupa-pin/?token_dev=eyJhbGciOi...)
     // ============================================================
-} else {
+} */
+else {
     // require 'config.php';
     //untuk memverifikasi token user di sini
     $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
