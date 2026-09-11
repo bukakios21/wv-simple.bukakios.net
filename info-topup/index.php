@@ -14,10 +14,7 @@ if (isset($_GET['id'])) {
     $detail_topup = json_decode($resApi, true);
 
     if (!isset($detail_topup['status']) || $detail_topup['status'] != 1 || empty($detail_topup['data']['uid'])) {
-        echo "Data Topup tidak di temukan #$topup_id";
-        if (isset($app) && method_exists($app, 'simpan_file')) {
-            //$app->simpan_file("topup_detail_error.txt", $resApi ?? '');
-        }
+        require_once "404.php";
         exit;
     }
 
