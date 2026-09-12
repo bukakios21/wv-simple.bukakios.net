@@ -20,3 +20,10 @@ logs/
 # Cache
 cache/
 tmp/
+
+
+# Log runtime
+api_log.txt
+api_log.txt.*
+email_res.txt
+resapi.txt
