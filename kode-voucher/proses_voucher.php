@@ -1,10 +1,9 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-// require_once('../_session.php');
+require_once('../_session.php');
 require_once('../config.php');
-//require_once('../config_db.php');
+require_once('../lib/ApiV2.php');
+
+$api_v2 = new ApiV2($user_jwt);
 
 $csrf = $_GET['csrf'];
 if ($csrf != $_SESSION['csrf']) {
@@ -20,8 +19,8 @@ if ($csrf != $_SESSION['csrf']) {
 
 if (isset($_GET['act'], $_GET['csrf'])) {
     $act = $_GET['act'];
+    $kode = isset($_GET['kode']) ? trim($_GET['kode']) : '';
     if ($act == "use") {
-        $kode = $db->escape_string($_GET['kode']);
         if (empty($kode)) {
             $out = array(
                 'status' => 0,
@@ -30,67 +29,24 @@ if (isset($_GET['act'], $_GET['csrf'])) {
             echo json_encode($out);
             exit;
         }
-        //call api proses kode
-        if ($user_id == 30009958) {
-            $url = "$apiv2_url/$apiv2_slug/voucher/redem";
-            $send = array(
-                "uid" => $user_id,
-                "kode" => $kode
+        //call api proses kode voucher via libapiv2 (BE: api-bukakios-v2)
+        $raw = $api_v2->redem_voucher($kode);
+        $res = json_decode($raw, true);
+        if (!is_array($res) || !isset($res['status'])) {
+            $out = array(
+                'status' => 0,
+                'error_msg' => "Gagal memproses kode voucher. Silakan coba lagi."
             );
-            $ch = curl_init();
-            $header = array(
-                "auth: bukakios-x98x",
-                "Api-Key: OmAtIcHULeTZsChiPTIVatHyprOvenTY"
+        } else if ($res['status'] == 1) {
+            $out = array(
+                'status' => 1,
+                'message' => isset($res['message']) ? $res['message'] : 'Kode voucher berhasil digunakan.'
             );
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'bukakios-curl-webview 71b97cdb7dc7a7bbe205c48d5241d64b');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $send);
-            $result = curl_exec($ch);
-            $return = $result;
-            curl_close($ch);
-            $res = json_decode($return, true);
-            if (isset($res['status'])) {
-                if ($res['status'] == 1) {
-                    $out = array(
-                        'status' => 1,
-                        'message' => $res['message']
-                    );
-                } else {
-                    $out = array(
-                        'status' => 0,
-                        'error_msg' => $res['error_msg']
-                    );
-                }
-            } else {
-                $out = array(
-                    'status' => 0,
-                    'error_msg' => "Error server. #$result"
-                );
-            }
         } else {
-            $post = array(
-                'key' => $ms0_key,
-                'kode' => $kode,
-                'uid' => $user_id,
-                'token_trx' => $user_token_trx
+            $out = array(
+                'status' => 0,
+                'error_msg' => isset($res['error_msg']) ? $res['error_msg'] : 'Kode voucher tidak valid.'
             );
-            $res = $app->curl_post("$ms0_url/proses_voucher.php", $post);
-            $res = json_decode($res, true);
-            if ($res['status'] == 1) {
-                $out = array(
-                    'status' => 1,
-                    'message' => $res['message']
-                );
-            } else {
-                $out = array(
-                    'status' => 0,
-                    'error_msg' => $res['error_msg']
-                );
-            }
         }
     } else {
         $out = array(

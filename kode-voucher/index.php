@@ -160,6 +160,10 @@ if (isset($_GET['act'])){
       $('#btn-use').attr('disabled', true);
       $('#btn-text').text('Memproses...');
 
+      // reset pesan gagal sebelumnya tiap kali redeem
+      $('#error-section').addClass('hidden');
+      $('#error-message').text('');
+
       $.ajax({
         url: "index.php",
         data: {act: "use", csrf: csrf, kode: kode},
@@ -168,10 +172,10 @@ if (isset($_GET['act'])){
         success: function(data) {
           $('#btn-use').attr('disabled', false);
           $('#btn-text').text('Gunakan Kode');
-          
+
           if (data.status == 1) {
             $('#success-message').text(data.message);
-            $('#success-modal').removeClass('hidden');
+            $('#success-modal').removeClass('hidden').addClass('flex');
             $('#kode').val('');
             $('#btn-use').attr('disabled', true);
           } else if (data.status == 0) {
@@ -194,6 +198,7 @@ if (isset($_GET['act'])){
 
   <!-- Success Modal -->
   <div id="success-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <!-- toggle 'flex' saat show; jangan hanya remove 'hidden' agar items-center/justify-center (flex) tetap berlaku -->
     <div class="bg-white rounded-3xl w-full max-w-sm p-6 text-center animate-bounce-in">
       <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
         <svg viewBox="0 0 24 24" class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -220,7 +225,7 @@ if (isset($_GET['act'])){
 
   <script>
     function closeSuccessModal() {
-      $('#success-modal').addClass('hidden');
+      $('#success-modal').removeClass('flex').addClass('hidden');
     }
     // Close modal on backdrop click
     $('#success-modal').click(function(e) {

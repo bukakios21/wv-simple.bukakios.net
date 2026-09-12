@@ -12,16 +12,33 @@ if (isset($_GET['token_dev'])) {
     }
     $user_jwt = $_GET['token_dev'];
     $user_id  = isset($_GET['uid_dev']) ? abs((int)$_GET['uid_dev']) : 1;
-    $_SESSION['user_jwt'] = $user_jwt;
     $user_token     = 'dev_token';
     $user_token_trx = 'dev_token_trx';
     $webview_valid  = true;
     $new_detail     = true;
     $bukakios_version     = '1.0';
     $bukakios_version_int = 10;
+    // Tandai sesi ini sebagai sesi dev. token_dev hanya di-pass dari build
+    // lokal, jadi flag ini tidak akan pernah ada di production.
+    // Request berikutnya cukup cek $_SESSION['is_dev'] untuk pakai ulang
+    // session JWT tanpa perlu query token_dev lagi (lihat blok di bawah).
+    $_SESSION['is_dev']               = true;
+    $_SESSION['user_jwt']             = $user_jwt;
+    $_SESSION['user_id']              = $user_id;
+    $_SESSION['user_token']           = $user_token;
+    $_SESSION['user_token_trx']       = $user_token_trx;
+    $_SESSION['new_detail']           = $new_detail;
+    $_SESSION['bukakios_version']     = $bukakios_version;
+    $_SESSION['bukakios_version_int'] = $bukakios_version_int;
     // Dev bypass aktif — skip semua validasi di bawah
 }
-/* else if (!empty($_SESSION['user_jwt'])) {
+// ============================================================
+// DEV BYPASS: sesi sudah ditandai is_dev (berasal dari request
+// ?token_dev=... sebelumnya), pakai session JWT langsung tanpa perlu
+// query token_dev terus-menerus. Di production flag is_dev tidak pernah
+// ada sehingga blok ini tidak akan pernah dieksekusi.
+// ============================================================
+else if (!empty($_SESSION['is_dev']) && !empty($_SESSION['user_jwt'])) {
     $user_jwt = $_SESSION['user_jwt'];
     $user_id  = abs((int)($_SESSION['user_id'] ?? 1));
     $user_token     = $_SESSION['user_token'] ?? 'session_token';
@@ -30,11 +47,7 @@ if (isset($_GET['token_dev'])) {
     $new_detail     = !empty($_SESSION['new_detail']);
     $bukakios_version     = $_SESSION['bukakios_version'] ?? '1.0';
     $bukakios_version_int = (int)($_SESSION['bukakios_version_int'] ?? 10);
-    // ============================================================
-    // DEV BYPASS: tambahkan ?token_dev=<jwt_value> di URL untuk skip
-    // validasi session (misal: lupa-pin/?token_dev=eyJhbGciOi...)
-    // ============================================================
-} */
+}
 else {
     // require 'config.php';
     //untuk memverifikasi token user di sini

@@ -3,11 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once("../config.php");
-//$user_id = 39958;
-// require_once("../_session.php");
-// if ($user_id != 39958){
-//     exit;
-// }
+require_once("../_session.php");
 ob_start();
 $winner_utama = array(
     "287391",
@@ -152,8 +148,9 @@ if (!isset($_GET['e_id'])) {
     exit;
 }
 $e_id  = abs((int) $_GET['e_id']);
-if (file_exists("$e_id.html")) {
-    include("$e_id.html");
+if (is_file("$e_id.html")) {
+    header('Content-Type: text/html; charset=utf-8');
+    readfile("$e_id.html");
     exit;
 }
 
@@ -166,7 +163,7 @@ if (!isset($data_res['status'])) {
 }
 
 if ($data_res['status'] == 0) {
-    echo $data_res['error_msg'];
+    echo htmlspecialchars($data_res['error_msg'], ENT_QUOTES, 'UTF-8');
     exit;
 }
 
@@ -447,13 +444,13 @@ function rep_toko($toko)
             }
             if (isset($data_user_res['status'])) {
                 if ($data_user_res['status'] == 1) {
-                    $utama_ni .= '<tr><td><b>' . $data_user_res["data"]["nama"] . '</b>(' . $hp . ')</td>
+                    $utama_ni .= '<tr><td><b>' . htmlspecialchars($data_user_res["data"]["nama"], ENT_QUOTES, 'UTF-8') . '</b>(' . htmlspecialchars($hp, ENT_QUOTES, 'UTF-8') . ')</td>
                             <td>' . $hadiah . '</td>
                             <td>' . $no . '</td>
                         </tr>';
                 } else {
         ?>
-                    <div class="alert alert-danger deskripsi-title"><?php echo $data_user_res['error_msg'] ?></div>
+                    <div class="alert alert-danger deskripsi-title"><?php echo htmlspecialchars($data_user_res['error_msg'], ENT_QUOTES, 'UTF-8') ?></div>
                 <?php
                 }
             } else {
@@ -475,13 +472,13 @@ function rep_toko($toko)
             $hp = substr($data_user_res['data']['hp'], 0, -5) . 'xxx';
             if (isset($data_user_res['status'])) {
                 if ($data_user_res['status'] == 1) {
-                    $_100rb_winner .= '<tr><td><b>' . $data_user_res["data"]["nama"] . '</b>(' . $hp . ')</td>
+                    $_100rb_winner .= '<tr><td><b>' . htmlspecialchars($data_user_res["data"]["nama"], ENT_QUOTES, 'UTF-8') . '</b>(' . htmlspecialchars($hp, ENT_QUOTES, 'UTF-8') . ')</td>
                             <td>Rp100.000</td>
                             <td>' . $no . '</td>
                         </tr>';
                 } else {
                 ?>
-                    <div class="alert alert-danger deskripsi-title"><?php echo $data_user_res['error_msg'] ?></div>
+                    <div class="alert alert-danger deskripsi-title"><?php echo htmlspecialchars($data_user_res['error_msg'], ENT_QUOTES, 'UTF-8') ?></div>
                 <?php
                 }
             } else {
@@ -499,13 +496,13 @@ function rep_toko($toko)
             $hp = substr($data_user_res['data']['hp'], 0, -5) . 'xxx';
             if (isset($data_user_res['status'])) {
                 if ($data_user_res['status'] == 1) {
-                    $_50rb_winner .= '<tr><td><b>' . $data_user_res["data"]["nama"] . '</b>(' . $hp . ')</td>
+                    $_50rb_winner .= '<tr><td><b>' . htmlspecialchars($data_user_res["data"]["nama"], ENT_QUOTES, 'UTF-8') . '</b>(' . htmlspecialchars($hp, ENT_QUOTES, 'UTF-8') . ')</td>
                             <td>Rp50.000</td>
                             <td>' . $no . '</td>
                         </tr>';
                 } else {
                 ?>
-                    <div class="alert alert-danger deskripsi-title"><?php echo $data_user_res['error_msg'] ?></div>
+                    <div class="alert alert-danger deskripsi-title"><?php echo htmlspecialchars($data_user_res['error_msg'], ENT_QUOTES, 'UTF-8') ?></div>
                 <?php
                 }
             } else {
@@ -523,13 +520,13 @@ function rep_toko($toko)
             $hp = substr($data_user_res['data']['hp'], 0, -5) . 'xxx';
             if (isset($data_user_res['status'])) {
                 if ($data_user_res['status'] == 1) {
-                    $_20rb_winner .= '<tr><td><b>' . $data_user_res["data"]["nama"] . '</b>(' . $hp . ')</td>
+                    $_20rb_winner .= '<tr><td><b>' . htmlspecialchars($data_user_res["data"]["nama"], ENT_QUOTES, 'UTF-8') . '</b>(' . htmlspecialchars($hp, ENT_QUOTES, 'UTF-8') . ')</td>
                             <td>Rp20.000</td>
                             <td>' . $no . '</td>
                         </tr>';
                 } else {
                 ?>
-                    <div class="alert alert-danger deskripsi-title"><?php echo $data_user_res['error_msg'] ?></div>
+                    <div class="alert alert-danger deskripsi-title"><?php echo htmlspecialchars($data_user_res['error_msg'], ENT_QUOTES, 'UTF-8') ?></div>
                 <?php
                 }
             } else {
@@ -541,7 +538,7 @@ function rep_toko($toko)
         }
 
 
-        $winner = html_entity_decode($data_res['data']['e_pemenang']);
+        $winner = $data_res['data']['e_pemenang'];
         $winner = str_replace('{{utama}}', $utama_ni, $winner);
         $winner = str_replace('{{100rb}}', $_100rb_winner, $winner);
         $winner = str_replace('{{50rb}}', $_50rb_winner, $winner);

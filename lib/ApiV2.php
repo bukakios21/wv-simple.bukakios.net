@@ -319,4 +319,15 @@ class ApiV2
         return $this->curl_post_url($url, $body);
     }
 
+    // redem_voucher: POST /voucher/redem (WV route, JWT + Api-Key).
+    // Migrasi dari MS0 v1/proses_voucher.php. Kode dikirim plaintext; uid
+    // diambil BE dari JWT. Response: {status, message} / {status, error_msg}.
+    function redem_voucher($kode){
+        $body = array(
+            "kode" => $kode
+        );
+        $url =  $this->api_url_wv."/voucher/redem";
+        return $this->curl_post_url($url, $body);
+    }
+
 }
