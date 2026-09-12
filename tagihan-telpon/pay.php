@@ -630,7 +630,7 @@ $csrf_token = $app->csrf();
 
     // CEK
     function doCek() {
-      var id_pelanggan = document.getElementById('nope').value.replace(/[^0-9]/g, '');
+      var id_pelanggan = document.getElementById('nope').value.trim();
       if (!id_pelanggan) {
         showToastError('Nomor telepon tidak boleh kosong');
         document.getElementById('nope').focus();

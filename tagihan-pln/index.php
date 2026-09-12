@@ -875,7 +875,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
 
     // CEK
     function doCek() {
-      var id_pelanggan = document.getElementById('nope').value.replace(/[^0-9]/g, '');
+      var id_pelanggan = document.getElementById('nope').value.trim();
       if (!id_pelanggan) {
         showToastError('Nomor pelanggan tidak boleh kosong');
         document.getElementById('nope').focus();
@@ -1285,7 +1285,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       document.getElementById('favFormId').value = isEdit ? data.id : '';
       document.getElementById('favFormNama').value = isEdit ? data.nama : '';
       // Prefill nomor: dari data (edit) atau dari input utama (tambah cepat)
-      var hpVal = isEdit ? data.hp : (document.getElementById('nope').value.replace(/[^0-9]/g, ''));
+      var hpVal = isEdit ? data.hp : (document.getElementById('nope').value.trim());
       document.getElementById('favFormHp').value = hpVal || '';
       document.getElementById('favFormDelete').classList.toggle('hidden', !isEdit);
       var m = document.getElementById('favFormModal');

@@ -452,4 +452,99 @@ class ApiV2
     }
     /************ NOMOR PELANGGAN / KONTAK FAVORIT ************/
 
+    /************ QRIS (migrasi dari wv2.bukakios.net) ************/
+    // Semua route di grup WV /qris (JWT). uid diambil BE dari JWT.
+    // Response mengikuti bentuk standar apiv2:
+    //  - list/detail : {status:1, data, message, rc, ts} / {status:0, rc, error_msg}
+    //  - insert/cancel: {status:1, rc, message} (tanpa data)
+
+    // qris_detail_user: GET /qris/user/detail. Detail akun QRIS user (saldo,
+    // merchant, nmid, status verif, url_qris, admin_pencairan, dll).
+    // Response: {status, data:{...UsersQris}} / {status, error_msg}.
+    function qris_detail_user()
+    {
+        $url = $this->api_url_wv . "/qris/user/detail";
+        return $this->curl_get_url($url);
+    }
+
+    // qris_riwayat_transaksi: POST /qris/riwayat/transaksi. Riwayat transaksi
+    // QRIS masuk. Paginasi cursor last_id. status WAJIB (1=saldo real, 0=hold).
+    // Response: {status, data:{last_id, riwayat_trx:[...]}} / {status, error_msg}.
+    function qris_riwayat_transaksi($body)
+    {
+        $url = $this->api_url_wv . "/qris/riwayat/transaksi";
+        return $this->curl_post_url($url, $body);
+    }
+
+    // qris_mutasi: POST /qris/mutasi. Mutasi saldo (tipe "real" atau selain itu
+    // = kliring). Paginasi cursor last_id.
+    // Response: {status, data:{data:[...], last_id}} / {status, error_msg}.
+    function qris_mutasi($body)
+    {
+        $url = $this->api_url_wv . "/qris/mutasi";
+        return $this->curl_post_url($url, $body);
+    }
+
+    // qris_payment_list: GET /qris/payment/list. Daftar metode payment QRIS
+    // (Saldo Bukakios + bank). Berisi min, max, biaya_admin, biaya_persen, dll.
+    // Response: {status, data:[...PaymentMethodQris]} / {status, error_msg}.
+    function qris_payment_list()
+    {
+        $url = $this->api_url_wv . "/qris/payment/list";
+        return $this->curl_get_url($url);
+    }
+
+    // qris_rekening_list: GET /qris/rekening/list. Daftar rekening bank user
+    // untuk pencairan (nested rekening_qris + payment_method).
+    // Response: {status, data:[...]} / {status, error_msg}.
+    function qris_rekening_list()
+    {
+        $url = $this->api_url_wv . "/qris/rekening/list";
+        return $this->curl_get_url($url);
+    }
+
+    // qris_pencairan_v2: POST /qris/pencairan-v2. Proses penarikan dana QRIS.
+    // Body: {total, rekening_id} (rekening_id=0 = ke stok Bukakios).
+    // Response: {status, data:{id}} / {status, error_msg}.
+    function qris_pencairan_v2($total, $rekening_id = 0)
+    {
+        $body = array(
+            "total"       => (int)$total,
+            "rekening_id" => (int)$rekening_id,
+        );
+        $url = $this->api_url_wv . "/qris/pencairan-v2";
+        return $this->curl_post_url($url, $body);
+    }
+
+    // qris_pencairan_list: POST /qris/pencairan/list. Riwayat penarikan dana.
+    // Paginasi cursor last_id. Catatan: BE membalas key "LastId" (bukan snake).
+    // Response: {status, data:{data:[...], LastId}} / {status, error_msg}.
+    function qris_pencairan_list($payment_method_id = 0, $limit = 30, $last_id = 0)
+    {
+        $body = array(
+            "payment_method_id" => (int)$payment_method_id,
+            "limit"             => (int)$limit,
+            "last_id"           => (int)$last_id,
+        );
+        $url = $this->api_url_wv . "/qris/pencairan/list";
+        return $this->curl_post_url($url, $body);
+    }
+
+    // qris_pencairan_detail: GET /qris/pencairan/detail/:id. Detail 1 penarikan.
+    // Response: {status, data:{...PencarianQrisDetail}} / {status, error_msg}.
+    function qris_pencairan_detail($id)
+    {
+        $url = $this->api_url_wv . "/qris/pencairan/detail/" . (int)$id;
+        return $this->curl_get_url($url);
+    }
+
+    // qris_pencairan_cancel: GET /qris/pencairan/cancel/:id. Batalkan penarikan.
+    // Response: {status:1, message} / error.
+    function qris_pencairan_cancel($id)
+    {
+        $url = $this->api_url_wv . "/qris/pencairan/cancel/" . (int)$id;
+        return $this->curl_get_url($url);
+    }
+    /************ QRIS ************/
+
 }
