@@ -27,6 +27,10 @@ if (isset($_GET['id'])) {
     $topup_metode_kategori = $detail_topup['topup_metode_kategori'];
     $nama_kategori = $detail_topup['nama_kategori'];
     $metode_id = $detail_topup['metode_id'];
+    // metode_id 29 = Klaim Komisi Referral. Topup ini di-approve manual oleh
+    // admin (bukan pembayaran user), jadi: JANGAN load info payment (Tokopay/
+    // rekening) dan JANGAN tampilkan tombol Batalkan Topup.
+    $is_klaim_komisi = ((int) $metode_id === 29);
     $uid = $detail_topup['uid'];
     $nama_metode = $detail_topup['nama_metode'];
     $topup_metode = $detail_topup['topup_metode'];
@@ -54,9 +58,11 @@ if (isset($_GET['id'])) {
         //   sehingga FE tidak perlu render DB nomor_rekening manual lagi (konsisten).
         // - selainnya (qris/va/ewallet): return QR / VA / link dari Tokopay.
         // Response shape: { topup_id, tipe, nilai, cara_bayar, expired_at }
+        // Klaim komisi (metode 29): skip fetch payment sepenuhnya. Approval
+        // manual admin, tidak ada instruksi bayar yang perlu ditampilkan.
         $payment_info = null;
         $payment_error = null;
-        if ((int)$status === 0) {
+        if ((int)$status === 0 && !$is_klaim_komisi) {
             $resPay = $api_v2->topup_payment($topup_id);
             //var_dump($resPay); //ini jangan dihapusm
             $resPayJson = json_decode($resPay, true);
@@ -655,6 +661,8 @@ if (isset($_GET['id'])) {
                         <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[13px] font-bold text-emerald-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Topup Berhasil</span>
                     <?php } elseif ($status == 2) { ?>
                         <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[13px] font-bold text-rose-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Topup Dibatalkan</span>
+                    <?php } elseif ($is_klaim_komisi) { ?>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[13px] font-bold text-amber-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Menunggu Approval</span>
                     <?php } else { ?>
                         <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[13px] font-bold text-amber-600"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Menunggu Pembayaran</span>
                         <span id="countdown" class="font-mono text-[14px] font-bold tabular-nums text-amber-600">--:--:--</span>
@@ -665,7 +673,7 @@ if (isset($_GET['id'])) {
             <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[14px]">
                 <div class="mb-3 flex items-center gap-3">
                     <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.2" fill="currentColor"/></svg></div>
-                    <div><h3 class="m-0 text-[15px] font-bold leading-tight text-slate-900">Rincian Nominal</h3><p class="m-0 mt-0.5 text-[13px] font-medium text-slate-500">Pastikan bayar sesuai total transfer</p></div>
+                    <div><h3 class="m-0 text-[15px] font-bold leading-tight text-slate-900">Rincian Nominal</h3><p class="m-0 mt-0.5 text-[13px] font-medium text-slate-500"><?= $is_klaim_komisi ? 'Nominal komisi yang akan diterima' : 'Pastikan bayar sesuai total transfer' ?></p></div>
                 </div>
                 <div class="flex items-center justify-between py-1.5 border-b border-slate-100 mb-1">
                     <span class="text-slate-500">Topup ID</span>
@@ -690,7 +698,7 @@ if (isset($_GET['id'])) {
                     <div class="flex justify-between py-1"><span class="text-slate-500">Biaya Admin</span><span class="font-medium text-slate-900"><?= $app->idr($fee) ?></span></div>
                 <?php } ?>
                 <div class="mt-2 flex items-center justify-between border-t border-slate-200 pt-2.5">
-                    <span class="font-semibold text-slate-700">Total Transfer</span>
+                    <span class="font-semibold text-slate-700"><?= $is_klaim_komisi ? 'Total Diterima' : 'Total Transfer' ?></span>
                     <button id="nominal_transfer" onclick="copyToClipboard('nominal_transfer')" data-text="Jumlah Transfer Berhasil Di Salin" data-copy="<?= ($metode_id == 40) ? $app->idr($nominal_topup + $fee) : $total_transfer ?>" type="button" class="text-right text-[16px] font-bold text-brand active:scale-95"><?php if ($metode_id == 40) { echo $app->idr($nominal_topup + $fee); } else { echo $total_transfer_rp; } ?></button>
                 </div>
             </div>
@@ -702,7 +710,15 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="min-w-0 flex-1"><h3 class="m-0 truncate text-[15px] font-bold leading-tight text-slate-900"><?= $nama_metode ?></h3><p class="m-0 mt-0.5 truncate text-[12px] capitalize text-slate-400"><?= $nama_kategori ?></p></div>
                 </div>
-                <?php if (!empty($payment_error)) { ?>
+                <?php if ($is_klaim_komisi) { ?>
+                    <div class="flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3">
+                        <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0 text-amber-500" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        <div class="min-w-0">
+                            <p class="m-0 text-[13px] font-bold text-amber-700">Menunggu persetujuan admin</p>
+                            <p class="m-0 mt-0.5 break-words text-[13px] text-amber-600">Penarikan komisi kamu sedang diproses dan akan di-approve manual oleh admin. Mohon menunggu.</p>
+                        </div>
+                    </div>
+                <?php } elseif (!empty($payment_error)) { ?>
                     <div class="flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3">
                         <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0 text-rose-500" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
                         <div class="min-w-0">
@@ -790,7 +806,7 @@ if (isset($_GET['id'])) {
                 </div>
             <?php } ?>
 
-            <?php if ($status == 0) { ?>
+            <?php if ($status == 0 && !$is_klaim_komisi) { ?>
                 <button type="button" id="btn-cancel-topup" data-id="<?= $topup_id ?>" data-csrf="<?= htmlspecialchars($_SESSION['csrf'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[14px] font-bold text-rose-700 transition active:scale-[0.99] disabled:opacity-60">
                     <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
                     <span class="btn-cancel-label">Batalkan Topup</span>
@@ -1056,7 +1072,7 @@ if (isset($_GET['id'])) {
 
         // Let's go !
         <?php
-        if ($status == 0) { ?>
+        if ($status == 0 && !$is_klaim_komisi) { ?>
             console.log(<?= $status ?>)
             Countdown.init();
         <?php

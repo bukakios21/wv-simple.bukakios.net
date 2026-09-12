@@ -252,6 +252,38 @@ class ApiV2
         return $this->grab_data_url($url);
     }
 
+    // get_komisi: GET /user/komisi. Total komisi (my_komisi) milik user.
+    // Response: {status, data:{komisi}} / {status, error_msg}.
+    function get_komisi(){
+        $url = $this->api_url_wv . "/user/komisi";
+        return $this->grab_data_url($url);
+    }
+
+    // list_downline_user: POST /downline-user/list. Daftar referral/downline
+    // milik user. Paginasi cursor: kirim last_id (0 untuk halaman pertama),
+    // BE balikin data + last_id (id terkecil batch) untuk request berikutnya.
+    // Response: {status, data:{data:[...], last_id}} / {status, error_msg}.
+    function list_downline_user($limit = 30, $last_id = 0){
+        $body = array(
+            "limit"   => (int)$limit,
+            "last_id" => (int)$last_id,
+        );
+        $url = $this->api_url_wv . "/downline-user/list";
+        return $this->curl_post_url($url, $body);
+    }
+
+    // list_downline_komisi: POST /downline-user/komisi. Riwayat komisi dari
+    // transaksi referral. Paginasi cursor sama seperti list_downline_user.
+    // Response: {status, data:{data:[...], last_id}} / {status, error_msg}.
+    function list_downline_komisi($limit = 30, $last_id = 0){
+        $body = array(
+            "limit"   => (int)$limit,
+            "last_id" => (int)$last_id,
+        );
+        $url = $this->api_url_wv . "/downline-user/komisi";
+        return $this->curl_post_url($url, $body);
+    }
+
     function update_price_sell($data){
         $url =  $this->api_url_wv."/update-price-sell";
         return $this->curl_post_url($url, $data);
