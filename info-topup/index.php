@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
     $topup_metode_kategori = $detail_topup['topup_metode_kategori'];
     $nama_kategori = $detail_topup['nama_kategori'];
     $metode_id = $detail_topup['metode_id'];
-    // metode_id 29 = Klaim Komisi Referral. Topup ini di-approve manual oleh
+    // metode_id 29 = Klaim Komisi Referral. Topup ini di-approve manual oleh,
     // admin (bukan pembayaran user), jadi: JANGAN load info payment (Tokopay/
     // rekening) dan JANGAN tampilkan tombol Batalkan Topup.
     $is_klaim_komisi = ((int) $metode_id === 29);
