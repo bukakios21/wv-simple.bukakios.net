@@ -127,6 +127,41 @@ class ApiV2
         return $this->grab_data_url($url);
     }
 
+    // curl_request_url: wrapper generik untuk method non-POST (PUT/DELETE) ke WV
+    // API. Header/signature identik dengan curl_post_url. Body dikirim sebagai
+    // JSON di request body (termasuk untuk DELETE, sesuai kebutuhan controller
+    // NomorPelanggan di apiv2).
+    function curl_request_url($method, $url, $body)
+    {
+        $token = $this->gen_token_expired();
+        $bodyJson = json_encode($body);
+        $api_key = $this->api_key;
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => strtoupper($method),
+            CURLOPT_POSTFIELDS => $bodyJson,
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                "Signature: " . $token,
+                "Token: $token",
+                "Api-Key: $api_key",
+                "Authorization: " . $this->jwt,
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
+    }
+
     private function grab_data_url($url)
     {
         $api_key = $this->api_key;
@@ -329,5 +364,60 @@ class ApiV2
         $url =  $this->api_url_wv."/voucher/redem";
         return $this->curl_post_url($url, $body);
     }
+
+    /************ NOMOR PELANGGAN / KONTAK FAVORIT ************/
+    // Reuse controller co_public.NomorPelanggan di apiv2 via group WV.
+    // uid diambil BE dari JWT. Semua response: {status, ...} / {status, error_msg}.
+
+    // list_nomor_pelanggan: POST /nomor/pelanggan/list. Ambil daftar kontak
+    // favorit milik user (paginasi last_id + pencarian). Struktur data list
+    // ada di response.data.data.data (lihat handler apiv2).
+    function list_nomor_pelanggan($cari = '', $limit = 300, $last_id = 0)
+    {
+        $body = array(
+            "cari"    => (string)$cari,
+            "limit"   => (int)$limit,
+            "last_id" => (int)$last_id,
+        );
+        $url = $this->api_url_wv . "/nomor/pelanggan/list";
+        return $this->curl_post_url($url, $body);
+    }
+
+    // simpan_nomor_pelanggan: POST /nomor/pelanggan (act=add).
+    function simpan_nomor_pelanggan($nama, $hp)
+    {
+        $body = array(
+            "act"  => "add",
+            "nama" => $nama,
+            "hp"   => $hp,
+        );
+        $url = $this->api_url_wv . "/nomor/pelanggan";
+        return $this->curl_post_url($url, $body);
+    }
+
+    // update_nomor_pelanggan: PUT /nomor/pelanggan (act=update).
+    function update_nomor_pelanggan($id, $nama, $hp)
+    {
+        $body = array(
+            "act"  => "update",
+            "id"   => (int)$id,
+            "nama" => $nama,
+            "hp"   => $hp,
+        );
+        $url = $this->api_url_wv . "/nomor/pelanggan";
+        return $this->curl_request_url("PUT", $url, $body);
+    }
+
+    // hapus_nomor_pelanggan: DELETE /nomor/pelanggan (act=delete).
+    function hapus_nomor_pelanggan($hp)
+    {
+        $body = array(
+            "act" => "delete",
+            "hp"  => $hp,
+        );
+        $url = $this->api_url_wv . "/nomor/pelanggan";
+        return $this->curl_request_url("DELETE", $url, $body);
+    }
+    /************ NOMOR PELANGGAN / KONTAK FAVORIT ************/
 
 }
