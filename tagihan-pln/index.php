@@ -270,7 +270,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
       </svg>
-      <p class="text-[14px] font-extrabold text-slate-700" id="loadingText">Memproses…</p>
+      <p class="text-[15px] font-extrabold text-slate-700" id="loadingText">Memproses…</p>
     </div>
   </div>
 
@@ -278,7 +278,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
   <div id="toastError" class="fixed top-4 left-1/2 z-[9998] hidden -translate-x-1/2 max-w-[90vw] w-full px-4">
     <div class="flex items-start gap-3 rounded-xl bg-red-600 px-4 py-3 shadow-lg text-white">
       <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      <p id="toastErrorMsg" class="text-[14px] font-semibold leading-5"></p>
+      <p id="toastErrorMsg" class="text-[15px] font-semibold leading-5"></p>
     </div>
   </div>
 
@@ -286,7 +286,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
   <div id="customModal" class="fixed inset-0 z-[10010] hidden items-center justify-center bg-black/50 backdrop-blur-[2px] px-4">
     <div class="w-[92vw] max-w-[400px] rounded-3xl bg-white px-7 py-7 shadow-2xl ring-1 ring-slate-900/5">
       <div id="customModalBody"></div>
-      <button id="customModalBtn" type="button" class="mt-6 w-full rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white text-[16px] font-bold py-3.5 px-5 transition">
+      <button id="customModalBtn" type="button" class="mt-6 w-full rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white text-[17px] font-bold py-3.5 px-5 transition">
         Tutup
       </button>
     </div>
@@ -323,8 +323,8 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     <section class="px-4 pb-4">
       <div class="rounded-[16px] border border-slate-200 bg-white shadow-soft overflow-hidden">
         <div class="px-5 pt-5 pb-4" id="inputSection">
-          <label class="text-[14px] font-semibold text-slate-700">Nomor Pelanggan</label>
-          <div class="mt-2 flex gap-2">
+          <label class="text-[15px] font-semibold text-slate-700">Nomor Pelanggan</label>
+          <div class="mt-2 flex items-stretch gap-2">
             <div class="relative flex-1">
               <input
                 type="tel"
@@ -340,21 +340,21 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
                 <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
               </button>
             </div>
-            <button type="button" onclick="showInfo()" class="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 transition hover:bg-slate-100">
+            <button type="button" onclick="showInfo()" class="grid w-[50px] shrink-0 place-items-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 transition hover:bg-slate-100">
               <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
             </button>
           </div>
           <input type="hidden" id="csrf" value="<?= $app->csrf(); ?>" />
-          <p class="text-[13px] text-mutedText mt-2">Masukkan nomor pelanggan PLN (11–12 digit)</p>
+          <p class="text-[14px] text-mutedText mt-2">Masukkan nomor pelanggan PLN (11–12 digit)</p>
 
           <!-- Favorit trigger -->
           <div class="mt-3 flex items-center gap-2">
-            <button id="btnFav" type="button" onclick="openFavList()" class="inline-flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2 text-[13px] font-semibold text-amber-700 transition hover:bg-amber-100 active:scale-[0.98] disabled:opacity-60 disabled:cursor-wait">
+            <button id="btnFav" type="button" onclick="openFavList()" class="inline-flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2 text-[14px] font-semibold text-amber-700 transition hover:bg-amber-100 active:scale-[0.98] disabled:opacity-60 disabled:cursor-wait">
               <svg id="btnFavStar" viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
               <svg id="btnFavSpin" viewBox="0 0 24 24" class="hidden h-4 w-4 animate-spin" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
               <span id="btnFavLabel">Favorit</span>
             </button>
-            <button type="button" onclick="openFavForm()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-[13px] font-semibold text-slate-600 transition hover:bg-slate-50 active:scale-[0.98]">
+            <button type="button" onclick="openFavForm()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-[14px] font-semibold text-slate-600 transition hover:bg-slate-50 active:scale-[0.98]">
               <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
               Simpan Nomor
             </button>
@@ -368,7 +368,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
               <svg class="h-4 w-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-[13px] text-emerald-700 leading-snug">
+              <p class="text-[14px] text-emerald-700 leading-snug">
                 Bayar tagihan PLN di bukakios, kamu otomatis mendapatkan keuntungan dari biaya admin.
               </p>
             </div>
@@ -377,7 +377,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
             <div class="shrink-0 mt-0.5">
               <svg class="h-4 w-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-            <p class="text-[13px] text-amber-700 leading-snug">
+            <p class="text-[14px] text-amber-700 leading-snug">
               Tagihan PLN pascabayar jatuh tempo tanggal 20 setiap bulannya. Pastikan bayar sebelum tanggal tersebut agar tidak terkena denda.
             </p>
           </div>
@@ -389,7 +389,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     <div id="errorMsg" class="hidden mx-4 mb-3 rounded-xl bg-red-50 border border-red-100 px-4 py-3">
       <div class="flex items-start gap-3">
         <svg class="h-4 w-4 text-red-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        <p id="errorText" class="text-[14px] text-red-600 font-medium leading-snug"></p>
+        <p id="errorText" class="text-[15px] text-red-600 font-medium leading-snug"></p>
       </div>
     </div>
 
@@ -399,54 +399,54 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
 
         <!-- Header -->
         <div class="px-5 py-4 bg-brand text-white">
-          <h2 class="text-[15px] font-bold">Detail Tagihan</h2>
+          <h2 class="text-[16px] font-bold">Detail Tagihan</h2>
         </div>
 
         <!-- Billing rows -->
         <div class="divide-y divide-slate-100">
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Total Tagihan</span>
-            <span class="text-[16px] font-extrabold text-brand" id="tot_ta">-</span>
+            <span class="text-[15px] text-slate-600">Total Tagihan</span>
+            <span class="text-[17px] font-extrabold text-brand" id="tot_ta">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Nama Pelanggan</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="nama">-</span>
+            <span class="text-[15px] text-slate-600">Nama Pelanggan</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="nama">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Tarif / Daya</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="tarif_daya">-</span>
+            <span class="text-[15px] text-slate-600">Tarif / Daya</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="tarif_daya">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Lembar Tagihan</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="lembar_tagihan">-</span>
+            <span class="text-[15px] text-slate-600">Lembar Tagihan</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="lembar_tagihan">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Periode</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="periode">-</span>
+            <span class="text-[15px] text-slate-600">Periode</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="periode">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Jumlah Meter</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="jml_meter">-</span>
+            <span class="text-[15px] text-slate-600">Jumlah Meter</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="jml_meter">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Tagihan</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="tagihan">-</span>
+            <span class="text-[15px] text-slate-600">Tagihan</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="tagihan">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Biaya Admin</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="biaya">-</span>
+            <span class="text-[15px] text-slate-600">Biaya Admin</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="biaya">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Diskon Biaya Admin</span>
-            <span class="text-[14px] font-semibold text-emerald-600" id="potongan">-</span>
+            <span class="text-[15px] text-slate-600">Diskon Biaya Admin</span>
+            <span class="text-[15px] font-semibold text-emerald-600" id="potongan">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Denda</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="denda">-</span>
+            <span class="text-[15px] text-slate-600">Denda</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="denda">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3 bg-slate-50">
-            <span class="text-[15px] font-bold text-slate-800">Total Bayar</span>
-            <span class="text-[18px] font-extrabold text-brand" id="tot_ka">-</span>
+            <span class="text-[16px] font-bold text-slate-800">Total Bayar</span>
+            <span class="text-[19px] font-extrabold text-brand" id="tot_ka">-</span>
           </div>
         </div>
       </div>
@@ -454,35 +454,35 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       <!-- Profit detail -->
       <div class="mt-3 rounded-[20px] border border-slate-200 bg-white shadow-soft overflow-hidden">
         <div class="px-5 py-4 bg-slate-800 text-white">
-          <h2 class="text-[15px] font-bold">Detail Keuntungan</h2>
+          <h2 class="text-[16px] font-bold">Detail Keuntungan</h2>
         </div>
         <div class="divide-y divide-slate-100">
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Pelanggan Kamu Bayar</span>
-            <span class="text-[14px] font-semibold text-slate-800" id="tot_ta2">-</span>
+            <span class="text-[15px] text-slate-600">Pelanggan Kamu Bayar</span>
+            <span class="text-[15px] font-semibold text-slate-800" id="tot_ta2">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
-            <span class="text-[14px] text-slate-600">Saldo Kamu Berkurang</span>
-            <span class="text-[14px] font-semibold text-red-500" id="tot_ka2">-</span>
+            <span class="text-[15px] text-slate-600">Saldo Kamu Berkurang</span>
+            <span class="text-[15px] font-semibold text-red-500" id="tot_ka2">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3 bg-emerald-50/50">
-            <span class="text-[15px] font-bold text-emerald-700">Profit Kamu</span>
-            <span class="text-[18px] font-extrabold text-emerald-600" id="profit">-</span>
+            <span class="text-[16px] font-bold text-emerald-700">Profit Kamu</span>
+            <span class="text-[19px] font-extrabold text-emerald-600" id="profit">-</span>
           </div>
         </div>
       </div>
 
       <!-- Biaya layanan -->
       <div class="mt-3 rounded-[20px] border border-slate-200 bg-white shadow-soft px-5 py-4">
-        <h3 class="text-[14px] font-bold text-slate-700 mb-1">Buat Biaya Layanan Toko/Kios</h3>
+        <h3 class="text-[15px] font-bold text-slate-700 mb-1">Buat Biaya Layanan Toko/Kios</h3>
         <input
           type="number"
           id="biaya_profit"
-          class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[15px] text-slate-800 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
+          class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[16px] text-slate-800 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
           value="0"
           min="0"
         />
-        <p class="text-[12px] text-mutedText mt-1.5">* Akan muncul di struk transaksi</p>
+        <p class="text-[13px] text-mutedText mt-1.5">* Akan muncul di struk transaksi</p>
       </div>
     </section>
 
@@ -490,15 +490,15 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
 
   <!-- Fixed footer -->
   <footer class="fixed bottom-0 left-0 right-0 z-10 bg-white border-t border-slate-200 shadow-soft px-4 py-3">
-    <button id="btnCek" onclick="doCek()" class="w-full rounded-2xl bg-brand py-3.5 text-[16px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
+    <button id="btnCek" onclick="doCek()" class="w-full rounded-2xl bg-brand py-3.5 text-[17px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
       Cek Tagihan
     </button>
 
     <div id="btnActionGroup" class="hidden grid grid-cols-2 gap-3">
-      <button id="btnBatal" onclick="doBatal()" class="rounded-2xl border border-slate-200 bg-white py-3.5 text-[15px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
+      <button id="btnBatal" onclick="doBatal()" class="rounded-2xl border border-slate-200 bg-white py-3.5 text-[16px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
         Batal
       </button>
-      <button id="btnBayar" onclick="doBayar()" class="rounded-2xl bg-emerald-500 py-3.5 text-[15px] font-bold text-white shadow-cta transition hover:bg-emerald-600 active:scale-[0.99]">
+      <button id="btnBayar" onclick="doBayar()" class="rounded-2xl bg-emerald-500 py-3.5 text-[16px] font-bold text-white shadow-cta transition hover:bg-emerald-600 active:scale-[0.99]">
         Bayar Sekarang
       </button>
     </div>
@@ -509,7 +509,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
         </svg>
-        <span class="text-[15px] font-semibold text-slate-600">Memproses transaksi…</span>
+        <span class="text-[16px] font-semibold text-slate-600">Memproses transaksi…</span>
       </div>
     </div>
   </footer>
@@ -523,7 +523,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       </div>
       <!-- Header -->
       <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
-        <h2 class="text-[16px] font-bold text-slate-900">Nomor Favorit</h2>
+        <h2 class="text-[17px] font-bold text-slate-900">Nomor Favorit</h2>
         <button type="button" onclick="closeFavList()" class="grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
           <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
@@ -542,7 +542,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       </div>
       <!-- Footer -->
       <div class="px-5 py-4 border-t border-slate-100">
-        <button type="button" onclick="openFavForm()" class="w-full rounded-xl bg-brand py-3 text-[15px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
+        <button type="button" onclick="openFavForm()" class="w-full rounded-xl bg-brand py-3 text-[16px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
           + Tambah Favorit Baru
         </button>
       </div>
@@ -553,23 +553,23 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
   <div id="favFormModal" class="fixed inset-0 z-[10002] hidden items-center justify-center bg-black/50 backdrop-blur-[2px] px-4" onclick="onFavFormBackdrop(event)">
     <div class="form-panel w-[92vw] max-w-[400px] rounded-3xl bg-white px-6 py-6 shadow-2xl">
       <div class="flex items-center justify-between mb-4">
-        <h2 id="favFormTitle" class="text-[17px] font-bold text-slate-900">Tambah Favorit</h2>
+        <h2 id="favFormTitle" class="text-[18px] font-bold text-slate-900">Tambah Favorit</h2>
         <button type="button" onclick="closeFavForm()" class="grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
           <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
       <input type="hidden" id="favFormId" value="" />
-      <label class="text-[13px] font-semibold text-slate-600">Nama</label>
+      <label class="text-[14px] font-semibold text-slate-600">Nama</label>
       <input id="favFormNama" type="text" autocomplete="off" placeholder="Contoh: Rumah, Toko, Ibu"
         class="mt-1.5 mb-3 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[15px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition" />
-      <label class="text-[13px] font-semibold text-slate-600">Nomor Pelanggan</label>
+      <label class="text-[14px] font-semibold text-slate-600">Nomor Pelanggan</label>
       <input id="favFormHp" type="tel" inputmode="numeric" autocomplete="off" placeholder="Masukkan nomor"
         class="mt-1.5 mb-5 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[15px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition" />
       <div class="flex gap-2">
-        <button id="favFormDelete" type="button" onclick="submitFavDelete()" class="hidden flex-1 rounded-xl border border-red-200 bg-red-50 py-3 text-[15px] font-bold text-red-600 transition hover:bg-red-100 active:scale-[0.99]">
+        <button id="favFormDelete" type="button" onclick="submitFavDelete()" class="hidden flex-1 rounded-xl border border-red-200 bg-red-50 py-3 text-[16px] font-bold text-red-600 transition hover:bg-red-100 active:scale-[0.99]">
           Hapus
         </button>
-        <button type="button" onclick="submitFavForm()" class="flex-1 rounded-xl bg-brand py-3 text-[15px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
+        <button type="button" onclick="submitFavForm()" class="flex-1 rounded-xl bg-brand py-3 text-[16px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
           Simpan
         </button>
       </div>
@@ -583,14 +583,14 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
         <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 ring-8 ring-red-50/60 bg-red-50">
           <svg viewBox="0 0 24 24" class="h-8 w-8 text-red-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>
         </div>
-        <h2 class="text-[18px] font-extrabold text-slate-900 mb-1.5">Hapus Favorit?</h2>
-        <p class="text-[13.5px] text-slate-500 leading-relaxed mb-5 px-2">Nomor <span id="favConfirmName" class="font-semibold text-slate-700"></span> akan dihapus dari daftar favorit.</p>
+        <h2 class="text-[19px] font-extrabold text-slate-900 mb-1.5">Hapus Favorit?</h2>
+        <p class="text-[14.5px] text-slate-500 leading-relaxed mb-5 px-2">Nomor <span id="favConfirmName" class="font-semibold text-slate-700"></span> akan dihapus dari daftar favorit.</p>
       </div>
       <div class="flex gap-2">
-        <button type="button" onclick="closeFavConfirm()" class="flex-1 rounded-xl border border-slate-200 bg-white py-3 text-[15px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
+        <button type="button" onclick="closeFavConfirm()" class="flex-1 rounded-xl border border-slate-200 bg-white py-3 text-[16px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
           Batal
         </button>
-        <button type="button" onclick="confirmFavDelete()" class="flex-1 rounded-xl bg-red-500 py-3 text-[15px] font-bold text-white shadow-cta transition hover:bg-red-600 active:scale-[0.99]">
+        <button type="button" onclick="confirmFavDelete()" class="flex-1 rounded-xl bg-red-500 py-3 text-[16px] font-bold text-white shadow-cta transition hover:bg-red-600 active:scale-[0.99]">
           Hapus
         </button>
       </div>
@@ -791,8 +791,8 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
         inner =
           '<div class="flex flex-col items-center text-center">' +
             '<div class="w-20 h-20 rounded-full flex items-center justify-center mb-5 ring-8 ' + iconRing + ' ' + iconAnimClass + '">' + iconHtml + '</div>' +
-            '<h2 class="modal-title text-[21px] font-extrabold leading-tight text-slate-900 mb-2">' + titleText + '</h2>' +
-            '<p class="modal-subtitle text-[13.5px] text-slate-600 leading-relaxed max-w-[300px] mx-auto font-medium px-2">' + messageText + '</p>' +
+            '<h2 class="modal-title text-[22px] font-extrabold leading-tight text-slate-900 mb-2">' + titleText + '</h2>' +
+            '<p class="modal-subtitle text-[14.5px] text-slate-600 leading-relaxed max-w-[300px] mx-auto font-medium px-2">' + messageText + '</p>' +
           '</div>';
       }
 
@@ -803,7 +803,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       bodyEl.innerHTML = inner;
       btnEl.textContent = btnText;
       // Reset & set button color class + animasi
-      btnEl.className = 'modal-btn mt-6 w-full rounded-xl text-white text-[16px] font-bold py-3.5 px-5 transition active:scale-[0.99] ' + btnColorClass;
+      btnEl.className = 'modal-btn mt-6 w-full rounded-xl text-white text-[17px] font-bold py-3.5 px-5 transition active:scale-[0.99] ' + btnColorClass;
 
       // Hapus listener lama, pasang yang baru (button + backdrop + escape)
       var newBtn = btnEl.cloneNode(true);
@@ -1030,13 +1030,13 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
                         '<path class="modal-check-path" d="M4 12.5 L10 18.5 L20 6.5"/>' +
                       '</svg>' +
                     '</div>' +
-                    '<h2 class="modal-title text-[21px] font-extrabold text-slate-900 mb-1.5 leading-tight">Pembayaran Berhasil</h2>' +
-                    '<p class="modal-subtitle text-[13.5px] text-slate-500 leading-relaxed mb-5 px-2">Transaksi sedang diproses. Silahkan periksa riwayat transaksi kamu.</p>' +
+                    '<h2 class="modal-title text-[22px] font-extrabold text-slate-900 mb-1.5 leading-tight">Pembayaran Berhasil</h2>' +
+                    '<p class="modal-subtitle text-[14.5px] text-slate-500 leading-relaxed mb-5 px-2">Transaksi sedang diproses. Silahkan periksa riwayat transaksi kamu.</p>' +
                     // Detail card - fade up
                     '<div class="modal-body w-full rounded-2xl bg-slate-50 border border-slate-100 p-4 text-left divide-y divide-slate-200/70">' +
-                      '<div class="flex justify-between items-center py-2.5 text-[14px]"><span class="text-slate-500">ID Transaksi</span><span class="font-bold text-slate-900 font-mono">' + trxId + '</span></div>' +
-                      '<div class="flex justify-between items-center py-2.5 text-[14px]"><span class="text-slate-500">Nama Pelanggan</span><span class="font-semibold text-slate-800 text-right ml-2 truncate max-w-[60%]">' + namaPelanggan + '</span></div>' +
-                      '<div class="flex justify-between items-center py-2.5 text-[14px]"><span class="text-slate-500">Saldo Kamu Berkurang</span><span class="font-extrabold text-red-500 text-[16px]">' + saldoBerkurang + '</span></div>' +
+                      '<div class="flex justify-between items-center py-2.5 text-[15px]"><span class="text-slate-500">ID Transaksi</span><span class="font-bold text-slate-900 font-mono">' + trxId + '</span></div>' +
+                      '<div class="flex justify-between items-center py-2.5 text-[15px]"><span class="text-slate-500">Nama Pelanggan</span><span class="font-semibold text-slate-800 text-right ml-2 truncate max-w-[60%]">' + namaPelanggan + '</span></div>' +
+                      '<div class="flex justify-between items-center py-2.5 text-[15px]"><span class="text-slate-500">Saldo Kamu Berkurang</span><span class="font-extrabold text-red-500 text-[17px]">' + saldoBerkurang + '</span></div>' +
                     '</div>' +
                   '</div>';
 
@@ -1058,7 +1058,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
             } catch(e) {
               console.error('[doBayar] parse error:', e);
               var rawResp = (xhr.responseText || '').substring(0, 500);
-              var debugInfo = '<div class="mt-4 w-full text-left"><details class="text-left"><summary class="text-[13px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-2 max-h-40 overflow-auto rounded-lg bg-slate-100 p-3 text-[12px] text-slate-700 whitespace-pre-wrap break-all">' +
+              var debugInfo = '<div class="mt-4 w-full text-left"><details class="text-left"><summary class="text-[14px] text-slate-400 cursor-pointer">Detail teknis</summary><pre class="mt-2 max-h-40 overflow-auto rounded-lg bg-slate-100 p-3 text-[13px] text-slate-700 whitespace-pre-wrap break-all">' +
                 'Parse error: ' + (e.message || e) + '\n\nRaw response:\n' + rawResp + '</pre></details></div>';
               showFailDialog('Respons Tidak Valid', 'Server mengembalikan data yang tidak dapat diproses. Silakan coba lagi.' + debugInfo);
               document.getElementById('btnProcessing').classList.add('hidden');
@@ -1214,8 +1214,8 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
             '<button type="button" class="flex flex-1 min-w-0 items-center gap-3 text-left" onclick="pickFav(\'' + hp + '\')">' +
               '<span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand/10 text-brand font-bold">' + esc(initial) + '</span>' +
               '<span class="min-w-0">' +
-                '<span class="block truncate text-[14px] font-semibold text-slate-800">' + nama + '</span>' +
-                '<span class="block truncate text-[13px] text-slate-500">' + hp + '</span>' +
+                '<span class="block truncate text-[15px] font-semibold text-slate-800">' + nama + '</span>' +
+                '<span class="block truncate text-[14px] text-slate-500">' + hp + '</span>' +
               '</span>' +
             '</button>' +
             '<button type="button" title="Ubah" class="grid h-8 w-8 shrink-0 place-items-center rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-700 transition" onclick="openFavForm({id:\'' + id + '\',nama:\'' + nama + '\',hp:\'' + hp + '\'})">' +
@@ -1267,7 +1267,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     function favEmpty(text) {
       return '<div class="flex flex-col items-center justify-center py-10 text-center text-slate-400">' +
         '<svg viewBox="0 0 24 24" class="mb-2 h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>' +
-        '<p class="text-[13px] px-6">' + esc(text) + '</p></div>';
+        '<p class="text-[14px] px-6">' + esc(text) + '</p></div>';
     }
 
     // Pilih nomor favorit -> isi input & tutup modal
