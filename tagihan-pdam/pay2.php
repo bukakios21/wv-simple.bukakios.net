@@ -219,7 +219,7 @@ $csrf_token = $app->csrf();
     </div>
   </div>
 
-  <main class="relative w-full min-h-screen bg-slate-50 pb-24">
+  <main class="relative w-full min-h-screen bg-slate-50 pb-36">
 
     <!-- Header -->
     <header class="relative z-10 px-5 pt-4 pb-3 bg-white border-b border-slate-100">
@@ -442,6 +442,13 @@ $csrf_token = $app->csrf();
       Cek Tagihan
     </button>
 
+    <div id="paySummary" class="hidden mb-3 flex items-center justify-between rounded-2xl bg-emerald-50 border border-emerald-200 px-4 py-3">
+      <div>
+        <p class="text-[13px] font-semibold text-emerald-800">Total Pelanggan Kamu Bayar</p>
+      </div>
+      <span class="text-[18px] font-extrabold text-emerald-700" id="total_bayar_pelanggan">-</span>
+    </div>
+
     <div id="btnActionGroup" class="hidden grid grid-cols-2 gap-3">
       <button id="btnBatal" onclick="doBatal()" class="rounded-2xl border border-slate-200 bg-white py-3.5 text-[15px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
         Batal
@@ -467,6 +474,8 @@ $csrf_token = $app->csrf();
     var trx_id = "";
     // Profit produk dari BE (custom_data.profit), dipakai section "Sumber Keuntungan".
     var profitBE = 0;
+    // total_bayar_buyer dari BE (yang menjadi dasar tagihan pelanggan).
+    var totalBayarBuyerBE = 0;
 
     // Product detail (dari API V2 detail_produk_by_code) untuk rumus diskon wv3
     var productDetail = {
@@ -562,15 +571,21 @@ $csrf_token = $app->csrf();
     }
 
     // Update section "Sumber Keuntungan": profit produk (BE) + biaya toko.
+    // Sekaligus update "Total Pelanggan Kamu Bayar" = tagihan + total profit.
     function updateProfitSources() {
-      var toko  = getBiayaToko();
-      var total = (Number(profitBE) || 0) + toko;
+      var toko        = getBiayaToko();
+      var totalProfit = (Number(profitBE) || 0) + toko;
       var beEl    = document.getElementById('src_profit_be');
       var tokoEl  = document.getElementById('src_profit_toko');
       var totalEl = document.getElementById('src_profit_total');
       if (beEl)    beEl.textContent    = formatRupiah(profitBE);
       if (tokoEl)  tokoEl.textContent  = formatRupiah(toko);
-      if (totalEl) totalEl.textContent = formatRupiah(total);
+      if (totalEl) totalEl.textContent = formatRupiah(totalProfit);
+
+      // Total yang harus dibayar pelanggan ke toko = tagihan (buyer) + total profit.
+      var totalPelangganBayar = (Number(totalBayarBuyerBE) || 0) + totalProfit;
+      var payEl = document.getElementById('total_bayar_pelanggan');
+      if (payEl) payEl.textContent = formatRupiah(totalPelangganBayar);
     }
 
     // Format to Rp (legacy helper)
@@ -869,8 +884,10 @@ $csrf_token = $app->csrf();
       document.getElementById('tot_ta2').textContent        = formatRupiah(totalBayarPelanggan);
       document.getElementById('profit').textContent         = formatRupiah(profitAngka);
 
-      // Simpan profit dari BE untuk section "Sumber Keuntungan".
+      // Simpan profit & total buyer dari BE untuk section "Sumber Keuntungan"
+      // dan ringkasan "Total Pelanggan Kamu Bayar".
       profitBE = profitAngka;
+      totalBayarBuyerBE = totalBayarPelanggan;
 
       // Isi saran biaya layanan toko/kios dari price_sell produk (BE).
       var priceSell = Number(cd.price_sell) || 0;
@@ -899,6 +916,7 @@ $csrf_token = $app->csrf();
       document.getElementById('detailSection').classList.remove('hidden');
       document.getElementById('btnCek').classList.add('hidden');
       document.getElementById('btnActionGroup').classList.remove('hidden');
+      document.getElementById('paySummary').classList.remove('hidden');
       document.getElementById('progressBar').style.width = '100%';
     }
 
@@ -919,6 +937,7 @@ $csrf_token = $app->csrf();
       document.getElementById('errorMsg').classList.add('hidden');
       document.getElementById('detailSection').classList.add('hidden');
       document.getElementById('btnActionGroup').classList.add('hidden');
+      document.getElementById('paySummary').classList.add('hidden');
       document.getElementById('btnProcessing').classList.add('hidden');
       document.getElementById('inputSection').classList.remove('hidden');
       document.getElementById('infoCard').classList.remove('hidden');
@@ -928,6 +947,7 @@ $csrf_token = $app->csrf();
       document.getElementById('nope').value = '';
       document.getElementById('biaya_profit').value = '0';
       profitBE = 0;
+      totalBayarBuyerBE = 0;
       toggleClearBiayaToko();
       updateProfitSources();
       document.getElementById('progressBar').style.width = '33%';
@@ -948,6 +968,7 @@ $csrf_token = $app->csrf();
       var biaya_toko = String(getBiayaToko());
 
       document.getElementById('btnActionGroup').classList.add('hidden');
+      document.getElementById('paySummary').classList.add('hidden');
       document.getElementById('btnProcessing').classList.remove('hidden');
 
       var xhr = new XMLHttpRequest();
@@ -993,6 +1014,7 @@ $csrf_token = $app->csrf();
                 showFailDialog('Transaksi Gagal', myJsn.error_msg || 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.');
                 document.getElementById('btnProcessing').classList.add('hidden');
                 document.getElementById('btnActionGroup').classList.remove('hidden');
+                document.getElementById('paySummary').classList.remove('hidden');
               }
             } catch(e) {
               console.error('[doBayar] parse error:', e);
@@ -1002,11 +1024,13 @@ $csrf_token = $app->csrf();
               showFailDialog('Respons Tidak Valid', 'Server mengembalikan data yang tidak dapat diproses. Silakan coba lagi.' + debugInfo);
               document.getElementById('btnProcessing').classList.add('hidden');
               document.getElementById('btnActionGroup').classList.remove('hidden');
+              document.getElementById('paySummary').classList.remove('hidden');
             }
           } else {
             showFailDialog('Koneksi Gagal', 'Tidak dapat terhubung ke server (HTTP ' + xhr.status + '). Periksa koneksi Anda dan coba lagi.');
             document.getElementById('btnProcessing').classList.add('hidden');
             document.getElementById('btnActionGroup').classList.remove('hidden');
+            document.getElementById('paySummary').classList.remove('hidden');
           }
         }
       };
