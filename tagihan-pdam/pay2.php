@@ -829,13 +829,16 @@ $csrf_token = $app->csrf();
       // tanda minus tidak hilang. Field root lama berformat "Rp ..." -> parseNum.
       var hasCustom = root.custom_data != null && cd.total_bayar_seller != null;
 
-      var admin, tagihan, bulan, diskonAngka, totalBayarPelanggan, totalBayarKamuAngka, profitAngka;
+      var admin, tagihan, tagihanTampil, bulan, diskonAngka, totalBayarPelanggan, totalBayarKamuAngka, profitAngka;
 
       if (hasCustom) {
         // Ambil apa adanya dari BE, JANGAN hitung ulang. Termasuk profit
         // (FE tinggal nampil, dihitung di BE responseInq).
         admin               = Number(cd.biaya_admin) || 0;
         tagihan             = Number(cd.tagihan) || 0;
+        tagihanTampil       = cd.tagihan_asli_pasca != null && cd.tagihan_asli_pasca !== ''
+          ? Number(cd.tagihan_asli_pasca) || 0
+          : tagihan;
         bulan               = Number(cd.jml_bulan) || 1;
         diskonAngka         = Number(cd.potongan) || 0;
         totalBayarPelanggan = Number(cd.total_bayar_buyer) || 0;
@@ -850,6 +853,9 @@ $csrf_token = $app->csrf();
         var priceAdd = Number(productDetail.price_add) || 0;
         admin               = parseNum(d.admin != null ? d.admin : d.biaya_admin);
         tagihan             = parseNum(d.tagihan);
+        tagihanTampil       = d.tagihan_asli_pasca != null && d.tagihan_asli_pasca !== ''
+          ? parseNum(d.tagihan_asli_pasca)
+          : tagihan;
         bulan               = parseNum(d.jml_bulan) || 1;
         diskonAngka         = admin - ((price + priceAdd) * bulan);
         totalBayarPelanggan = tagihan; // buyer = tagihan saja (admin sudah termasuk profit)
@@ -875,7 +881,7 @@ $csrf_token = $app->csrf();
       document.getElementById('periode').textContent        = cd.periode || d.bln_th || d.periode || '-';
       document.getElementById('meter_awal').textContent     = meterAwal;
       document.getElementById('meter_akhir').textContent    = meterAkhir;
-      document.getElementById('tagihan').textContent        = formatRupiah(tagihan);
+      document.getElementById('tagihan').textContent        = formatRupiah(tagihanTampil);
       document.getElementById('biaya').textContent          = formatRupiah(admin);
       // "Diskon Biaya Admin" menampilkan nilai profit (permintaan bisnis).
       document.getElementById('potongan').textContent       = '- ' + formatRupiah(profitAngka);
