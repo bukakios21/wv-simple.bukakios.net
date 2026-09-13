@@ -26,6 +26,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
             }
 
             $cek_tagihan = json_decode($cek_tagihan_http, true);
+            var_dump($cek_tagihan_http);
             if (isset($cek_tagihan['status'])) {
                 $data_r = $cek_tagihan;
             } else {
@@ -311,6 +312,10 @@ $csrf_token = $app->csrf();
             <span class="text-[16px] font-extrabold text-brand" id="tot_ta">-</span>
           </div>
           <div class="flex items-center justify-between px-5 py-3">
+            <span class="text-[14px] text-slate-600">No. Pelanggan</span>
+            <span class="text-[14px] font-semibold text-slate-800" id="no_pelanggan">-</span>
+          </div>
+          <div class="flex items-center justify-between px-5 py-3">
             <span class="text-[14px] text-slate-600">Nama Pelanggan</span>
             <span class="text-[14px] font-semibold text-slate-800" id="nama">-</span>
           </div>
@@ -377,14 +382,55 @@ $csrf_token = $app->csrf();
       <!-- Biaya layanan -->
       <div class="mt-3 rounded-[20px] border border-slate-200 bg-white shadow-soft px-5 py-4">
         <h3 class="text-[14px] font-bold text-slate-700 mb-1">Buat Biaya Layanan Toko/Kios</h3>
-        <input
-          type="number"
-          id="biaya_profit"
-          class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[15px] text-slate-800 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
-          value="0"
-          min="0"
-        />
+        <div class="relative mt-1">
+          <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[15px] font-semibold text-slate-500">Rp</span>
+          <input
+            type="text"
+            id="biaya_profit"
+            inputmode="numeric"
+            autocomplete="off"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-10 py-2.5 text-[15px] text-slate-800 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
+            value="0"
+          />
+          <button
+            type="button"
+            id="biaya_profit_clear"
+            onclick="clearBiayaToko()"
+            class="hidden absolute right-3 top-1/2 -translate-y-1/2 h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-slate-500 hover:bg-slate-300 active:scale-95 transition"
+            aria-label="Hapus biaya toko"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </button>
+        </div>
         <p class="text-[12px] text-mutedText mt-1.5">* Akan muncul di struk transaksi</p>
+      </div>
+
+      <!-- Rincian sumber profit -->
+      <div class="mt-3 rounded-[20px] border border-emerald-200 bg-emerald-50/60 shadow-soft overflow-hidden">
+        <div class="px-5 py-4 border-b border-emerald-100">
+          <h3 class="text-[14px] font-bold text-emerald-800">Sumber Keuntungan Kamu</h3>
+          <p class="text-[12px] text-emerald-700/80 mt-0.5">Kamu bisa dapat profit double dari 2 sumber:</p>
+        </div>
+        <div class="divide-y divide-emerald-100">
+          <div class="flex items-center justify-between px-5 py-3">
+            <div>
+              <span class="text-[14px] font-semibold text-slate-700">1. Profit Produk</span>
+              <p class="text-[12px] text-slate-500">Selisih harga dari sistem</p>
+            </div>
+            <span class="text-[14px] font-bold text-emerald-600" id="src_profit_be">-</span>
+          </div>
+          <div class="flex items-center justify-between px-5 py-3">
+            <div>
+              <span class="text-[14px] font-semibold text-slate-700">2. Biaya Layanan Toko</span>
+              <p class="text-[12px] text-slate-500">Biaya yang kamu tetapkan sendiri</p>
+            </div>
+            <span class="text-[14px] font-bold text-emerald-600" id="src_profit_toko">-</span>
+          </div>
+          <div class="flex items-center justify-between px-5 py-3 bg-emerald-100/50">
+            <span class="text-[15px] font-extrabold text-emerald-800">Total Profit Kamu</span>
+            <span class="text-[18px] font-extrabold text-emerald-700" id="src_profit_total">-</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -419,6 +465,8 @@ $csrf_token = $app->csrf();
   <script>
     // State
     var trx_id = "";
+    // Profit produk dari BE (custom_data.profit), dipakai section "Sumber Keuntungan".
+    var profitBE = 0;
 
     // Product detail (dari API V2 detail_produk_by_code) untuk rumus diskon wv3
     var productDetail = {
@@ -469,6 +517,60 @@ $csrf_token = $app->csrf();
     function parseNum(v) {
       var n = Number(String(v == null ? 0 : v).replace(/[^\d]/g, ''));
       return isNaN(n) ? 0 : n;
+    }
+
+    // ==== Biaya Layanan Toko: input text auto-format ribuan ====
+
+    // Ambil nilai polos (angka) dari input biaya toko.
+    function getBiayaToko() {
+      var el = document.getElementById('biaya_profit');
+      return el ? parseNum(el.value) : 0;
+    }
+
+    // Format angka dengan pemisah ribuan (tanpa "Rp"), utk value input.
+    function formatRibuan(angka) {
+      var n = Number(angka) || 0;
+      return n.toLocaleString('id-ID');
+    }
+
+    // Handler input: rapikan angka, auto-format ribuan, toggle tombol X.
+    function onBiayaTokoInput() {
+      var el = document.getElementById('biaya_profit');
+      if (!el) return;
+      var angka = parseNum(el.value);
+      el.value = formatRibuan(angka);
+      toggleClearBiayaToko();
+      updateProfitSources();
+    }
+
+    // Tampilkan/sembunyikan tombol X sesuai isi input.
+    function toggleClearBiayaToko() {
+      var btn = document.getElementById('biaya_profit_clear');
+      if (!btn) return;
+      var val = getBiayaToko();
+      btn.classList.toggle('hidden', val <= 0);
+      btn.classList.toggle('flex', val > 0);
+    }
+
+    // Tombol X: kosongkan biaya toko.
+    function clearBiayaToko() {
+      var el = document.getElementById('biaya_profit');
+      if (el) el.value = '0';
+      toggleClearBiayaToko();
+      updateProfitSources();
+      if (el) el.focus();
+    }
+
+    // Update section "Sumber Keuntungan": profit produk (BE) + biaya toko.
+    function updateProfitSources() {
+      var toko  = getBiayaToko();
+      var total = (Number(profitBE) || 0) + toko;
+      var beEl    = document.getElementById('src_profit_be');
+      var tokoEl  = document.getElementById('src_profit_toko');
+      var totalEl = document.getElementById('src_profit_total');
+      if (beEl)    beEl.textContent    = formatRupiah(profitBE);
+      if (tokoEl)  tokoEl.textContent  = formatRupiah(toko);
+      if (totalEl) totalEl.textContent = formatRupiah(total);
     }
 
     // Format to Rp (legacy helper)
@@ -712,31 +814,38 @@ $csrf_token = $app->csrf();
       // tanda minus tidak hilang. Field root lama berformat "Rp ..." -> parseNum.
       var hasCustom = root.custom_data != null && cd.total_bayar_seller != null;
 
-      var admin, tagihan, bulan, diskonAngka, totalBayarPelanggan, totalBayarKamuAngka;
+      var admin, tagihan, bulan, diskonAngka, totalBayarPelanggan, totalBayarKamuAngka, profitAngka;
 
       if (hasCustom) {
-        // Ambil apa adanya dari BE, JANGAN hitung ulang (samakan dengan wv lama).
+        // Ambil apa adanya dari BE, JANGAN hitung ulang. Termasuk profit
+        // (FE tinggal nampil, dihitung di BE responseInq).
         admin               = Number(cd.biaya_admin) || 0;
         tagihan             = Number(cd.tagihan) || 0;
         bulan               = Number(cd.jml_bulan) || 1;
         diskonAngka         = Number(cd.potongan) || 0;
         totalBayarPelanggan = Number(cd.total_bayar_buyer) || 0;
         totalBayarKamuAngka = Number(cd.total_bayar_seller) || 0;
+        profitAngka         = cd.profit != null
+          ? Number(cd.profit) || 0
+          : totalBayarPelanggan - totalBayarKamuAngka; // fallback cache lama tanpa profit
       } else {
-        // Fallback (mis. cache redis lama tanpa custom_data): hitung sendiri.
+        // Fallback (mis. cache redis lama tanpa custom_data): hitung sendiri,
+        // samakan rumus dengan BE responseInq.
         var price    = Number(productDetail.price)     || 0; // pertahankan minus
         var priceAdd = Number(productDetail.price_add) || 0;
         admin               = parseNum(d.admin != null ? d.admin : d.biaya_admin);
         tagihan             = parseNum(d.tagihan);
         bulan               = parseNum(d.jml_bulan) || 1;
         diskonAngka         = admin - ((price + priceAdd) * bulan);
-        totalBayarPelanggan = parseNum(d.total_bayar != null ? d.total_bayar : d.total_bayar_buyer);
-        totalBayarKamuAngka = tagihan + admin - diskonAngka;
+        totalBayarPelanggan = tagihan; // buyer = tagihan saja (admin sudah termasuk profit)
+        totalBayarKamuAngka = (tagihan + admin) - diskonAngka;
+        profitAngka         = totalBayarPelanggan - totalBayarKamuAngka;
       }
 
-      var profitAngka = totalBayarPelanggan - totalBayarKamuAngka;
-
       // Field khusus PDAM (fallback ke '-' jika kosong)
+      // No. pelanggan: utamakan yang diinput user, fallback ke data BE.
+      var noPelangganInput = (document.getElementById('nope') && document.getElementById('nope').value.trim()) || '';
+      var noPelanggan   = noPelangganInput || cd.id_pelanggan || d.nomor_tagihan || d.id_pelanggan || '-';
       var namaPelanggan = cd.nama_pelanggan || d.customer_name || d.nama_pelanggan || '-';
       var alamat        = d.alamat || d.alamat_pelanggan || '-';
       var meterAwal     = d.meter_awal != null && d.meter_awal !== '' ? d.meter_awal : '-';
@@ -744,6 +853,7 @@ $csrf_token = $app->csrf();
 
       // Tampilkan ke UI
       document.getElementById('tot_ta').textContent         = formatRupiah(totalBayarPelanggan);
+      document.getElementById('no_pelanggan').textContent   = noPelanggan;
       document.getElementById('nama').textContent           = namaPelanggan;
       document.getElementById('alamat').textContent         = alamat;
       document.getElementById('lembar_tagihan').textContent   = bulan + ' Bulan';
@@ -752,11 +862,25 @@ $csrf_token = $app->csrf();
       document.getElementById('meter_akhir').textContent    = meterAkhir;
       document.getElementById('tagihan').textContent        = formatRupiah(tagihan);
       document.getElementById('biaya').textContent          = formatRupiah(admin);
-      document.getElementById('potongan').textContent       = '- ' + formatRupiah(diskonAngka);
+      // "Diskon Biaya Admin" menampilkan nilai profit (permintaan bisnis).
+      document.getElementById('potongan').textContent       = '- ' + formatRupiah(profitAngka);
       document.getElementById('tot_ka').textContent         = formatRupiah(totalBayarKamuAngka);
       document.getElementById('tot_ka2').textContent        = formatRupiah(totalBayarKamuAngka);
       document.getElementById('tot_ta2').textContent        = formatRupiah(totalBayarPelanggan);
       document.getElementById('profit').textContent         = formatRupiah(profitAngka);
+
+      // Simpan profit dari BE untuk section "Sumber Keuntungan".
+      profitBE = profitAngka;
+
+      // Isi saran biaya layanan toko/kios dari price_sell produk (BE).
+      var priceSell = Number(cd.price_sell) || 0;
+      var biayaProfitEl = document.getElementById('biaya_profit');
+      if (biayaProfitEl) {
+        biayaProfitEl.value = formatRibuan(priceSell);
+        biayaProfitEl.oninput = onBiayaTokoInput;
+      }
+      toggleClearBiayaToko();
+      updateProfitSources();
 
       // Sembunyikan baris meter_awal / meter_akhir kalau kosong (PDAM tidak selalu kirim)
       if (meterAwal === '-') {
@@ -803,6 +927,9 @@ $csrf_token = $app->csrf();
       document.getElementById('nope').disabled = false;
       document.getElementById('nope').value = '';
       document.getElementById('biaya_profit').value = '0';
+      profitBE = 0;
+      toggleClearBiayaToko();
+      updateProfitSources();
       document.getElementById('progressBar').style.width = '33%';
       // Reset baris kondisional PDAM (meter_awal / meter_akhir)
       ['row_meter_awal', 'row_meter_akhir'].forEach(function(id) {
@@ -818,7 +945,7 @@ $csrf_token = $app->csrf();
 
       var csrf       = document.getElementById('csrf').value;
       var id_pel     = document.getElementById('nope').value.trim();
-      var biaya_toko = document.getElementById('biaya_profit').value || '0';
+      var biaya_toko = String(getBiayaToko());
 
       document.getElementById('btnActionGroup').classList.add('hidden');
       document.getElementById('btnProcessing').classList.remove('hidden');
