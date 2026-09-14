@@ -292,7 +292,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     </div>
   </div>
 
-  <main class="relative w-full min-h-screen bg-slate-50 pb-24">
+  <main class="relative w-full min-h-screen bg-slate-50 pb-36">
 
     <!-- Header -->
     <header class="relative z-10 px-5 pt-4 pb-3 bg-white border-b border-slate-100">
@@ -475,14 +475,56 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       <!-- Biaya layanan -->
       <div class="mt-3 rounded-[20px] border border-slate-200 bg-white shadow-soft px-5 py-4">
         <h3 class="text-[15px] font-bold text-slate-700 mb-1">Buat Biaya Layanan Toko/Kios</h3>
-        <input
-          type="number"
-          id="biaya_profit"
-          class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[16px] text-slate-800 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
-          value="0"
-          min="0"
-        />
+        <div class="relative">
+          <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[15px] font-semibold text-slate-500">Rp</span>
+          <input
+            type="text"
+            id="biaya_profit"
+            inputmode="numeric"
+            autocomplete="off"
+            oninput="onBiayaTokoInput()"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-10 py-2.5 text-[16px] text-slate-800 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
+            value="0"
+          />
+          <button
+            type="button"
+            id="biaya_profit_clear"
+            onclick="clearBiayaToko()"
+            class="hidden absolute right-3 top-1/2 -translate-y-1/2 h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-slate-500 hover:bg-slate-300 active:scale-95 transition"
+            aria-label="Hapus biaya toko"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </button>
+        </div>
         <p class="text-[13px] text-mutedText mt-1.5">* Akan muncul di struk transaksi</p>
+      </div>
+
+      <!-- Rincian sumber profit -->
+      <div class="mt-3 rounded-[20px] border border-emerald-200 bg-emerald-50/60 shadow-soft overflow-hidden">
+        <div class="px-5 py-3 border-b border-emerald-100">
+          <h3 class="text-[14px] font-bold text-emerald-800">Sumber Keuntungan Kamu</h3>
+          <p class="text-[12px] text-emerald-700/80 mt-0.5">Kamu bisa dapat profit double dari 2 sumber:</p>
+        </div>
+        <div class="divide-y divide-emerald-100">
+          <div class="flex items-center justify-between px-5 py-2.5">
+            <div>
+              <span class="text-[14px] font-semibold text-slate-700">1. Potongan Harga Produk</span>
+              <p class="text-[12px] text-slate-500">Diskon harga dari produk</p>
+            </div>
+            <span class="text-[14px] font-bold text-emerald-600" id="src_profit_be">-</span>
+          </div>
+          <div class="flex items-center justify-between px-5 py-2.5">
+            <div>
+              <span class="text-[14px] font-semibold text-slate-700">2. Biaya Layanan Toko</span>
+              <p class="text-[12px] text-slate-500">Biaya yang kamu tetapkan sendiri</p>
+            </div>
+            <span class="text-[14px] font-bold text-emerald-600" id="src_profit_toko">-</span>
+          </div>
+          <div class="flex items-center justify-between px-5 py-2.5 bg-emerald-100/50">
+            <span class="text-[15px] font-extrabold text-emerald-800">Total Profit Kamu</span>
+            <span class="text-[18px] font-extrabold text-emerald-700" id="src_profit_total">-</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -493,6 +535,13 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     <button id="btnCek" onclick="doCek()" class="w-full rounded-2xl bg-brand py-3.5 text-[17px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
       Cek Tagihan
     </button>
+
+    <div id="paySummary" class="hidden mb-3 flex items-center justify-between rounded-2xl bg-emerald-50 border border-emerald-200 px-4 py-3">
+      <div>
+        <p class="text-[13px] font-semibold text-emerald-800">Total Pelanggan Kamu Bayar</p>
+      </div>
+      <span class="text-[18px] font-extrabold text-emerald-700" id="total_bayar_pelanggan">-</span>
+    </div>
 
     <div id="btnActionGroup" class="hidden grid grid-cols-2 gap-3">
       <button id="btnBatal" onclick="doBatal()" class="rounded-2xl border border-slate-200 bg-white py-3.5 text-[16px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
@@ -600,6 +649,10 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
   <script>
     // State
     var trx_id = "";
+    // Profit produk dari BE (custom_data.profit), dipakai section "Sumber Keuntungan".
+    var profitBE = 0;
+    // total_bayar_buyer dari BE (yang menjadi dasar tagihan pelanggan).
+    var totalBayarBuyerBE = 0;
 
     // Product detail (dari API V2 detail_produk_by_code)
     var productDetail = {
@@ -650,6 +703,59 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     function parseNum(v) {
       var n = Number(String(v == null ? 0 : v).replace(/[^\d]/g, ''));
       return isNaN(n) ? 0 : n;
+    }
+
+    // ==== Biaya Layanan Toko: input text auto-format ribuan ====
+    function getBiayaToko() {
+      var el = document.getElementById('biaya_profit');
+      return el ? parseNum(el.value) : 0;
+    }
+
+    function formatRibuan(angka) {
+      var n = Number(angka) || 0;
+      return n.toLocaleString('id-ID');
+    }
+
+    function onBiayaTokoInput() {
+      var el = document.getElementById('biaya_profit');
+      if (!el) return;
+      var angka = parseNum(el.value);
+      el.value = formatRibuan(angka);
+      toggleClearBiayaToko();
+      updateProfitSources();
+    }
+
+    function toggleClearBiayaToko() {
+      var btn = document.getElementById('biaya_profit_clear');
+      if (!btn) return;
+      var val = getBiayaToko();
+      btn.classList.toggle('hidden', val <= 0);
+      btn.classList.toggle('flex', val > 0);
+    }
+
+    function clearBiayaToko() {
+      var el = document.getElementById('biaya_profit');
+      if (el) el.value = '0';
+      toggleClearBiayaToko();
+      updateProfitSources();
+      if (el) el.focus();
+    }
+
+    // Update section "Sumber Keuntungan": profit produk (BE) + biaya toko.
+    // Sekaligus update "Total Pelanggan Kamu Bayar" = tagihan + total profit.
+    function updateProfitSources() {
+      var toko        = getBiayaToko();
+      var totalProfit = (Number(profitBE) || 0) + toko;
+      var beEl    = document.getElementById('src_profit_be');
+      var tokoEl  = document.getElementById('src_profit_toko');
+      var totalEl = document.getElementById('src_profit_total');
+      if (beEl)    beEl.textContent    = formatRupiah(profitBE);
+      if (tokoEl)  tokoEl.textContent  = formatRupiah(toko);
+      if (totalEl) totalEl.textContent = formatRupiah(totalProfit);
+
+      var totalPelangganBayar = (Number(totalBayarBuyerBE) || 0) + totalProfit;
+      var payEl = document.getElementById('total_bayar_pelanggan');
+      if (payEl) payEl.textContent = formatRupiah(totalPelangganBayar);
     }
 
     // Format to Rp
@@ -923,6 +1029,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     function renderDetail(data) {
       // API bisa return nested (data.data) atau flat (langsung field)
       var d = data.data || data.custom_data || data;
+      var customData = d.custom_data || data.custom_data || {};
       trx_id = d.trx_id || data.trx_id || "";
 
       // Hitung diskon biaya admin (rumus wv3)
@@ -939,7 +1046,17 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
 
       // Total Bayar Kamu (saldo seller) = tagihan + admin - diskon (rumus wv3)
       var totalBayarKamuAngka = tagihan + admin - diskonAngka;
-      var profitAngka = totalBayarPelanggan - totalBayarKamuAngka;
+      var profitAngka = parseNum(customData.profit != null ? customData.profit : d.profit);
+      if (!profitAngka) profitAngka = totalBayarPelanggan - totalBayarKamuAngka;
+      var priceSell = parseNum(customData.price_sell != null ? customData.price_sell : d.price_sell);
+      totalBayarBuyerBE = parseNum(customData.total_bayar_buyer != null ? customData.total_bayar_buyer : d.total_bayar_buyer);
+      if (!totalBayarBuyerBE) totalBayarBuyerBE = totalBayarPelanggan;
+      profitBE = profitAngka;
+
+      var biayaProfitEl = document.getElementById('biaya_profit');
+      if (biayaProfitEl) biayaProfitEl.value = formatRibuan(priceSell);
+      toggleClearBiayaToko();
+      updateProfitSources();
 
       // Tampilkan ke UI
       document.getElementById('tot_ta').textContent         = formatRupiah(totalBayarPelanggan);
@@ -963,6 +1080,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       document.getElementById('infoCard').classList.add('hidden');
       document.getElementById('detailSection').classList.remove('hidden');
       document.getElementById('btnCek').classList.add('hidden');
+      document.getElementById('paySummary').classList.remove('hidden');
       document.getElementById('btnActionGroup').classList.remove('hidden');
       document.getElementById('progressBar').style.width = '100%';
     }
@@ -981,6 +1099,7 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       document.getElementById('errorMsg').classList.add('hidden');
       document.getElementById('detailSection').classList.add('hidden');
       document.getElementById('btnActionGroup').classList.add('hidden');
+      document.getElementById('paySummary').classList.add('hidden');
       document.getElementById('btnProcessing').classList.add('hidden');
       document.getElementById('inputSection').classList.remove('hidden');
       document.getElementById('infoCard').classList.remove('hidden');
@@ -990,7 +1109,11 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
       // Kosongkan nomor pelanggan agar tidak terbawa ke transaksi berikutnya
       document.getElementById('nope').value = '';
       toggleClearNope();
+      profitBE = 0;
+      totalBayarBuyerBE = 0;
       document.getElementById('biaya_profit').value = '0';
+      toggleClearBiayaToko();
+      updateProfitSources();
       document.getElementById('progressBar').style.width = '33%';
       // Fokus kembali ke input agar UX lebih baik
       document.getElementById('nope').focus();
@@ -1000,9 +1123,9 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
     function doBayar() {
       if (!trx_id) { showToastError('Silakan cek tagihan terlebih dahulu'); return; }
 
-      var csrf      = document.getElementById('csrf').value;
-      var id_pel    = document.getElementById('nope').value.trim();
-      var biaya_toko = document.getElementById('biaya_profit').value || '0';
+      var csrf       = document.getElementById('csrf').value;
+      var id_pel     = document.getElementById('nope').value.trim();
+      var biaya_toko = String(getBiayaToko());
 
       document.getElementById('btnActionGroup').classList.add('hidden');
       document.getElementById('btnProcessing').classList.remove('hidden');
