@@ -53,6 +53,48 @@ if (isset($_REQUEST['msg'], $_REQUEST['csrf'])) {
             } else {
                 $data_r = ['status' => 0, "error_msg" => "Parameter tidak lengkap (trx_id / biaya_toko)"];
             }
+        } else if ($msg === "fav_list") {
+            $cari    = $_REQUEST['cari'] ?? '';
+            $last_id = (int)($_REQUEST['last_id'] ?? 0);
+            $fav_http = $api_v2->list_nomor_pelanggan($cari, 300, $last_id);
+            $fav = json_decode($fav_http, true);
+            if (isset($fav['status']) && $fav['status'] == 1) {
+                $list = $fav['data']['data']['data'] ?? [];
+                $next = $fav['data']['data']['last_id'] ?? 0;
+                $data_r = ['status' => 1, 'data' => $list, 'last_id' => $next];
+            } else {
+                $data_r = ['status' => 1, 'data' => [], 'last_id' => 0, 'note' => $fav['error_msg'] ?? ''];
+            }
+        } else if ($msg === "fav_add") {
+            $nama = trim($_REQUEST['nama'] ?? '');
+            $hp   = trim($_REQUEST['hp'] ?? '');
+            if ($nama === '' || $hp === '') {
+                $data_r = ['status' => 0, "error_msg" => "Nama dan nomor wajib diisi"];
+            } else {
+                $add_http = $api_v2->simpan_nomor_pelanggan($nama, $hp);
+                $add = json_decode($add_http, true);
+                $data_r = isset($add['status']) ? $add : ['status' => 0, "error_msg" => "Gagal menyimpan favorit, server tidak merespon"];
+            }
+        } else if ($msg === "fav_update") {
+            $id   = (int)($_REQUEST['id'] ?? 0);
+            $nama = trim($_REQUEST['nama'] ?? '');
+            $hp   = trim($_REQUEST['hp'] ?? '');
+            if ($id <= 0 || $nama === '' || $hp === '') {
+                $data_r = ['status' => 0, "error_msg" => "Data favorit tidak lengkap"];
+            } else {
+                $upd_http = $api_v2->update_nomor_pelanggan($id, $nama, $hp);
+                $upd = json_decode($upd_http, true);
+                $data_r = isset($upd['status']) ? $upd : ['status' => 0, "error_msg" => "Gagal mengubah favorit, server tidak merespon"];
+            }
+        } else if ($msg === "fav_delete") {
+            $hp = trim($_REQUEST['hp'] ?? '');
+            if ($hp === '') {
+                $data_r = ['status' => 0, "error_msg" => "Nomor tidak ditemukan"];
+            } else {
+                $del_http = $api_v2->hapus_nomor_pelanggan($hp);
+                $del = json_decode($del_http, true);
+                $data_r = isset($del['status']) ? $del : ['status' => 0, "error_msg" => "Gagal menghapus favorit, server tidak merespon"];
+            }
         } else {
             $data_r = ['status' => 0, "error_msg" => "Aksi tidak dikenali"];
         }
@@ -186,6 +228,23 @@ $csrf_token = $app->csrf();
       from { opacity: 0; }
       to   { opacity: 1; }
     }
+
+    /* ===== Bottom sheet (favorit) ===== */
+    #favListModal:not(.hidden) { animation: backdropIn 0.2s ease-out both; }
+    #favListModal .sheet-panel { animation: sheetUp 0.34s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    @keyframes sheetUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    @keyframes sheetDown {
+      from { transform: translateY(0); }
+      to   { transform: translateY(100%); }
+    }
+
+    #favFormModal:not(.hidden) { animation: backdropIn 0.2s ease-out both; }
+    #favFormModal .form-panel { animation: modalPopIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+    #favConfirmModal:not(.hidden) { animation: backdropIn 0.2s ease-out both; }
+    #favConfirmModal .confirm-panel { animation: modalPopIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-950">
@@ -209,8 +268,8 @@ $csrf_token = $app->csrf();
     </div>
   </div>
 
-  <!-- Custom modal (success / fail / info) -->
-  <div id="customModal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/50 backdrop-blur-[2px] px-4">
+  <!-- Custom modal (success / fail / info) - z paling atas agar tidak tertindih modal favorit -->
+  <div id="customModal" class="fixed inset-0 z-[10010] hidden items-center justify-center bg-black/50 backdrop-blur-[2px] px-4">
     <div class="w-[92vw] max-w-[400px] rounded-3xl bg-white px-7 py-7 shadow-2xl ring-1 ring-slate-900/5">
       <div id="customModalBody"></div>
       <button id="customModalBtn" type="button" class="mt-6 w-full rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white text-[16px] font-bold py-3.5 px-5 transition">
@@ -263,6 +322,17 @@ $csrf_token = $app->csrf();
             />
             <button type="button" onclick="showInfo()" class="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 transition hover:bg-slate-100">
               <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            </button>
+          </div>
+          <div class="mt-3 flex items-center gap-2">
+            <button id="btnFav" type="button" onclick="openFavList()" class="inline-flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2 text-[13px] font-bold text-amber-700 transition hover:bg-amber-100 active:scale-[0.99] disabled:opacity-60 disabled:cursor-wait">
+              <svg id="btnFavStar" viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <svg id="btnFavSpin" class="hidden h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
+              <span id="btnFavLabel">Favorit</span>
+            </button>
+            <button type="button" onclick="openFavForm()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-[13px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Simpan Nomor
             </button>
           </div>
           <input type="hidden" id="csrf" value="<?= $csrf_token ?>" />
@@ -414,8 +484,8 @@ $csrf_token = $app->csrf();
         <div class="divide-y divide-emerald-100">
           <div class="flex items-center justify-between px-5 py-3">
             <div>
-              <span class="text-[14px] font-semibold text-slate-700">1. Profit Produk</span>
-              <p class="text-[12px] text-slate-500">Selisih harga dari sistem</p>
+              <span class="text-[14px] font-semibold text-slate-700">1. Potongan Harga Produk</span>
+              <p class="text-[12px] text-slate-500">Diskon harga dari produk</p>
             </div>
             <span class="text-[14px] font-bold text-emerald-600" id="src_profit_be">-</span>
           </div>
@@ -468,6 +538,72 @@ $csrf_token = $app->csrf();
       </div>
     </div>
   </footer>
+
+  <!-- ===== Modal: Daftar Favorit (bottom sheet) ===== -->
+  <div id="favListModal" class="fixed inset-0 z-[10001] hidden items-end justify-center bg-black/50 backdrop-blur-[2px]" onclick="onFavListBackdrop(event)">
+    <div class="sheet-panel w-full sm:max-w-[480px] mx-auto max-h-[85vh] flex flex-col rounded-t-3xl bg-white shadow-2xl">
+      <div class="flex justify-center pt-3 pb-1"><span class="h-1.5 w-10 rounded-full bg-slate-300"></span></div>
+      <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
+        <h2 class="text-[17px] font-bold text-slate-900">Nomor Favorit</h2>
+        <button type="button" onclick="closeFavList()" class="grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="px-5 pt-4">
+        <div class="relative">
+          <svg viewBox="0 0 24 24" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="favSearch" type="text" oninput="onFavSearch()" placeholder="Cari nama atau nomor…" autocomplete="off"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-3 py-2.5 text-[14px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition" />
+        </div>
+      </div>
+      <div id="favListBody" class="flex-1 overflow-y-auto px-3 py-3 min-h-[160px]"></div>
+      <div class="px-5 py-4 border-t border-slate-100">
+        <button type="button" onclick="openFavForm()" class="w-full rounded-xl bg-brand py-3 text-[16px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">
+          + Tambah Favorit Baru
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Form Tambah/Edit Favorit (pop-up) ===== -->
+  <div id="favFormModal" class="fixed inset-0 z-[10002] hidden items-center justify-center bg-black/50 backdrop-blur-[2px] px-4" onclick="onFavFormBackdrop(event)">
+    <div class="form-panel w-[92vw] max-w-[400px] rounded-3xl bg-white px-6 py-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h2 id="favFormTitle" class="text-[18px] font-bold text-slate-900">Tambah Favorit</h2>
+        <button type="button" onclick="closeFavForm()" class="grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <input type="hidden" id="favFormId" value="" />
+      <label class="text-[14px] font-semibold text-slate-600">Nama</label>
+      <input id="favFormNama" type="text" autocomplete="off" placeholder="Contoh: Rumah, Toko, Ibu"
+        class="mt-1.5 mb-3 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[15px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition" />
+      <label class="text-[14px] font-semibold text-slate-600">Nomor Pelanggan</label>
+      <input id="favFormHp" type="tel" inputmode="numeric" autocomplete="off" placeholder="Masukkan nomor"
+        class="mt-1.5 mb-5 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[15px] text-slate-800 placeholder-slate-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition" />
+      <div class="flex gap-2">
+        <button id="favFormDelete" type="button" onclick="submitFavDelete()" class="hidden flex-1 rounded-xl border border-red-200 bg-red-50 py-3 text-[16px] font-bold text-red-600 transition hover:bg-red-100 active:scale-[0.99]">Hapus</button>
+        <button type="button" onclick="submitFavForm()" class="flex-1 rounded-xl bg-brand py-3 text-[16px] font-bold text-white shadow-cta transition hover:bg-brandDark active:scale-[0.99]">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Konfirmasi Hapus Favorit (pop-up) ===== -->
+  <div id="favConfirmModal" class="fixed inset-0 z-[10003] hidden items-center justify-center bg-black/50 backdrop-blur-[2px] px-4" onclick="onFavConfirmBackdrop(event)">
+    <div class="confirm-panel w-[92vw] max-w-[360px] rounded-3xl bg-white px-6 py-6 shadow-2xl">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 ring-8 ring-red-50/60 bg-red-50">
+          <svg viewBox="0 0 24 24" class="h-8 w-8 text-red-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>
+        </div>
+        <h2 class="text-[19px] font-extrabold text-slate-900 mb-1.5">Hapus Favorit?</h2>
+        <p class="text-[14.5px] text-slate-500 leading-relaxed mb-5 px-2">Nomor <span id="favConfirmName" class="font-semibold text-slate-700"></span> akan dihapus dari daftar favorit.</p>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" onclick="closeFavConfirm()" class="flex-1 rounded-xl border border-slate-200 bg-white py-3 text-[16px] font-bold text-slate-600 transition hover:bg-slate-50 active:scale-[0.99]">Batal</button>
+        <button type="button" onclick="confirmFavDelete()" class="flex-1 rounded-xl bg-red-500 py-3 text-[16px] font-bold text-white shadow-cta transition hover:bg-red-600 active:scale-[0.99]">Hapus</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // State
@@ -582,8 +718,8 @@ $csrf_token = $app->csrf();
       if (tokoEl)  tokoEl.textContent  = formatRupiah(toko);
       if (totalEl) totalEl.textContent = formatRupiah(totalProfit);
 
-      // Total yang harus dibayar pelanggan ke toko = tagihan (buyer) + total profit.
-      var totalPelangganBayar = (Number(totalBayarBuyerBE) || 0) + totalProfit;
+      // Total yang harus dibayar pelanggan ke toko = tagihan buyer + biaya layanan toko.
+      var totalPelangganBayar = (Number(totalBayarBuyerBE) || 0) + toko;
       var payEl = document.getElementById('total_bayar_pelanggan');
       if (payEl) payEl.textContent = formatRupiah(totalPelangganBayar);
     }
@@ -1041,6 +1177,199 @@ $csrf_token = $app->csrf();
         }
       };
       xhr.send();
+    }
+
+    /* =========================================================
+       KONTAK FAVORIT (nomor pelanggan tersimpan)
+       ========================================================= */
+    var favData = [];
+    var favPendingDeleteHp = null;
+
+    function favReq(params, onDone) {
+      var csrf = document.getElementById('csrf').value;
+      var q = '?code=<?= urlencode($code) ?>&csrf=' + encodeURIComponent(csrf);
+      for (var k in params) {
+        if (Object.prototype.hasOwnProperty.call(params, k)) q += '&' + k + '=' + encodeURIComponent(params[k]);
+      }
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', q, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status === 200) {
+          try { onDone(null, JSON.parse((xhr.responseText || '').replace(/^\uFEFF/, '').trim())); }
+          catch (e) { onDone('Respons server tidak valid', null); }
+        } else {
+          onDone('Koneksi gagal (HTTP ' + xhr.status + ')', null);
+        }
+      };
+      xhr.send();
+    }
+
+    function esc(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function setFavBtnLoading(on) {
+      var btn = document.getElementById('btnFav');
+      if (!btn) return;
+      document.getElementById('btnFavStar').classList.toggle('hidden', on);
+      document.getElementById('btnFavSpin').classList.toggle('hidden', !on);
+      document.getElementById('btnFavLabel').textContent = on ? 'Memuat…' : 'Favorit';
+      btn.disabled = on;
+    }
+
+    function openFavList() {
+      var btn = document.getElementById('btnFav');
+      if (btn && btn.disabled) return;
+      setFavBtnLoading(true);
+      favReq({ msg: 'fav_list', cari: '', last_id: 0 }, function(err, res) {
+        setFavBtnLoading(false);
+        if (err) { showToastError(err); return; }
+        favData = (res && res.data) || [];
+        document.getElementById('favSearch').value = '';
+        renderFavList('');
+        showFavListSheet();
+      });
+    }
+
+    function showFavListSheet() {
+      var m = document.getElementById('favListModal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function closeFavList() {
+      var m = document.getElementById('favListModal');
+      var panel = m.querySelector('.sheet-panel');
+      if (panel) {
+        panel.style.animation = 'sheetDown 0.24s cubic-bezier(0.4, 0, 1, 1) forwards';
+        setTimeout(function() { m.classList.add('hidden'); m.classList.remove('flex'); panel.style.animation = ''; }, 220);
+      } else {
+        m.classList.add('hidden'); m.classList.remove('flex');
+      }
+    }
+    function onFavListBackdrop(e) { if (e.target === document.getElementById('favListModal')) closeFavList(); }
+    function onFavFormBackdrop(e) { if (e.target === document.getElementById('favFormModal')) closeFavForm(); }
+    function onFavConfirmBackdrop(e) { if (e.target === document.getElementById('favConfirmModal')) closeFavConfirm(); }
+    function onFavSearch() { renderFavList(document.getElementById('favSearch').value.trim()); }
+    function favListState(html) { document.getElementById('favListBody').innerHTML = html; }
+
+    function refreshFavData() {
+      favListState('<div class="flex items-center justify-center py-10 text-slate-400"><svg class="h-6 w-6 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg></div>');
+      favReq({ msg: 'fav_list', cari: '', last_id: 0 }, function(err, res) {
+        if (err) { favData = []; favListState(favEmpty(err)); return; }
+        favData = (res && res.data) || [];
+        renderFavList(document.getElementById('favSearch').value.trim());
+      });
+    }
+
+    function renderFavList(cari) {
+      var q = (cari || '').toLowerCase();
+      var list = favData;
+      if (q) {
+        list = favData.filter(function(it) {
+          return String(it.nama || '').toLowerCase().indexOf(q) !== -1 || String(it.hp || '').toLowerCase().indexOf(q) !== -1;
+        });
+      }
+      if (!favData.length) { favListState(favEmpty('Belum ada nomor favorit.')); return; }
+      if (!list.length) { favListState(favEmpty('Tidak ada favorit yang cocok.')); return; }
+      var html = '';
+      for (var i = 0; i < list.length; i++) {
+        var it = list[i];
+        var nama = esc(it.nama), hp = esc(it.hp), id = esc(it.id);
+        var initial = (it.nama || '?').trim().charAt(0).toUpperCase();
+        html += '<div class="group flex items-center gap-2 rounded-xl px-2 py-2.5 hover:bg-slate-50 transition">' +
+          '<button type="button" class="flex flex-1 min-w-0 items-center gap-3 text-left" onclick="pickFav(\'' + hp + '\')">' +
+            '<span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand/10 text-brand font-bold">' + esc(initial) + '</span>' +
+            '<span class="min-w-0"><span class="block truncate text-[15px] font-semibold text-slate-800">' + nama + '</span><span class="block truncate text-[14px] text-slate-500">' + hp + '</span></span>' +
+          '</button>' +
+          '<button type="button" title="Ubah" class="grid h-8 w-8 shrink-0 place-items-center rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-700 transition" onclick="openFavForm({id:\'' + id + '\',nama:\'' + nama + '\',hp:\'' + hp + '\'})"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg></button>' +
+          '<button type="button" title="Hapus" class="grid h-8 w-8 shrink-0 place-items-center rounded-full text-red-400 hover:bg-red-100 hover:text-red-600 transition" onclick="deleteFavQuick(\'' + hp + '\',\'' + nama + '\')"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>' +
+        '</div>';
+      }
+      favListState(html);
+    }
+
+    function favEmpty(text) {
+      return '<div class="flex flex-col items-center justify-center py-10 text-center text-slate-400"><svg viewBox="0 0 24 24" class="mb-2 h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><p class="text-[14px] px-6">' + esc(text) + '</p></div>';
+    }
+
+    function pickFav(hp) {
+      document.getElementById('nope').value = String(hp).replace(/[^0-9]/g, '');
+      closeFavList();
+      document.getElementById('nope').focus();
+    }
+
+    function openFavForm(data) {
+      var isEdit = data && data.id;
+      document.getElementById('favFormTitle').textContent = isEdit ? 'Ubah Favorit' : 'Tambah Favorit';
+      document.getElementById('favFormId').value = isEdit ? data.id : '';
+      document.getElementById('favFormNama').value = isEdit ? data.nama : '';
+      document.getElementById('favFormHp').value = isEdit ? data.hp : (document.getElementById('nope').value.trim() || '');
+      document.getElementById('favFormDelete').classList.toggle('hidden', !isEdit);
+      var m = document.getElementById('favFormModal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+      document.getElementById('favFormNama').focus();
+    }
+    function closeFavForm() {
+      var m = document.getElementById('favFormModal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+    }
+
+    function submitFavForm() {
+      var id = document.getElementById('favFormId').value;
+      var nama = document.getElementById('favFormNama').value.trim();
+      var hp = document.getElementById('favFormHp').value.replace(/[^0-9]/g, '');
+      if (!nama || !hp) { showToastError('Nama dan nomor wajib diisi'); return; }
+      showLoading('Menyimpan…');
+      var params = id ? { msg: 'fav_update', id: id, nama: nama, hp: hp } : { msg: 'fav_add', nama: nama, hp: hp };
+      favReq(params, function(err, res) {
+        hideLoading();
+        if (err) { showToastError(err); return; }
+        if (res && res.status == 1) {
+          closeFavForm();
+          if (!document.getElementById('favListModal').classList.contains('hidden')) refreshFavData();
+          showModal({ title: 'Berhasil', message: (res.message || 'Favorit tersimpan.'), variant: 'success', btnText: 'Ok', btnColor: 'emerald' });
+        } else {
+          showToastError((res && res.error_msg) || 'Gagal menyimpan favorit');
+        }
+      });
+    }
+
+    function deleteFavQuick(hp, nama) {
+      favPendingDeleteHp = hp;
+      document.getElementById('favConfirmName').textContent = nama || hp;
+      var m = document.getElementById('favConfirmModal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function closeFavConfirm() {
+      favPendingDeleteHp = null;
+      var m = document.getElementById('favConfirmModal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+    }
+    function confirmFavDelete() {
+      var hp = favPendingDeleteHp;
+      if (!hp) return;
+      closeFavConfirm();
+      showLoading('Menghapus…');
+      favReq({ msg: 'fav_delete', hp: hp }, function(err, res) {
+        hideLoading();
+        if (err) { showToastError(err); return; }
+        if (res && res.status == 1) {
+          favData = favData.filter(function(it) { return String(it.hp) !== String(hp); });
+          renderFavList(document.getElementById('favSearch').value.trim());
+          showModal({ title: 'Terhapus', message: (res.message || 'Favorit berhasil dihapus.'), variant: 'success', btnText: 'Ok', btnColor: 'emerald' });
+        } else {
+          showToastError((res && res.error_msg) || 'Gagal menghapus favorit');
+        }
+      });
+    }
+    function submitFavDelete() {
+      var hp = document.getElementById('favFormHp').value.replace(/[^0-9]/g, '');
+      var nama = document.getElementById('favFormNama').value.trim();
+      if (!hp) { showToastError('Nomor tidak ditemukan'); return; }
+      closeFavForm();
+      deleteFavQuick(hp, nama);
     }
   </script>
 </body>

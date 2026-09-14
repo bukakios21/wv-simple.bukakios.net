@@ -111,7 +111,7 @@ $products    = isset($lists['data']) ? $lists['data'] : [];
         <!-- Product cards -->
         <div class="flex flex-col gap-2">
           <?php foreach ($products as $list): ?>
-            <a href="pay.php?code=<?= urlencode($list['code']) ?>" class="card-product group flex items-center gap-4 rounded-[16px] border border-slate-200 bg-white px-4 py-3 shadow-soft text-decoration-none">
+            <a href="pay2.php?code=<?= urlencode($list['code']) ?>" class="card-product group flex items-center gap-4 rounded-[16px] border border-slate-200 bg-white px-4 py-3 shadow-soft text-decoration-none">
               <!-- Product image -->
               <div class="h-11 w-11 flex items-center justify-center rounded-xl bg-slate-100 overflow-hidden shrink-0">
                 <img

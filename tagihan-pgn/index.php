@@ -7,6 +7,8 @@ require_once("../_session.php");
 require_once("../lib/ApiV2.php");
 $api_v2 = new ApiV2($user_jwt);
 
+header("Location: pay2.php");
+exit;
 
 $file_me = "index.php";
 $kode_produk = 'PGAS'; //data static kode produk PGN
