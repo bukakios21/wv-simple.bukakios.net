@@ -157,7 +157,7 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
     if (!el) return;
 
     if (!URL_QRIS) {
-      el.innerHTML = '<p class="px-4 text-center text-[12px] font-semibold text-rose-500">Data QRIS belum tersedia</p>';
+      el.innerHTML = '<p class="px-4 text-center text-[17px] font-semibold text-rose-500">Data QRIS belum tersedia</p>';
       return;
     }
 
@@ -213,7 +213,7 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
   }
 
   function showQrisRenderError(el) {
-    el.innerHTML = '<p class="px-4 text-center text-[12px] font-semibold text-rose-500">Gagal memuat QRIS</p>';
+    el.innerHTML = '<p class="px-4 text-center text-[17px] font-semibold text-rose-500">Gagal memuat QRIS</p>';
   }
 
   function openTarik() {
@@ -333,14 +333,14 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
           '<div class="flex items-center gap-2.5 min-w-0">' +
             '<img class="h-10 w-10 rounded-lg object-cover shrink-0" src="' + icon + '" alt="" />' +
             '<div class="min-w-0">' +
-              '<p class="text-[13px] font-semibold text-slate-800 truncate">' + esc(r.pengirim || '-') + '</p>' +
-              '<p class="text-[11px] text-slate-400 truncate">' + esc(r.no_pengirim || '') + '</p>' +
-              '<p class="text-[11px] text-slate-400">' + fmtDate(r.created_at) + '</p>' +
+              '<p class="text-[17px] font-semibold text-slate-800 truncate">' + esc(r.pengirim || '-') + '</p>' +
+              '<p class="text-[17px] text-slate-400 truncate">' + esc(r.no_pengirim || '') + '</p>' +
+              '<p class="text-[17px] text-slate-400">' + fmtDate(r.created_at) + '</p>' +
             '</div>' +
           '</div>' +
           '<div class="text-right shrink-0">' +
-            '<p class="text-[13px] font-bold text-emerald-600">+' + rupiah(r.total_diterima) + '</p>' +
-            '<p class="text-[11px] text-slate-400">' + rupiah(r.nominal) + '</p>' +
+            '<p class="text-[17px] font-bold text-emerald-600">+' + rupiah(r.total_diterima) + '</p>' +
+            '<p class="text-[17px] text-slate-400">' + rupiah(r.nominal) + '</p>' +
           '</div>' +
         '</div>'
       ).children().last().on('click', function () { showDetailTrx(r); });
@@ -419,12 +419,12 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
       $list.append(
         '<div class="bg-white rounded-2xl border border-slate-200 p-3 flex items-center justify-between gap-3">' +
           '<div class="min-w-0">' +
-            '<p class="text-[13px] font-semibold text-slate-800 truncate">' + esc(m.deskripsi || m.kategori || '-') + '</p>' +
-            '<p class="text-[11px] text-slate-400">' + fmtDate(m.created_at) + '</p>' +
+            '<p class="text-[17px] font-semibold text-slate-800 truncate">' + esc(m.deskripsi || m.kategori || '-') + '</p>' +
+            '<p class="text-[17px] text-slate-400">' + fmtDate(m.created_at) + '</p>' +
           '</div>' +
           '<div class="text-right shrink-0">' +
-            '<p class="text-[13px] font-bold ' + amountCls + '">' + sign + rupiah(Math.abs(nominal)) + '</p>' +
-            '<p class="text-[11px] text-slate-400">Saldo: ' + rupiah(m.saldo_after) + '</p>' +
+            '<p class="text-[17px] font-bold ' + amountCls + '">' + sign + rupiah(Math.abs(nominal)) + '</p>' +
+            '<p class="text-[17px] text-slate-400">Saldo: ' + rupiah(m.saldo_after) + '</p>' +
           '</div>' +
         '</div>'
       );
@@ -470,13 +470,13 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
       $list.append(
         '<div class="qris-pen-row bg-white rounded-2xl border border-slate-200 p-3 flex items-center justify-between gap-3" style="cursor:pointer">' +
           '<div class="min-w-0">' +
-            '<p class="text-[13px] font-semibold text-slate-800 truncate">' + esc(p.metode_payment || 'Penarikan') + '</p>' +
-            '<p class="text-[11px] text-slate-400">' + fmtDate(p.created_at) + '</p>' +
+            '<p class="text-[17px] font-semibold text-slate-800 truncate">' + esc(p.metode_payment || 'Penarikan') + '</p>' +
+            '<p class="text-[17px] text-slate-400">' + fmtDate(p.created_at) + '</p>' +
             statusBadge(p.status) +
           '</div>' +
           '<div class="text-right shrink-0">' +
-            '<p class="text-[13px] font-bold text-slate-800">' + rupiah(p.nominal) + '</p>' +
-            '<p class="text-[11px] text-emerald-600">Diterima: ' + rupiah(p.total) + '</p>' +
+            '<p class="text-[17px] font-bold text-slate-800">' + rupiah(p.nominal) + '</p>' +
+            '<p class="text-[17px] text-emerald-600">Diterima: ' + rupiah(p.total) + '</p>' +
           '</div>' +
         '</div>'
       ).children().last().on('click', function () { showDetailPenarikan(p.id); });
@@ -496,7 +496,7 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
       3: ['Gagal', 'bg-red-100 text-red-700']
     };
     var s = map[status] || ['-', 'bg-slate-100 text-slate-600'];
-    return '<span class="inline-block mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ' + s[1] + '">' + s[0] + '</span>';
+    return '<span class="inline-block mt-1 text-[17px] font-semibold px-2 py-0.5 rounded-full ' + s[1] + '">' + s[0] + '</span>';
   }
 
   function showDetailPenarikan(id) {
@@ -509,7 +509,7 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
         if (d.status != 1) { showToast(d.error_msg || 'Gagal memuat detail', 'error'); return; }
         var p = d.data || {};
         var cancelBtn = (parseInt(p.status, 10) === 0)
-          ? '<button id="btn-cancel-pen" class="mt-4 w-full rounded-xl border border-red-200 bg-red-50 py-2.5 text-[13px] font-semibold text-red-600 active:scale-[0.98] transition">Batalkan Penarikan</button>'
+          ? '<button id="btn-cancel-pen" class="mt-4 w-full rounded-xl border border-red-200 bg-red-50 py-2.5 text-[17px] font-semibold text-red-600 active:scale-[0.98] transition">Batalkan Penarikan</button>'
           : '';
         var html =
           '<div class="space-y-2">' +

@@ -171,7 +171,7 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
       <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[16px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[17px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
@@ -182,25 +182,25 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
       <div class="inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card text-brand">
         <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M17 21v.01M21 17v4h-4"/></svg>
       </div>
-      <h1 class="m-0 mt-2.5 text-[16px] font-bold leading-tight text-slate-900"><?= htmlspecialchars($merchant_name, ENT_QUOTES, 'UTF-8') ?></h1>
-      <p class="m-0 mt-0.5 text-[13px] font-semibold text-slate-500">NMID <?= htmlspecialchars($nmid, ENT_QUOTES, 'UTF-8') ?></p>
+      <h1 class="m-0 mt-2.5 text-[17px] font-bold leading-tight text-slate-900"><?= htmlspecialchars($merchant_name, ENT_QUOTES, 'UTF-8') ?></h1>
+      <p class="m-0 mt-0.5 text-[17px] font-semibold text-slate-500">NMID <?= htmlspecialchars($nmid, ENT_QUOTES, 'UTF-8') ?></p>
     </div>
 
     <div class="space-y-3.5">
       <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
         <div class="flex items-start justify-between gap-3">
           <div>
-            <p class="m-0 text-[13px] font-medium text-slate-500">Stok QRIS</p>
-            <p class="m-0 mt-0.5 text-[26px] font-extrabold tracking-tight text-slate-900"><?= $app->idr($saldo_real) ?></p>
+            <p class="m-0 text-[17px] font-medium text-slate-500">Stok QRIS</p>
+            <p class="m-0 mt-0.5 text-[27px] font-extrabold tracking-tight text-slate-900"><?= $app->idr($saldo_real) ?></p>
           </div>
           <div class="flex shrink-0 items-center gap-2">
             <button onclick="window.location.reload()" aria-label="Refresh QRIS" class="grid h-8 w-8 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-brand active:scale-95">
               <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
             </button>
-            <span class="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-brand/10 px-3 py-1.5 text-[13px] font-bold text-brand"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-5"/></svg>Aktif</span>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-brand/10 px-3 py-1.5 text-[17px] font-bold text-brand"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-5"/></svg>Aktif</span>
           </div>
         </div>
-        <div class="mt-3 grid grid-cols-2 gap-2.5 text-[13px]">
+        <div class="mt-3 grid grid-cols-2 gap-2.5 text-[17px]">
           <div class="rounded-xl border border-slate-200 bg-white px-3 py-2.5">
             <p class="m-0 text-slate-500">Saldo Real</p>
             <p class="m-0 mt-0.5 font-bold text-slate-900"><?= $app->idr($saldo_real) ?></p>
@@ -213,42 +213,42 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
       </div>
 
       <!-- Action buttons -->
-      <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[14px]">
+      <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[17px]">
         <div class="mb-3 flex items-center gap-3">
           <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
-          <div><h3 class="m-0 text-[15px] font-bold leading-tight text-slate-900">Menu QRIS</h3><p class="m-0 mt-0.5 text-[13px] font-medium text-slate-500">Kelola QRIS dan pencairan dana</p></div>
+          <div><h3 class="m-0 text-[17px] font-bold leading-tight text-slate-900">Menu QRIS</h3><p class="m-0 mt-0.5 text-[17px] font-medium text-slate-500">Kelola QRIS dan pencairan dana</p></div>
         </div>
         <div class="grid grid-cols-4 gap-1">
         <button class="flex flex-col items-center gap-1.5" data-action="lihat-qris">
           <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M17 21v.01M21 17v4h-4"/></svg>
           </span>
-          <span class="text-[11px] font-semibold text-slate-600">Lihat QRIS</span>
+          <span class="text-[17px] font-semibold text-slate-600">Lihat QRIS</span>
         </button>
         <button class="flex flex-col items-center gap-1.5" data-action="info-akun">
           <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
           </span>
-          <span class="text-[11px] font-semibold text-slate-600">Info Akun</span>
+          <span class="text-[17px] font-semibold text-slate-600">Info Akun</span>
         </button>
         <button class="flex flex-col items-center gap-1.5" data-action="tarik-dana">
           <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v14M6 10l6 6 6-6"/><path d="M4 20h16"/></svg>
           </span>
-          <span class="text-[11px] font-semibold text-slate-600">Tarik Dana</span>
+          <span class="text-[17px] font-semibold text-slate-600">Tarik Dana</span>
         </button>
         <button class="flex flex-col items-center gap-1.5" data-action="mutasi">
           <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h13l-3-3M21 17H8l3 3"/></svg>
           </span>
-          <span class="text-[11px] font-semibold text-slate-600">Mutasi Stok</span>
+          <span class="text-[17px] font-semibold text-slate-600">Mutasi Stok</span>
         </button>
         </div>
       </div>
 
     <?php if ($status_verif === 'Gagal'): ?>
     <div>
-      <div class="rounded-2xl bg-red-50 border border-red-200 p-4 text-[12px] text-red-700">
+      <div class="rounded-2xl bg-red-50 border border-red-200 p-4 text-[17px] text-red-700">
         <p class="font-bold mb-1">Verifikasi Toko kamu Gagal!</p>
         <?php if ($alasan_verif !== ''): ?><p class="mb-1">Alasan: <?= htmlspecialchars($alasan_verif, ENT_QUOTES, 'UTF-8') ?></p><?php endif; ?>
         <p>Silakan hubungi CS untuk <strong class="underline">verifikasi ulang</strong>.</p>
@@ -257,7 +257,7 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
     <?php endif; ?>
 
     <!-- Tabs riwayat / mutasi / penarikan -->
-    <div class="grid grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-white p-1.5 text-[12px] font-semibold">
+    <div class="grid grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-white p-1.5 text-[17px] font-semibold">
         <button data-tab="riwayat"   class="tab-btn rounded-xl py-2.5 transition">Transaksi</button>
         <button data-tab="mutasi"    class="tab-btn rounded-xl py-2.5 transition">Mutasi</button>
         <button data-tab="penarikan" class="tab-btn rounded-xl py-2.5 transition">Penarikan</button>
@@ -268,33 +268,33 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
     <section id="tab-riwayat" class="tab-panel mt-3.5">
       <div id="riwayat-list" class="space-y-2.5"></div>
       <div id="riwayat-empty" class="hidden bg-white rounded-2xl border border-slate-200 p-8 text-center">
-        <p class="text-[14px] font-semibold text-slate-700">Belum ada transaksi</p>
-        <p class="text-[12px] text-slate-500 mt-1">Transaksi QRIS masuk akan tampil di sini.</p>
+        <p class="text-[17px] font-semibold text-slate-700">Belum ada transaksi</p>
+        <p class="text-[17px] text-slate-500 mt-1">Transaksi QRIS masuk akan tampil di sini.</p>
       </div>
       <div id="riwayat-loading" class="hidden space-y-2.5"></div>
       <div id="riwayat-pager" class="hidden mt-4 flex items-center justify-between">
-        <button id="riw-prev" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[13px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Sebelumnya</button>
-        <span id="riw-page" class="text-[13px] font-semibold text-slate-500">Hal 1</span>
-        <button id="riw-next" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[13px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Berikutnya</button>
+        <button id="riw-prev" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[17px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Sebelumnya</button>
+        <span id="riw-page" class="text-[17px] font-semibold text-slate-500">Hal 1</span>
+        <button id="riw-next" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[17px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Berikutnya</button>
       </div>
     </section>
 
     <!-- ============ TAB: MUTASI ============ -->
     <section id="tab-mutasi" class="tab-panel hidden mt-3.5">
-      <div class="flex gap-2 mb-3 text-[12px] font-semibold">
+      <div class="flex gap-2 mb-3 text-[17px] font-semibold">
         <button data-mutasi="real" class="mutasi-btn flex-1 rounded-xl py-2 border transition">Saldo Real</button>
         <button data-mutasi="kliring" class="mutasi-btn flex-1 rounded-xl py-2 border transition">Saldo Kliring</button>
       </div>
       <div id="mutasi-list" class="space-y-2.5"></div>
       <div id="mutasi-empty" class="hidden bg-white rounded-2xl border border-slate-200 p-8 text-center">
-        <p class="text-[14px] font-semibold text-slate-700">Belum ada mutasi</p>
-        <p class="text-[12px] text-slate-500 mt-1">Mutasi saldo akan tampil di sini.</p>
+        <p class="text-[17px] font-semibold text-slate-700">Belum ada mutasi</p>
+        <p class="text-[17px] text-slate-500 mt-1">Mutasi saldo akan tampil di sini.</p>
       </div>
       <div id="mutasi-loading" class="hidden space-y-2.5"></div>
       <div id="mutasi-pager" class="hidden mt-4 flex items-center justify-between">
-        <button id="mut-prev" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[13px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Sebelumnya</button>
-        <span id="mut-page" class="text-[13px] font-semibold text-slate-500">Hal 1</span>
-        <button id="mut-next" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[13px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Berikutnya</button>
+        <button id="mut-prev" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[17px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Sebelumnya</button>
+        <span id="mut-page" class="text-[17px] font-semibold text-slate-500">Hal 1</span>
+        <button id="mut-next" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[17px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Berikutnya</button>
       </div>
     </section>
 
@@ -302,21 +302,21 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
     <section id="tab-penarikan" class="tab-panel hidden mt-3.5">
       <div id="penarikan-list" class="space-y-2.5"></div>
       <div id="penarikan-empty" class="hidden bg-white rounded-2xl border border-slate-200 p-8 text-center">
-        <p class="text-[14px] font-semibold text-slate-700">Belum ada penarikan</p>
-        <p class="text-[12px] text-slate-500 mt-1">Riwayat tarik dana kamu akan tampil di sini.</p>
+        <p class="text-[17px] font-semibold text-slate-700">Belum ada penarikan</p>
+        <p class="text-[17px] text-slate-500 mt-1">Riwayat tarik dana kamu akan tampil di sini.</p>
       </div>
       <div id="penarikan-loading" class="hidden space-y-2.5"></div>
       <div id="penarikan-pager" class="hidden mt-4 flex items-center justify-between">
-        <button id="pen-prev" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[13px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Sebelumnya</button>
-        <span id="pen-page" class="text-[13px] font-semibold text-slate-500">Hal 1</span>
-        <button id="pen-next" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[13px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Berikutnya</button>
+        <button id="pen-prev" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[17px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Sebelumnya</button>
+        <span id="pen-page" class="text-[17px] font-semibold text-slate-500">Hal 1</span>
+        <button id="pen-next" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[17px] font-semibold text-slate-600 disabled:opacity-40 active:scale-[0.98] transition">Berikutnya</button>
       </div>
     </section>
 
     <!-- Terms -->
     <div class="mt-3.5">
       <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-center">
-        <p class="text-[11px] text-slate-500">
+        <p class="text-[17px] text-slate-500">
           Dengan menggunakan layanan QRIS BukaKios, Anda setuju dengan
           <a href="https://bukakios.id/syarat-ketentuan-qris" target="_blank" class="text-brand underline">Syarat dan Ketentuan</a> yang berlaku.
         </p>
@@ -372,7 +372,7 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
     <div class="relative z-10 w-full max-w-sm rounded-2xl bg-white p-5 shadow-card -mt-24">
       <div class="mb-2 mt-1 text-center text-sm text-slate-700">
         <img src="/assets/warning.png" class="w-9 h-9 mx-auto mb-4 object-contain" alt="" />
-        <p class="mb-3 px-2 text-center text-[14px] leading-5 font-extrabold text-slate-900">WAJIB SIMPAN BUKTI PEMBAYARAN QRIS!</p>
+        <p class="mb-3 px-2 text-center text-[17px] leading-5 font-extrabold text-slate-900">WAJIB SIMPAN BUKTI PEMBAYARAN QRIS!</p>
         <p class="mb-3">Simpan selalu bukti pembayaran QRIS yang menampilkan detail transaksi (kode RRN).</p>
         <p>Jika pembayaran tidak masuk dan tidak ada bukti lengkap yang menampilkan detail transaksi (kode RRN), maka di luar tanggung jawab Bukakios.</p>
         <p class="text-center mt-6">Terima kasih.</p>
