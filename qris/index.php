@@ -215,33 +215,33 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
       <!-- Action buttons -->
       <div class="rounded-2xl border border-slate-200 bg-white p-4 text-[17px]">
         <div class="mb-3 flex items-center gap-3">
-          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
-          <div><h3 class="m-0 text-[17px] font-bold leading-tight text-slate-900">Menu QRIS</h3><p class="m-0 mt-0.5 text-[17px] font-medium text-slate-500">Kelola QRIS dan pencairan dana</p></div>
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div>
+          <div><h3 class="m-0 text-[16px] font-bold leading-tight text-slate-900">Menu QRIS</h3><p class="m-0 mt-0.5 text-[14px] font-medium text-slate-500">Kelola QRIS dan pencairan dana</p></div>
         </div>
         <div class="grid grid-cols-4 gap-1">
         <button class="flex flex-col items-center gap-1.5" data-action="lihat-qris">
           <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M17 21v.01M21 17v4h-4"/></svg>
           </span>
-          <span class="text-[17px] font-semibold text-slate-600">Lihat QRIS</span>
+          <span class="text-[12px] font-semibold text-slate-600">Lihat QRIS</span>
         </button>
         <button class="flex flex-col items-center gap-1.5" data-action="info-akun">
           <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
           </span>
-          <span class="text-[17px] font-semibold text-slate-600">Info Akun</span>
+          <span class="text-[12px] font-semibold text-slate-600">Info Akun</span>
         </button>
         <button class="flex flex-col items-center gap-1.5" data-action="tarik-dana">
           <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v14M6 10l6 6 6-6"/><path d="M4 20h16"/></svg>
           </span>
-          <span class="text-[17px] font-semibold text-slate-600">Tarik Dana</span>
+          <span class="text-[12px] font-semibold text-slate-600">Tarik Dana</span>
         </button>
         <button class="flex flex-col items-center gap-1.5" data-action="mutasi">
           <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h13l-3-3M21 17H8l3 3"/></svg>
           </span>
-          <span class="text-[17px] font-semibold text-slate-600">Mutasi Stok</span>
+          <span class="text-[12px] font-semibold text-slate-600">Mutasi Stok</span>
         </button>
         </div>
       </div>
