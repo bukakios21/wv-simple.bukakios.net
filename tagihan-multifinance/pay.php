@@ -216,11 +216,12 @@ $csrf_token = $app->csrf();
   <main class="relative w-full min-h-screen bg-slate-50 pb-24">
 
     <!-- Header -->
-    <header class="relative z-10 px-5 pt-4 pb-3 bg-white border-b border-slate-100">
-      <div class="flex items-center gap-3">
-        <div class="h-1.5 flex-1 rounded-full bg-slate-200 overflow-hidden">
+    <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
+      <div class="flex items-center gap-3 px-4 py-3">
+        <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
           <div class="h-full rounded-full bg-brand transition-all duration-300" id="progressBar" style="width: 33%"></div>
         </div>
+        <div class="shrink-0 text-[16px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
       </div>
     </header>
 

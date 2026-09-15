@@ -121,16 +121,12 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
   </div>
 
   <!-- Header -->
-  <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-lg border-b border-slate-100/50">
+  <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
     <div class="flex items-center gap-3 px-4 py-3">
-      <div class="h-1.5 flex-1 rounded-full bg-slate-100 overflow-hidden">
-        <div class="h-full w-full rounded-full bg-gradient-to-r from-brand to-brandDark transition-all duration-500"></div>
+      <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
+        <div class="h-full w-full rounded-full bg-brand transition-all duration-500"></div>
       </div>
-      <div class="shrink-0">
-        <div class="flex items-center gap-2 bg-gradient-to-r from-brand to-brandDark px-4 py-1.5 rounded-full shadow-glow-sm">
-          <span class="text-[17px] font-extrabold tracking-[-0.04em] text-white">BukaKios</span>
-        </div>
-      </div>
+      <div class="shrink-0 text-[16px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 

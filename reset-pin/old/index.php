@@ -68,12 +68,12 @@ $nomor_hp_sensor = substr_replace($nomor_hp, str_repeat('*', $count), 4, $count)
 <body class="min-h-screen bg-slate-50 font-sans text-slate-950 antialiased pb-8">
 
   <!-- Header -->
-  <header class="sticky top-0 z-10 bg-white border-b border-slate-100">
+  <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
     <div class="flex items-center gap-3 px-4 py-3">
-      <div class="h-1 flex-1 rounded-full bg-slate-200 overflow-hidden">
+      <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[18px] font-extrabold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[16px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 

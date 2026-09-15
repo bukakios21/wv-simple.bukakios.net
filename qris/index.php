@@ -182,7 +182,7 @@ $download_qr_link = "open://https://w4.bukakios.net/qr/" . rawurlencode($nmid);
       <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
         <div class="h-full w-full rounded-full bg-brand"></div>
       </div>
-      <div class="shrink-0 text-[17px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
+      <div class="shrink-0 text-[16px] font-bold tracking-[-0.04em] text-brand">BukaKios</div>
     </div>
   </header>
 
