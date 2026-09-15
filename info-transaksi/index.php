@@ -392,11 +392,6 @@ if (isset($_GET["id"])) {
     </header>
 
     <main class="mx-auto max-w-lg px-4 py-5">
-        <div class="mb-3.5 flex items-start gap-2.5 rounded-2xl border border-blue-100 bg-blue-50 px-3.5 py-3 text-[13px] text-blue-700">
-            <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M18 13l-6 6-6-6"/></svg>
-            <div class="min-w-0 leading-relaxed"><span class="font-bold">Tips:</span> Tarik halaman ke bawah untuk refresh status transaksi terbaru.</div>
-        </div>
-
         <!-- Produk -->
         <div class="mb-4 flex flex-col items-center text-center">
             <div class="inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
@@ -408,6 +403,11 @@ if (isset($_GET["id"])) {
             </div>
             <h1 class="m-0 mt-2.5 text-[16px] font-bold leading-tight text-slate-900"><?= $product_name ?></h1>
             <p class="m-0 mt-0.5 text-[15px] font-semibold text-slate-600"><?= $nomor_tujuan ?></p>
+        </div>
+
+        <div class="mb-3.5 flex items-start gap-2.5 rounded-2xl border border-blue-100 bg-blue-50 px-3.5 py-3 text-[13px] text-blue-700">
+            <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M18 13l-6 6-6-6"/></svg>
+            <div class="min-w-0 leading-relaxed"><span class="font-bold">Tips:</span> Tarik halaman ke bawah untuk refresh status transaksi terbaru.</div>
         </div>
 
         <div class="space-y-3.5">

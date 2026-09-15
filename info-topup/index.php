@@ -666,6 +666,68 @@ if (isset($_GET['id'])) {
         <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
     </div>
     <div id="pull-refresh-shadow" aria-hidden="true"></div>
+    <script>
+        (function initPullToRefresh() {
+            if (window.__pullRefreshInit) return;
+            window.__pullRefreshInit = true;
+            var indicator = document.getElementById('pull-refresh-indicator');
+            var shadow = document.getElementById('pull-refresh-shadow');
+            if (!indicator) return;
+            var startY = 0, pullY = 0, tracking = false, refreshing = false;
+            var threshold = 86, maxPull = 124;
+            function atTop() { return window.scrollY <= 0 && document.documentElement.scrollTop <= 0 && document.body.scrollTop <= 0; }
+            function setIndicator(distance) {
+                var progress = Math.min(distance / threshold, 1);
+                var translate = -64 + Math.min(distance, maxPull);
+                var scale = .88 + (progress * .12);
+                var rotate = progress * 180;
+                indicator.classList.add('is-visible');
+                if (shadow) {
+                    shadow.classList.add('is-visible');
+                    shadow.style.opacity = String(.12 + (progress * .88));
+                }
+                indicator.style.transform = 'translate(-50%, ' + translate + 'px) scale(' + scale + ') rotate(' + rotate + 'deg)';
+            }
+            function resetIndicator() {
+                indicator.classList.remove('is-visible', 'is-refreshing');
+                if (shadow) {
+                    shadow.classList.remove('is-visible');
+                    shadow.style.opacity = '';
+                }
+                indicator.style.transform = 'translate(-50%, -64px) scale(.88) rotate(0deg)';
+            }
+            window.addEventListener('touchstart', function (e) {
+                if (refreshing || !atTop() || !e.touches || !e.touches.length) return;
+                startY = e.touches[0].clientY; pullY = 0; tracking = true;
+            }, { passive: true });
+            window.addEventListener('touchmove', function (e) {
+                if (!tracking || refreshing || !e.touches || !e.touches.length) return;
+                var diff = e.touches[0].clientY - startY;
+                if (diff <= 0) return;
+                pullY = Math.min(diff * .62, maxPull);
+                setIndicator(pullY);
+            }, { passive: true });
+            window.addEventListener('touchend', function () {
+                if (!tracking || refreshing) return;
+                tracking = false;
+                if (pullY >= threshold) {
+                    refreshing = true;
+                    indicator.classList.add('is-visible', 'is-refreshing');
+                    if (shadow) {
+                        shadow.classList.add('is-visible');
+                        shadow.style.opacity = '1';
+                    }
+                    indicator.style.transform = 'translate(-50%, 58px) scale(1) rotate(0deg)';
+                    setTimeout(function () { window.location.reload(); }, 250);
+                } else { resetIndicator(); }
+            }, { passive: true });
+            window.addEventListener('touchcancel', function () {
+                if (refreshing) return;
+                tracking = false;
+                resetIndicator();
+            }, { passive: true });
+        })();
+    </script>
 
     <!-- Header -->
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
@@ -683,11 +745,6 @@ if (isset($_GET['id'])) {
     </header>
 
     <main class="mx-auto max-w-lg px-4 py-5">
-        <div class="mb-3.5 flex items-start gap-2.5 rounded-2xl border border-blue-100 bg-blue-50 px-3.5 py-3 text-[13px] text-blue-700">
-            <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M18 13l-6 6-6-6"/></svg>
-            <div class="min-w-0 leading-relaxed"><span class="font-bold">Tips:</span> Tarik halaman ke bawah untuk refresh status topup terbaru.</div>
-        </div>
-
         <div class="mb-4 flex justify-center">
             <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl <?= $status == 1 ? 'bg-emerald-100 text-emerald-600' : ($status == 2 ? 'bg-rose-100 text-rose-600' : 'bg-amber-100 text-amber-600') ?>">
                 <?php if ($status == 1) { ?>
@@ -698,6 +755,11 @@ if (isset($_GET['id'])) {
                     <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                 <?php } ?>
             </div>
+        </div>
+
+        <div class="mb-3.5 flex items-start gap-2.5 rounded-2xl border border-blue-100 bg-blue-50 px-3.5 py-3 text-[13px] text-blue-700">
+            <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M18 13l-6 6-6-6"/></svg>
+            <div class="min-w-0 leading-relaxed"><span class="font-bold">Tips:</span> Tarik halaman ke bawah untuk refresh status topup terbaru.</div>
         </div>
 
         <div class="space-y-3.5">
@@ -1234,6 +1296,8 @@ if (isset($_GET['id'])) {
         })();
 
         (function initPullToRefresh() {
+            if (window.__pullRefreshInit) return;
+            window.__pullRefreshInit = true;
             var indicator = document.getElementById('pull-refresh-indicator');
             var shadow = document.getElementById('pull-refresh-shadow');
             if (!indicator) return;
