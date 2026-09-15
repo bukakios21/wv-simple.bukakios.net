@@ -78,6 +78,7 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
   /* ---------------- PULL TO REFRESH ---------------- */
   function initPullToRefresh() {
     var indicator = document.getElementById('pull-refresh-indicator');
+    var shadow = document.getElementById('pull-refresh-shadow');
     if (!indicator) return;
 
     var startY = 0;
@@ -97,11 +98,19 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
       var scale = .88 + (progress * .12);
       var rotate = progress * 180;
       indicator.classList.add('is-visible');
+      if (shadow) {
+        shadow.classList.add('is-visible');
+        shadow.style.opacity = String(.12 + (progress * .88));
+      }
       indicator.style.transform = 'translate(-50%, ' + translate + 'px) scale(' + scale + ') rotate(' + rotate + 'deg)';
     }
 
     function resetIndicator() {
       indicator.classList.remove('is-visible', 'is-refreshing');
+      if (shadow) {
+        shadow.classList.remove('is-visible');
+        shadow.style.opacity = '';
+      }
       indicator.style.transform = 'translate(-50%, -64px) scale(.88) rotate(0deg)';
     }
 
@@ -129,6 +138,10 @@ if (!defined('ROOT')) { http_response_code(403); exit('Forbidden'); }
       if (pullY >= threshold) {
         refreshing = true;
         indicator.classList.add('is-visible', 'is-refreshing');
+        if (shadow) {
+          shadow.classList.add('is-visible');
+          shadow.style.opacity = '1';
+        }
         indicator.style.transform = 'translate(-50%, 58px) scale(1) rotate(0deg)';
         setTimeout(function () { window.location.reload(); }, 250);
       } else {
