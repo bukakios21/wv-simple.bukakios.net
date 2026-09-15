@@ -330,10 +330,51 @@ if (isset($_GET["id"])) {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        #pull-refresh-indicator {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            z-index: 60;
+            width: 42px;
+            height: 42px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, .96);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, .14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a7fce;
+            opacity: 0;
+            transform: translate(-50%, -64px) scale(.88) rotate(0deg);
+            transition: opacity .16s ease, transform .16s ease;
+            pointer-events: none;
+        }
+        #pull-refresh-indicator.is-visible { opacity: 1; }
+        #pull-refresh-indicator.is-refreshing svg { animation: pull-refresh-spin .8s linear infinite; }
+        #pull-refresh-shadow {
+            position: fixed;
+            top: 58px;
+            left: 0;
+            right: 0;
+            height: 56px;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(to bottom, rgba(15, 23, 42, .18), rgba(15, 23, 42, 0));
+            transition: opacity .16s ease;
+        }
+        #pull-refresh-shadow.is-visible { opacity: 1; }
+        @keyframes pull-refresh-spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 
-<body class="font-sans text-slate-950 antialiased">
+<body class="font-sans text-slate-950 antialiased overscroll-y-contain">
+    <div id="pull-refresh-indicator" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    </div>
+    <div id="pull-refresh-shadow" aria-hidden="true"></div>
 
     <!-- Header -->
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
@@ -351,6 +392,11 @@ if (isset($_GET["id"])) {
     </header>
 
     <main class="mx-auto max-w-lg px-4 py-5">
+        <div class="mb-3.5 flex items-start gap-2.5 rounded-2xl border border-blue-100 bg-blue-50 px-3.5 py-3 text-[13px] text-blue-700">
+            <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M18 13l-6 6-6-6"/></svg>
+            <div class="min-w-0 leading-relaxed"><span class="font-bold">Tips:</span> Tarik halaman ke bawah untuk refresh status transaksi terbaru.</div>
+        </div>
+
         <!-- Produk -->
         <div class="mb-4 flex flex-col items-center text-center">
             <div class="inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
@@ -504,6 +550,66 @@ if (isset($_GET["id"])) {
             }
             var btn = document.getElementById('backBtn');
             if (btn) btn.addEventListener('click', goBack);
+        })();
+    </script>
+    <script>
+        (function initPullToRefresh() {
+            var indicator = document.getElementById('pull-refresh-indicator');
+            var shadow = document.getElementById('pull-refresh-shadow');
+            if (!indicator) return;
+            var startY = 0, pullY = 0, tracking = false, refreshing = false;
+            var threshold = 86, maxPull = 124;
+            function atTop() { return window.scrollY <= 0 && document.documentElement.scrollTop <= 0 && document.body.scrollTop <= 0; }
+            function setIndicator(distance) {
+                var progress = Math.min(distance / threshold, 1);
+                var translate = -64 + Math.min(distance, maxPull);
+                var scale = .88 + (progress * .12);
+                var rotate = progress * 180;
+                indicator.classList.add('is-visible');
+                if (shadow) {
+                    shadow.classList.add('is-visible');
+                    shadow.style.opacity = String(.12 + (progress * .88));
+                }
+                indicator.style.transform = 'translate(-50%, ' + translate + 'px) scale(' + scale + ') rotate(' + rotate + 'deg)';
+            }
+            function resetIndicator() {
+                indicator.classList.remove('is-visible', 'is-refreshing');
+                if (shadow) {
+                    shadow.classList.remove('is-visible');
+                    shadow.style.opacity = '';
+                }
+                indicator.style.transform = 'translate(-50%, -64px) scale(.88) rotate(0deg)';
+            }
+            window.addEventListener('touchstart', function (e) {
+                if (refreshing || !atTop() || !e.touches || !e.touches.length) return;
+                startY = e.touches[0].clientY; pullY = 0; tracking = true;
+            }, { passive: true });
+            window.addEventListener('touchmove', function (e) {
+                if (!tracking || refreshing || !e.touches || !e.touches.length) return;
+                var diff = e.touches[0].clientY - startY;
+                if (diff <= 0) return;
+                pullY = Math.min(diff * .62, maxPull);
+                setIndicator(pullY);
+            }, { passive: true });
+            window.addEventListener('touchend', function () {
+                if (!tracking || refreshing) return;
+                tracking = false;
+                if (pullY >= threshold) {
+                    refreshing = true;
+                    indicator.classList.add('is-visible', 'is-refreshing');
+                    if (shadow) {
+                        shadow.classList.add('is-visible');
+                        shadow.style.opacity = '1';
+                    }
+                    indicator.style.transform = 'translate(-50%, 58px) scale(1) rotate(0deg)'
+                    setTimeout(function () { window.location.reload(); }, 250);
+                } else { resetIndicator(); }
+            }, { passive: true });
+            window.addEventListener('touchcancel', function () {
+                if (refreshing) return;
+                tracking = false;
+                resetIndicator();
+            }, { passive: true });
         })();
     </script>
     <script>
