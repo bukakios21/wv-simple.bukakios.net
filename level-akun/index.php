@@ -123,11 +123,6 @@ $verif_percent = round(($verif_done / $total_verif) * 100);
   <!-- Header -->
   <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-lg border-b border-slate-100/50">
     <div class="flex items-center gap-3 px-4 py-3">
-      <button onclick="history.back()" aria-label="Kembali" class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-slate-200/80 bg-white/80 backdrop-blur text-slate-600 transition-all hover:bg-white hover:border-slate-300 hover:shadow-soft active:scale-95">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M15 18l-6-6 6-6"/>
-        </svg>
-      </button>
       <div class="h-1.5 flex-1 rounded-full bg-slate-100 overflow-hidden">
         <div class="h-full w-full rounded-full bg-gradient-to-r from-brand to-brandDark transition-all duration-500"></div>
       </div>

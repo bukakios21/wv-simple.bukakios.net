@@ -312,11 +312,6 @@ function getCategoryIconBg($slug) {
     <!-- Shared header -->
     <header class="relative z-10 px-6 pt-4 pb-3 bg-white border-b border-slate-100">
       <div class="flex items-center gap-3">
-        <button id="backBtn" aria-label="Kembali" class="grid h-9 w-9 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50">
-          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
         <div class="h-1.5 flex-1 rounded-full bg-slate-200 overflow-hidden">
           <div id="topProgress" class="h-full w-[27%] rounded-full bg-[#1a7fce] transition-all duration-300"></div>
         </div>
@@ -730,7 +725,7 @@ function getCategoryIconBg($slug) {
     const toggleOtherOptions = document.getElementById('toggleOtherOptions');
     const hideOtherOptions = document.getElementById('hideOtherOptions');
     const otherOptions = document.getElementById('otherOptions');
-    const backBtn = document.getElementById('backBtn');
+    const backBtn = document.getElementById('backBtn') || { classList: { add: function(){}, remove: function(){} }, addEventListener: function(){} };
     const topProgress = document.getElementById('topProgress');
     const timerEl = document.getElementById('timer');
     const bottomProgress = document.getElementById('bottomTimerProgress');

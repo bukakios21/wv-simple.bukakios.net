@@ -176,6 +176,14 @@ if (isset($_GET["id"])) {
 		);
 		$data_respon = $app->curl_post("$api_url/cek_trx_id.php",$data_post);
 	}*/
+    $sn_full = ($pembelian_kategori_id == 7) ? $status_ppob : $sn;
+    $sn_limit = 48;
+    if (function_exists('mb_strlen')) {
+        $sn_display = mb_strlen($sn_full) > $sn_limit ? mb_substr($sn_full, 0, $sn_limit) . '...' : $sn_full;
+    } else {
+        $sn_display = strlen($sn_full) > $sn_limit ? substr($sn_full, 0, $sn_limit) . '...' : $sn_full;
+    }
+
     if ($status == 1) {
         //ini untuk dapatkan berapa lama proses nya
         $a_c = strtotime($created_at);
@@ -379,11 +387,7 @@ if (isset($_GET["id"])) {
     <!-- Header -->
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div class="flex items-center gap-3 px-4 py-3">
-            <button id="backBtn" aria-label="Kembali" class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-700 transition hover:bg-slate-200 active:scale-95">
-                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"/>
-                </svg>
-            </button>
+
             <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
                 <div class="h-full w-full rounded-full bg-brand"></div>
             </div>
@@ -446,9 +450,16 @@ if (isset($_GET["id"])) {
                 <div class="flex justify-between gap-3 border-b border-slate-100 py-2"><span class="shrink-0 text-slate-500">Produk</span><span class="text-right font-medium text-slate-900"><?= $product_name ?></span></div>
                 <div class="flex justify-between gap-3 border-b border-slate-100 py-2"><span class="shrink-0 text-slate-500">No Tujuan</span><span class="break-words text-right font-medium text-slate-900"><?= $nomor_tujuan ?></span></div>
                 <div class="flex justify-between gap-3 border-b border-slate-100 py-2"><span class="shrink-0 text-slate-500">Tanggal</span><span class="text-right font-medium text-slate-900"><?= datee($created_at) ?></span></div>
-                <div class="flex justify-between gap-3 py-2">
+                <div class="flex items-start justify-between gap-3 py-2">
                     <span class="shrink-0 text-slate-500">SN / Catatan</span>
-                    <span class="break-words text-right font-medium text-slate-900"><?php if ($pembelian_kategori_id == 7) { echo $status_ppob; } else { echo $sn; } ?></span>
+                    <span class="flex min-w-0 items-start justify-end gap-1.5 text-right font-medium text-slate-900">
+                        <span id="copy_sn" data-text="SN Berhasil Disalin" data-copy="<?= htmlspecialchars($sn_full, ENT_QUOTES, 'UTF-8') ?>" class="min-w-0 max-w-[220px] break-words"><?= htmlspecialchars($sn_display, ENT_QUOTES, 'UTF-8') ?></span>
+                        <?php if (!empty($sn_full)) { ?>
+                            <button onclick="copyToClipboard('copy_sn')" type="button" aria-label="Salin SN" class="mt-0.5 inline-flex shrink-0 items-center justify-center rounded-md bg-slate-50 px-1.5 py-0.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 active:scale-95 transition">
+                                <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            </button>
+                        <?php } ?>
+                    </span>
                 </div>
             </div>
 
@@ -537,21 +548,7 @@ if (isset($_GET["id"])) {
         </div>
     </main>
 
-    <script>
-        // Android-aware back button (pola reset-pin)
-        (function() {
-            function goBack(e) {
-                e.preventDefault();
-                if (window.android && typeof window.android.back === 'function') {
-                    try { window.android.back(); return; } catch (_) {}
-                }
-                if (history.length > 1) { history.back(); }
-                else { window.location.href = '<?= $c_url ?? "/" ?>'; }
-            }
-            var btn = document.getElementById('backBtn');
-            if (btn) btn.addEventListener('click', goBack);
-        })();
-    </script>
+
     <script>
         (function initPullToRefresh() {
             var indicator = document.getElementById('pull-refresh-indicator');
