@@ -78,8 +78,10 @@ if ($qris_status !== 1) {
         $lyt_title       = "Pendaftaran QRIS Sedang Diproses";
         $lyt_description = "Pendaftaran QRIS kamu sedang diproses. Mohon tunggu hingga proses selesai.";
     } elseif ($qris_status === 3) {
+        $lyt_button_link = "opentranslate://14;register-qris";
+        $lyt_button_name = "DAFTAR ULANG";
         $lyt_title       = "Pendaftaran QRIS Ditolak";
-        $lyt_description = !empty($user['alasan']) ? $user['alasan'] : "Pendaftaran QRIS kamu ditolak. Silakan hubungi CS BukaKios untuk informasi lebih lanjut.";
+        $lyt_description = !empty($user['alasan']) ? $user['alasan'] : "Pendaftaran QRIS kamu ditolak. Silakan daftar ulang atau hubungi CS BukaKios untuk informasi lebih lanjut.";
     } elseif ($qris_status === 4) {
         $lyt_title       = "Akun QRIS Dalam Pemeriksaan";
         $lyt_description = "Akun QRIS kamu sedang dalam pemeriksaan. Silakan hubungi CS BukaKios untuk informasi lebih lanjut.";
