@@ -17,7 +17,7 @@ if (isset($_POST['act'], $_POST['csrf'])) {
 // Data awal (server-side): detail akun QRIS user.
 // -------------------------------------------------------------------------
 $detail_res = json_decode($api_v2->qris_detail_user(), true);
-//var_dump($detail_res);exit;
+// var_dump($detail_res);exit;
 $is_error          = false;
 $is_not_registered = false;
 $error_msg         = "";
@@ -60,6 +60,37 @@ if ($is_error) {
 }
 
 $user = $detail_res['data'] ?? array();
+
+// Status akun QRIS dari data user:
+// 0 = pendaftaran direview, 1 = sukses/aktif, 2 = pendaftaran diproses,
+// 3 = ditolak, 4 = suspect account.
+$qris_status = (int) ($user['status'] ?? 1);
+if ($qris_status !== 1) {
+    $html_title      = "QRIS";
+    $lyt_button_link = "opentranslate://10|home";
+    $lyt_button_name = "KEMBALI";
+    $lyt_image       = "https://assets.bukakios.net/img/illustration/bc_logout.png";
+
+    if ($qris_status === 0) {
+        $lyt_title       = "Pendaftaran QRIS Sedang Direview";
+        $lyt_description = "Pendaftaran QRIS kamu sedang dalam proses review. Mohon tunggu hingga proses verifikasi selesai.";
+    } elseif ($qris_status === 2) {
+        $lyt_title       = "Pendaftaran QRIS Sedang Diproses";
+        $lyt_description = "Pendaftaran QRIS kamu sedang diproses. Mohon tunggu hingga proses selesai.";
+    } elseif ($qris_status === 3) {
+        $lyt_title       = "Pendaftaran QRIS Ditolak";
+        $lyt_description = !empty($user['alasan']) ? $user['alasan'] : "Pendaftaran QRIS kamu ditolak. Silakan hubungi CS BukaKios untuk informasi lebih lanjut.";
+    } elseif ($qris_status === 4) {
+        $lyt_title       = "Akun QRIS Dalam Pemeriksaan";
+        $lyt_description = "Akun QRIS kamu sedang dalam pemeriksaan. Silakan hubungi CS BukaKios untuk informasi lebih lanjut.";
+    } else {
+        $lyt_title       = "Status QRIS Tidak Dikenali";
+        $lyt_description = "Status akun QRIS kamu belum dapat diproses. Silakan coba beberapa saat lagi atau hubungi CS BukaKios.";
+    }
+
+    require_once(ROOT . "/_template/general_message.php");
+    exit;
+}
 
 $saldo_real       = (int) ($user['saldo_real'] ?? 0);
 $saldo_kliring    = (int) ($user['saldo_kliring'] ?? 0);
