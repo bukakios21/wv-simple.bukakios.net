@@ -190,7 +190,7 @@ require_once("../_session.php");
                     <svg viewBox="0 0 24 24" class="h-12 w-12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 11l2.5 2.5L14 10l4 5"/></svg>
                 </div>
             `;
-            const endedInfo = ended ? '<div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] font-semibold text-slate-500">Event sudah berakhir dan tidak bisa dibuka.</div>' : '';
+            const endedInfo = ended ? '<div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] font-semibold text-slate-500">Event sudah berakhir.</div>' : '';
 
             return `
                 <a href="${href}" ${disabledAttrs} class="event-card ${ended && !clickable ? 'is-ended opacity-75' : ''} block overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft">
