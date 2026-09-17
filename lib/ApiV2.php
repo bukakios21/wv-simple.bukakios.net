@@ -366,6 +366,20 @@ class ApiV2
         return $this->curl_get_url($url);
     }
 
+    // event_list: GET /event/ (WV route, JWT + Api-Key).
+    // Daftar event dari api-bukakios-v2, urut dari BE berdasarkan e_id DESC.
+    function event_list(){
+        $url =  $this->api_url_wv."/event/";
+        return $this->curl_get_url($url);
+    }
+
+    // event_detail: GET /event/:id (WV route, JWT + Api-Key).
+    // Detail event beserta data pemenang jika tersedia.
+    function event_detail($id){
+        $url =  $this->api_url_wv."/event/".$id;
+        return $this->curl_get_url($url);
+    }
+
     // transaksi_additional_info: GET /transaksi/additional-info/:id.
     // Info tambahan struk (mis. token PLN) yang tampil saat status transaksi > 0.
     function transaksi_additional_info($id){
