@@ -52,7 +52,7 @@ require_once("../_session.php");
 </head>
 <body class="font-sans text-slate-950 antialiased bg-slate-50">
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div class="flex items-center gap-3 px-4 py-3">
+        <div class="flex h-12 items-center gap-3 px-4">
             <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
                 <div class="h-full w-full rounded-full bg-brand"></div>
             </div>
@@ -174,10 +174,10 @@ require_once("../_session.php");
             return raw.replace(/\.(jpe?g|png)$/i, '.webp');
         }
 
-        function eventCard(row, index) {
+        function eventCard(row) {
             const eId = Number(row.e_id || 0);
             const ended = isEnded(row.e_akhir);
-            const clickable = !ended || index === 0;
+            const clickable = !ended;
             const tagClass = ended ? 'border-slate-200 bg-slate-100 text-slate-500' : 'border-emerald-200 bg-emerald-50 text-emerald-700';
             const tagText = ended ? 'Event Berakhir' : 'Masih Berjalan';
             const href = clickable ? `detail2.php?e_id=${encodeURIComponent(eId)}` : '#';
@@ -190,7 +190,7 @@ require_once("../_session.php");
                     <svg viewBox="0 0 24 24" class="h-12 w-12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 11l2.5 2.5L14 10l4 5"/></svg>
                 </div>
             `;
-            const endedInfo = ended ? `<div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] font-semibold text-slate-500">${index === 0 ? 'Event sudah berakhir, tapi detail masih bisa dibuka.' : 'Event sudah berakhir dan tidak bisa dibuka.'}</div>` : '';
+            const endedInfo = ended ? '<div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] font-semibold text-slate-500">Event sudah berakhir dan tidak bisa dibuka.</div>' : '';
 
             return `
                 <a href="${href}" ${disabledAttrs} class="event-card ${ended && !clickable ? 'is-ended opacity-75' : ''} block overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft">

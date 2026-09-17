@@ -184,10 +184,7 @@ $html = str_replace("{{formIkuti}}", $build_form, $html);
 </head>
 <body class="font-sans text-slate-950 antialiased bg-slate-50">
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div class="flex items-center gap-3 px-4 py-3">
-            <a href="index.php" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600 active:scale-95">
-                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-            </a>
+        <div class="flex h-12 items-center gap-3 px-4">
             <div class="h-1 flex-1 rounded-full bg-slate-100 overflow-hidden">
                 <div class="h-full w-full rounded-full bg-brand"></div>
             </div>
